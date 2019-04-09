@@ -1,0 +1,18 @@
+FROM node:10-jessie
+
+LABEL mantainer="Eloy Lopez <elswork@gmail.com>"
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends git && \
+    apt-get clean && \
+    npm install -g polymer-cli --unsafe-perm
+
+EXPOSE 8080
+
+RUN mkdir -p app
+
+VOLUME /root/app
+
+WORKDIR /root/app
+
+CMD [ "polymer", "serve", "-p", "8080", "-H", "0.0.0.0"]
