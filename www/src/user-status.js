@@ -77,7 +77,7 @@ class UserStatus extends LitElement {
       position: absolute;
       top: 60px;
       right: 0px;
-      height: 300px;
+      /*height: 300px;*/
       width: 20em;
       padding: 5px 10px;
       background-color: #4285f4;
@@ -168,17 +168,29 @@ class UserStatus extends LitElement {
       <div class="user${this.hasAvatar?
         " avatar":""}" @click="${this.openStatus}">
         ${this.hasAvatar?"":html`<iron-icon icon="my-icons:person"></iron-icon>`}
+
         ${this.showLogin?
           html`
           <div class="status">
+          <h2>Logg deg inn.</h2>
           <form class="login" onsubmit="javascript: return false;">
-          <label for="uname">Brukernavn</label><input type="text" id="uname" name="uname"><br/>
+          <label for="email">E-Post</label><input type="email" id="email" name="email"><br/>
           <label for="pwd">Passord</label><input type="password" id="pwd" name="pwd"><br/>
           <button @click="${this.login}">Logg inn</button>
+          </form>
+
+          <h2>Registrer deg.</h2>
+          <form class="register" name="register" id="register" onsubmit="javascript: return false;">
+          <label for="name">Fullt navn</label><input type="text" id="name" name="name"><br/>
+          <label for="email">E-Post</label><input type="email" id="email" name="email"><br/>
+          <label for="pwd">Passord</label><input type="password" id="pwd" name="pwd"><br/>
+          <label for="isTeacher">Jeg er lærer.<input type="checkbox" name="isTeacher" value="1"></br>
+          <button @click="${this.register}">Registrer bruker</button>
           </form>
           </div>`:
           html``
         }
+
         ${this.showStatus?
           html`<div class="status">
             <div>${this.uname} logget på. <button @click="${this.logout}">Logg av</button></div>
@@ -214,6 +226,7 @@ class UserStatus extends LitElement {
    * @param  {Object} e event object from the click on the button. Contains
    * information about the form.
    */
+
   login(e) {
     const data = new FormData(e.target.form); // Wrap the form in a FormData object
     fetch (`${window.MyAppGlobals.serverURL}api/login.php`, {
@@ -223,6 +236,8 @@ class UserStatus extends LitElement {
       }
     ).then(res=>res.json())         // When a reply has arrived
     .then(res=>{
+      console.log("data");
+      console.log(res);
       if (res.status=='SUCCESS') {  // Successfully logged in
         this.updateStatus(res);
         if(res.hasAvatar==1) {
@@ -230,6 +245,23 @@ class UserStatus extends LitElement {
         }
         store.dispatch(logIn({uid: res.uid, uname: res.uname, isStudent: this.student, isTeacher: this.teacher, isAdmin: this.admin, hasAvatar: this.hasAvatar}));
       }                             // Needs to alert the user as to the error!!!!
+    })
+  }
+
+  register(e){
+    const data = new FormData(e.target.form); // Wrap the form in a FormData object
+    console.log(data);
+     fetch (`${window.MyAppGlobals.serverURL}api/register.php`, {
+        method: 'POST',
+        credentials: "include",
+        body: data
+      }
+    ).then(res=>res.json())         // When a reply has arrived
+    .then(res=>{
+      if (res.status=='SUCCESS') {  // Successfully logged in
+        this.updateStatus(res);
+        store.dispatch(logIn({uid: res.uid, uname: res.uname, isStudent: this.student, isTeacher: this.teacher, isAdmin: this.admin, hasAvatar: this.hasAvatar}));
+      }    
     })
   }
 
@@ -280,6 +312,7 @@ class UserStatus extends LitElement {
    */
   updateStatus(res) {
     this.showLogin = false;
+    this.showRegister = false;
     this.showStatus = true;
     this.uid = res.uid;
     this.uname = res.uname;

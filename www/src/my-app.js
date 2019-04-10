@@ -98,12 +98,12 @@ class MyApp extends PolymerElement {
             <a name="view3" href="[[rootPath]]view3">View Three</a>
             <template is="dom-if" if="{{user.isAdmin}}">
               <!-- Only admins will see this. -->
-              <a name="student" href="[[rootPath]]teacher">Lærer</a>
-              <a name="student" href="[[rootPath]]admin">Admin</a>
+              <a name="teacher" href="[[rootPath]]teacher">Lærer</a>
+              <a name="admin" href="[[rootPath]]admin">Admin</a>
             </template>
             <template is="dom-if" if="{{user.isTeacher}}">
               <!-- Only teachers will see this. -->
-              <a name="student" href="[[rootPath]]teacher">Lærer</a>
+              <a name="teacher" href="[[rootPath]]teacher">Lærer</a>
             </template>
             <template is="dom-if" if="{{user.isStudent}}">
               <!-- Only students will see this. -->

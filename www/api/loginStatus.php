@@ -16,21 +16,26 @@ ini_set('display_errors', 1);
 
 require_once 'classes/DB.php';
 $db = DB::getDBConnection();
-
+$res = [];
 $res['loggedIn'] = false;
 if (isset($_SESSION['uid'])) {
-  $stmt = $db->prepare('SELECT id, pwd, uname, type, !ISNULL(NULLIF(avatar,"")) as hasAvatar FROM user WHERE id=?');
+  //$stmt = $db->prepare('SELECT id, pwd, email, privileges, !ISNULL(NULLIF(avatar,"")) as hasAvatar FROM user WHERE id=?');
+  $stmt = $db->prepare('SELECT id, email, privileges FROM users WHERE id=?');
   $stmt->execute(array($_SESSION['uid']));
   $result = $stmt->fetch(PDO::FETCH_ASSOC);
   $res['loggedIn'] = true;
-  if ($result) {  // User found with old md5 password
-    $stmt = $db->prepare('UPDATE user SET pwd=? where id=?');
-    $stmt->execute(array($result['id'], password_hash($result['pwd'],PASSWORD_DEFAULT)));  // Convert md5 password to password_hash password
+  if ($result) {
     $res['status'] = 'SUCCESS';
     $res['uid'] = $result['id'];
-    $res['uname'] = $result['uname'];
-    $res['utype'] = $result['type'];
-    $res['hasAvatar'] = $result['hasAvatar'];
+    $res['uname'] = $result['email'];
+    $res['utype'] = "student";
+    switch($result['privileges']){
+      case 0: $res['utype'] = "student"; break;
+      case 1: $res['utype'] = "teacher"; break;
+      case 2: $res['utype'] = "admin"; break;
+      default: $res['utype'] = "student"; break;
+    }
+    $res['hasAvatar'] = 0;
   }
 }
 
