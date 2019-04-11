@@ -2,7 +2,7 @@
 
 class DB {
   private static $db=null;
-  private $dsn = 'mysql:dbname=prosjekt1;host=db';
+  private $dsn = 'mysql:dbname=myDb;host=db';
   private $user = 'user';
   private $password = 'test';
   private $dbh = null;

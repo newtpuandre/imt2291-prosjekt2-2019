@@ -1,129 +1,128 @@
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
-
+-- --------------------------------------------------------
+-- Host:                         127.0.0.1
+-- Server version:               5.7.23 - MySQL Community Server (GPL)
+-- Server OS:                    Win64
+-- HeidiSQL Version:             10.1.0.5479
+-- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+/*!40101 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
 
-CREATE TABLE `Person` (
-  `id` int(11) NOT NULL,
-  `name` varchar(20) NOT NULL
+-- Dumping database structure for prosjekt1
+CREATE DATABASE IF NOT EXISTS `myDb` /*!40100 DEFAULT CHARACTER SET latin1 */;
+USE `myDb`;
+
+-- Data exporting was unselected.
+-- Dumping structure for table prosjekt1.users
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL DEFAULT '0',
+  `password` varchar(255) NOT NULL DEFAULT '0',
+  `picture_path` varchar(255) DEFAULT 'https://propertymarketersllc.com/wp-content/uploads/2018/05/profile-picture-placeholder.png',
+  `privileges` varchar(255) NOT NULL DEFAULT '0' COMMENT '0 = user, 1 = teacher, 2 = admin',
+  `isTeacher` int(11) DEFAULT '0' COMMENT '0 = not checked, 1 = checked',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Data exporting was unselected.
+-- Dumping structure for table prosjekt1.video
+CREATE TABLE IF NOT EXISTS `video` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userid` int(11) NOT NULL,
+  `title` varchar(64) NOT NULL,
+  `description` varchar(512) DEFAULT NULL,
+  `topic` varchar(64) DEFAULT NULL,
+  `course` varchar(64) DEFAULT NULL,
+  `thumbnail_path` varchar(255) DEFAULT NULL,
+  `video_path` varchar(255) DEFAULT NULL,
+  `time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `fk_userid` (`userid`),
+  CONSTRAINT `fk_userid` FOREIGN KEY (`userid`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Dumping structure for table prosjekt1.comment
+CREATE TABLE IF NOT EXISTS `comment` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userid` int(11) NOT NULL DEFAULT '0',
+  `videoid` int(11) NOT NULL DEFAULT '0',
+  `comment` text NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`),
+  KEY `fk_useridComment` (`userid`),
+  KEY `fk_videoidComment` (`videoid`),
+  CONSTRAINT `fk_useridComment` FOREIGN KEY (`userid`) REFERENCES `users` (`id`),
+  CONSTRAINT `fk_videoidComment` FOREIGN KEY (`videoid`) REFERENCES `video` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Data exporting was unselected.
+-- Dumping structure for table prosjekt1.playlists
+CREATE TABLE IF NOT EXISTS `playlists` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `ownerId` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `thumbnail` varchar(255) DEFAULT NULL,
+  `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`),
+  KEY `ownerid` (`ownerId`),
+  CONSTRAINT `ownerid` FOREIGN KEY (`ownerId`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Data exporting was unselected.
+-- Dumping structure for table prosjekt1.playlistvideos
+CREATE TABLE IF NOT EXISTS `playlistvideos` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `videoid` int(11) NOT NULL DEFAULT '0',
+  `playlistid` int(11) NOT NULL DEFAULT '0',
+  `position` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`),
+  KEY `fk_playlistid` (`playlistid`),
+  KEY `fk_videoid` (`videoid`),
+  CONSTRAINT `fk_playlistid` FOREIGN KEY (`playlistid`) REFERENCES `playlists` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_videoid` FOREIGN KEY (`videoid`) REFERENCES `video` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Data exporting was unselected.
+-- Dumping structure for table prosjekt1.rating
+CREATE TABLE IF NOT EXISTS `rating` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userid` int(11) NOT NULL,
+  `videoid` int(11) NOT NULL,
+  `rating` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`),
+  KEY `fk_useridRating` (`userid`),
+  KEY `fk_videoidRating` (`videoid`),
+  CONSTRAINT `fk_useridRating` FOREIGN KEY (`userid`) REFERENCES `users` (`id`),
+  CONSTRAINT `fk_videoidRating` FOREIGN KEY (`videoid`) REFERENCES `video` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Data exporting was unselected.
+-- Dumping structure for table prosjekt1.subscriptions
+CREATE TABLE IF NOT EXISTS `subscriptions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userid` int(11) DEFAULT NULL,
+  `playlistid` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`),
+  KEY `fk_sub_userid` (`userid`),
+  KEY `fk_sub_playlistid` (`playlistid`),
+  CONSTRAINT `fk_sub_playlistid` FOREIGN KEY (`playlistid`) REFERENCES `playlists` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_sub_userid` FOREIGN KEY (`userid`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
-INSERT INTO `Person` (`id`, `name`) VALUES
-(1, 'William'),
-(2, 'Marc'),
-(3, 'John');
-
---
--- Table structure for table `students`
---
-
-CREATE TABLE `students` (
-  `id` bigint(20) NOT NULL,
-  `givenName` varchar(128) NOT NULL,
-  `lastName` varchar(128) NOT NULL,
-  `email` varchar(128) NOT NULL,
-  `studyProgram` varchar(128) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `students`
---
-
-INSERT INTO `students` (`id`, `givenName`, `lastName`, `email`, `studyProgram`) VALUES
-(1, 'JÃ¸rgen Aamot', 'Caspersen', 'jorgenac@stud.ntnu.no', 'Bachelor in Geomatics\r'),
-(2, 'Ugnius', 'Raizys', 'ugniusr@stud.ntnu.no', 'Bachelor in Information Security\r'),
-(3, 'Kristoffer SÃ¸rvang', 'Dahl', 'kristoffer.dahl2@stud.ntnu.no', 'Bachelor in Information Security\r'),
-(4, 'Christopher', 'Berglind', 'chbergli@stud.ntnu.no', 'Bachelor in Information Security\r'),
-(5, 'Ali Abdullahi', 'Ali', 'aliaa@stud.ntnu.no', 'Bachelor in IT-Operations and Information Security\r'),
-(6, 'Abu Baker Mohammed Abdullah', 'Al-Shammari', 'abalsham@stud.ntnu.no', 'Bachelor in IT-Operations and Information Security\r'),
-(7, 'Rune', 'Bergh', 'runbergh@stud.ntnu.no', 'Bachelor in IT-Operations and Information Security\r'),
-(8, 'Johanne', 'BognÃ¸y', 'johabog@stud.ntnu.no', 'Bachelor in IT-Operations and Information Security\r'),
-(9, 'Joakim Nereng', 'Ellestad', 'joakine@stud.ntnu.no', 'Bachelor in IT-Operations and Information Security\r'),
-(10, 'Martine', 'Granlien', 'margranl@stud.ntnu.no', 'Bachelor in IT-Operations and Information Security\r'),
-(11, 'Anders GjengstÃ¸', 'Gustad', 'andersgj@stud.ntnu.no', 'Bachelor in IT-Operations and Information Security\r'),
-(12, 'Hamse Abdi', 'Hashi', 'hamseah@stud.ntnu.no', 'Bachelor in IT-Operations and Information Security\r'),
-(13, 'Martin AndrÃ©', 'KvalvÃ¥g', 'martiakv@stud.ntnu.no', 'Bachelor in IT-Operations and Information Security\r'),
-(14, 'Magnus Lien', 'Lilja', 'magnull@stud.ntnu.no', 'Bachelor in IT-Operations and Information Security\r'),
-(15, 'Adrian', 'Lund-Lange', 'adrian.lund-lange@ntnu.no', 'Bachelor in IT-Operations and Information Security\r'),
-(16, 'Askil AmundÃ¸y', 'Olsen', 'askilao@stud.ntnu.no', 'Bachelor in IT-Operations and Information Security\r'),
-(17, 'Espen StÃ¥rvik', 'Skuggerud', 'espenssk@stud.ntnu.no', 'Bachelor in IT-Operations and Information Security\r'),
-(18, 'Benjamin Normann', 'Skinstad', 'benjamns@stud.ntnu.no', 'Bachelor in IT-Operations and Information Security\r'),
-(19, 'Ã…smund Helland', 'Bu', 'asmund.bu@stud.ntnu.no', 'Bachelor in Network and System Administration\r'),
-(20, 'Maria Inez Pourmosleh', 'Ã˜ksnes', 'mariaine@stud.ntnu.no', 'Bachelor in Programming\r'),
-(21, 'Brede Fritjof', 'Klausen', 'bredefk@stud.ntnu.no', 'Bachelor in Programming\r'),
-(22, 'Ole Kristian Lund', 'LysÃ¸', 'oklyso@stud.ntnu.no', 'Bachelor in Programming\r'),
-(23, 'Stian Bakken', 'SÃ¸rslett', 'stianbso@stud.ntnu.no', 'Bachelor in Programming\r'),
-(24, 'Eldar Hauge', 'Torkelsen', 'eldarht@stud.ntnu.no', 'Bachelor in Programming\r'),
-(25, 'Sondre Benjamin', 'Aasen', 'sondrbaa@stud.ntnu.no', 'Bachelor in Programming\r'),
-(26, 'Aleksander', 'Azizi', 'aleksaaz@stud.ntnu.no', 'Bachelor in Programming\r'),
-(27, 'Benjamin', 'Bergseth', 'benjabe@stud.ntnu.no', 'Bachelor in Programming\r'),
-(28, 'Fredrik Mikal Meyer', 'GlÃ¸sen', 'fmglosen@stud.ntnu.no', 'Bachelor in Programming\r'),
-(29, 'Ronny AndrÃ©', 'Gulberg', 'ronnyag@stud.ntnu.no', 'Bachelor in Programming\r'),
-(30, 'AndrÃ© Gyrud', 'Gunhildberget', 'andregg@stud.ntnu.no', 'Bachelor in Programming\r'),
-(31, 'Marius', 'HÃ¥konsen', 'marhaako@stud.ntnu.no', 'Bachelor in Programming\r'),
-(32, 'Ole Kristian', 'Larsen', 'oleklar@stud.ntnu.no', 'Bachelor in Programming\r'),
-(33, 'Amir Ali', 'Moaddeli', 'amiram@stud.ntnu.no', 'Bachelor in Programming\r'),
-(34, 'HÃ¥kon', 'Schia', 'haakosc@stud.ntnu.no', 'Bachelor in Programming\r'),
-(35, 'Vegard', 'Skaansar', 'vegaskaa@stud.ntnu.no', 'Bachelor in Programming\r'),
-(36, 'Kristian AndrÃ© Bernhoff', 'Skoglund', 'kaskoglu@stud.ntnu.no', 'Bachelor in Programming\r'),
-(37, 'Viktor Kind', 'Svendsen', 'viktorks@stud.ntnu.no', 'Bachelor in Programming\r'),
-(38, 'Elisabeth', 'WÃ¥de-Bye', 'elisawaa@stud.ntnu.no', 'Bachelor in Programming\r'),
-(39, 'Abubakar Ahmed', 'Yusuf', 'abubakay@stud.ntnu.no', 'Bachelor in Programming\r'),
-(40, 'Vanja', 'Falck', 'vanja.falck@ntnu.no', 'Bachelor in Programming\r'),
-(41, 'Nedim', 'Delalic', 'nedimd@stud.ntnu.no', 'Bachelor in Web Development\r'),
-(42, 'Carl Oskar', 'Eriksen', 'carloe@stud.ntnu.no', 'Bachelor in Web Development\r'),
-(43, 'Jonas', 'Ã˜degÃ¥rden', 'jonasod@stud.ntnu.no', 'Bachelor in Web Development\r'),
-(44, 'Robin-Andre Due', 'Herrmann', 'raherrma@stud.ntnu.no', 'Bachelor in Web Development\r'),
-(45, 'Cecilie Urdahl', 'Fossum', 'ceciliuf@stud.ntnu.no', 'Bachelor of Engineering in Computer Science\r'),
-(46, 'Magnus', 'Nordling', 'nordling@stud.ntnu.no', 'Bachelor of Engineering in Computer Science\r'),
-(47, 'Hans Emil Beritsveen', 'Eid', 'hanseei@stud.ntnu.no', 'Bachelor of Game Programming\r');
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `students`
---
-ALTER TABLE `students`
-  ADD PRIMARY KEY (`id`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `students`
---
-ALTER TABLE `students`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
-COMMIT;
-
-CREATE TABLE `user` (
-  `id` bigint(20) NOT NULL,
-  `uname` varchar(64) NOT NULL,
-  `type` ENUM('student','teacher','admin') NOT NULL DEFAULT 'student',
-  `pwd` varchar(130) NOT NULL,
-  `avatar` blob DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-INSERT INTO `user` (`id`, `uname`, `type`, `pwd`, `avatar`) VALUES (1, 'student', 'student', MD5('student'), NULL);
-INSERT INTO `user` (`id`, `uname`, `type`, `pwd`, `avatar`) VALUES (2, 'laerer', 'teacher', MD5('laerer'), NULL);
-INSERT INTO `user` (`id`, `uname`, `type`, `pwd`, `avatar`) VALUES (3, 'admin', 'admin', MD5('admin'), NULL);
-
-ALTER TABLE `user`
-  ADD PRIMARY KEY (`id`);
-
-ALTER TABLE `user`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-COMMIT;
-
+-- Data exporting was unselected.
+/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
