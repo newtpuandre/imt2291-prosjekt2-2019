@@ -80,6 +80,19 @@ class MyApp extends PolymerElement {
           height: 100%;
           border: 1px solid red;
         }
+
+        .tab { 
+          margin-left: 20px; 
+        }
+
+        hr {
+          display: block;
+          height: 1px;
+          border: 0;
+          border-top: 1px solid #ccc;
+          margin: 1em 0;
+          padding: 0;
+        }
       </style>
 
       <app-location route="{{route}}" url-space-regex="^[[rootPath]]">
@@ -93,21 +106,41 @@ class MyApp extends PolymerElement {
         <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
           <app-toolbar>Menu</app-toolbar>
           <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-            <a name="view1" href="[[rootPath]]view1">View One</a>
-            <a name="view2" href="[[rootPath]]view2">View Two</a>
-            <a name="view3" href="[[rootPath]]view3">View Three</a>
+            <a name="view1" href="[[rootPath]]view1">Hjem</a>
+            <a name="view2" href="[[rootPath]]view2">Emner</a>
+            <a name="view3" href="[[rootPath]]view3">Videoer</a>
+            <a name="view3" href="[[rootPath]]view3">Spillelister</a>
+            <hr></hr>
             <template is="dom-if" if="{{user.isAdmin}}">
               <!-- Only admins will see this. -->
-              <a name="teacher" href="[[rootPath]]teacher">Lærer</a>
-              <a name="admin" href="[[rootPath]]admin">Admin</a>
+              <a>Admin</a>
+              <a class="tab" name="admin" href="[[rootPath]]admin"><i>Endre Privilegier</i></a>
+
+              <a>Lærer</a>
+              <a class="tab" name="teacher" href="[[rootPath]]teacher"><i>Last opp video</i></a>
+              <a class="tab" name="teacher" href="[[rootPath]]teacher"><i>Rediger video</i></a>
+              <a class="tab" name="teacher" href="[[rootPath]]teacher"><i>Lag spilleliste</i></a>
+              <a class="tab" name="teacher" href="[[rootPath]]teacher"><i>Endre spilleliste</i></a>
+
+              <a>Student</a>
+              <a class="tab" name="student" href="[[rootPath]]student"><i>See abonnerte spillelister</i></a>
             </template>
             <template is="dom-if" if="{{user.isTeacher}}">
               <!-- Only teachers will see this. -->
-              <a name="teacher" href="[[rootPath]]teacher">Lærer</a>
+              <a>Lærer</a>
+              <a class="tab" name="teacher" href="[[rootPath]]teacher"><i>Last opp video</i></a>
+              <a class="tab" name="teacher" href="[[rootPath]]teacher"><i>Rediger video</i></a>
+              <a class="tab" name="teacher" href="[[rootPath]]teacher"><i>Lag spilleliste</i></a>
+              <a class="tab" name="teacher" href="[[rootPath]]teacher"><i>Endre spilleliste</i></a>
+
+              <a>Student</a>
+              <a class="tab" name="student" href="[[rootPath]]student"><i>See abonnerte spillelister</i></a>
+
             </template>
             <template is="dom-if" if="{{user.isStudent}}">
               <!-- Only students will see this. -->
-              <a name="student" href="[[rootPath]]student">Student</a>
+              <a>Student</a>
+              <a class="tab" name="student" href="[[rootPath]]student"><i>See abonnerte spillelister</i></a>
             </template>
           </iron-selector>
         </app-drawer>
