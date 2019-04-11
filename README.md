@@ -2,7 +2,10 @@
 
 ## Deltakere
 André Gyrud Gunhildberget - 493561
+
 Håkon Schia - XXXXX
+
+## Prosjekt beskrivelse
 
 Rediger readme filen og legg inn navnene på deltakerne på gruppen før dere begynner med noe annet :-).
 
