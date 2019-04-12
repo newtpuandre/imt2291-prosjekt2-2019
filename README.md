@@ -3,7 +3,7 @@
 ## Deltakere
 André Gyrud Gunhildberget - 493561
 
-Håkon Schia - XXXXX
+Håkon Schia - 480631
 
 ## Prosjekt beskrivelse
 
