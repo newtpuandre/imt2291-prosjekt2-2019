@@ -43,33 +43,54 @@ class AdminView1 extends PolymerElement {
         <div class="grid-container">
           <template is="dom-repeat" items="[[students]]">
             <div class="grid-item">
-            <p>Navn: [[item.name]]</p>
+            <form class="updatePriv" name="updatePriv" id="updatePriv" onsubmit="javascript: return false;">
+            <input type="hidden" name="id" id="id" value="[[item.id]]" />
+            <p><label for="name">Navn: [[item.name]]</label></p>
             <p>E-post: [[item.email]]</p>
-            <p>Privilegier: <select value=[[item.privileges]]>
+            <p>Privilegier: <select id="privilege" name="privilege" value=[[item.privileges]]>
             <option value="0">Student</option>
             <option value="1">Lærer</option>
             <option value="2">Admin</option>
           </select>
           </p>
             <p>Er lærer?: <input type="checkbox" name="isTeacher" value="1" checked=[[item.isTeacher]] disabled></p>
-            <p><button>Oppdater bruker</button></p>
+            <p><button on-click="updateUser" id="[[item.id]]">Oppdater bruker</button></p>
+            </form>
             </div>
           </template>
         </div>
       </div>
 
-
-
-
-
     `;
   }
 
+  updateUser(e) {
+    const data = new FormData(e.target.form); // Wrap the form in a FormData object
+    fetch (`${window.MyAppGlobals.serverURL}api/updatePrivilege.php`, {
+        method: 'POST',
+        credentials: "include",
+        body: data
+      }
+    ).then(res=>res.json())         // When a reply has arrived
+    .then(res=>{
+      console.log(res);
+      /*if (res.status=='SUCCESS') {  // Successfully logged in
+        this.updateStatus(res);
+        if(res.hasAvatar==1) {
+          this.hasAvatar = true;
+        }
+        store.dispatch(logIn({uid: res.uid, uname: res.uname, isStudent: this.student, isTeacher: this.teacher, isAdmin: this.admin, hasAvatar: this.hasAvatar}));
+      }   */                          // Needs to alert the user as to the error!!!!
+    })
+  }
 
   static get properties () {
     return {
       students: {
         type: Array
+      },
+      selectPriv:{
+        type: Number
       }
     }
   }
