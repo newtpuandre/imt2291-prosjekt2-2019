@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL DEFAULT '0',
   `password` varchar(255) NOT NULL DEFAULT '0',
-  `avatar` blob,
+  `avatar` blob DEFAULT NULL,
   `privileges` varchar(255) NOT NULL DEFAULT '0' COMMENT '0 = user, 1 = teacher, 2 = admin',
   `isTeacher` int(11) DEFAULT '0' COMMENT '0 = not checked, 1 = checked',
   PRIMARY KEY (`id`),
