@@ -28,13 +28,14 @@ if (isset($_SESSION['uid'])) {
     $res['status'] = 'SUCCESS';
     $res['uid'] = $result['id'];
     $res['uname'] = $result['email'];
-    $res['utype'] = "student";
+
     switch($result['privileges']){
       case 0: $res['utype'] = "student"; break;
       case 1: $res['utype'] = "teacher"; break;
       case 2: $res['utype'] = "admin"; break;
       default: $res['utype'] = "student"; break;
     }
+    
     $res['hasAvatar'] = $result['hasAvatar'];
   }
 }
