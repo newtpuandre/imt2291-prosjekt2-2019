@@ -54,7 +54,7 @@ class AdminView1 extends PolymerElement {
           </select>
           </p>
             <p>Er lærer?: <input type="checkbox" name="isTeacher" value="1" checked=[[item.isTeacher]] disabled></p>
-            <p><button on-click="updateUser" id="[[item.id]]">Oppdater bruker</button></p>
+            <p><button on-click="updateUser">Oppdater bruker</button></p>
             </form>
             </div>
           </template>
@@ -74,13 +74,13 @@ class AdminView1 extends PolymerElement {
     ).then(res=>res.json())         // When a reply has arrived
     .then(res=>{
       console.log(res);
-      /*if (res.status=='SUCCESS') {  // Successfully logged in
-        this.updateStatus(res);
-        if(res.hasAvatar==1) {
-          this.hasAvatar = true;
-        }
-        store.dispatch(logIn({uid: res.uid, uname: res.uname, isStudent: this.student, isTeacher: this.teacher, isAdmin: this.admin, hasAvatar: this.hasAvatar}));
-      }   */                          // Needs to alert the user as to the error!!!!
+
+      if (res.status=='SUCCESS') {  //Hamdle error
+
+      } else {
+
+      }   
+
     })
   }
 
@@ -89,9 +89,6 @@ class AdminView1 extends PolymerElement {
       students: {
         type: Array
       },
-      selectPriv:{
-        type: Number
-      }
     }
   }
 }
