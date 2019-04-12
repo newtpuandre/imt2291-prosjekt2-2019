@@ -17,7 +17,7 @@ $res = [];
 $res['status'] = 'FAILED';
 
 // Try log in with old md5 password
-$sql = 'SELECT password, id, !ISNULL(NULLIF(avatar,"")) as hasAvatar FROM users WHERE email=:email';
+$sql = 'SELECT password, id, privileges, !ISNULL(NULLIF(avatar,"")) as hasAvatar FROM users WHERE email=:email';
       $sth = $db->prepare ($sql);
       $sth->bindParam(':email', $_POST['email']);
       $sth->execute();
@@ -28,12 +28,14 @@ $sql = 'SELECT password, id, !ISNULL(NULLIF(avatar,"")) as hasAvatar FROM users 
           $res['status'] = 'SUCCESS';
           $res['uid'] = $row['id'];
           $res['uname'] = $_POST['email'];
+
           switch($row['privileges']){
             case 0: $res['utype'] = "student"; break;
             case 1: $res['utype'] = "teacher"; break;
             case 2: $res['utype'] = "admin"; break;
             default: $res['utype'] = "student"; break;
           }
+
           $res['hasAvatar'] = $row['hasAvatar'];
           $_SESSION['uid'] = $row['id'];
 
