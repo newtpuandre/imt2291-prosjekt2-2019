@@ -8,7 +8,7 @@ header("Content-Type: application/json; charset=utf-8");
 require_once 'classes/DB.php';
 $db = DB::getDBConnection();
 
-$stmt = $db->prepare('SELECT name, email, privileges, isTeacher FROM users');
+$stmt = $db->prepare('SELECT id, name, email, privileges, isTeacher FROM users');
 
 $stmt->execute(array());
 
