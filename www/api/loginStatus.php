@@ -20,7 +20,7 @@ $res = [];
 $res['loggedIn'] = false;
 if (isset($_SESSION['uid'])) {
   //$stmt = $db->prepare('SELECT id, pwd, email, privileges, !ISNULL(NULLIF(avatar,"")) as hasAvatar FROM user WHERE id=?');
-  $stmt = $db->prepare('SELECT id, email, privileges FROM users WHERE id=?');
+  $stmt = $db->prepare('SELECT id, email, privileges, !ISNULL(NULLIF(avatar,"")) as hasAvatar FROM users WHERE id=?');
   $stmt->execute(array($_SESSION['uid']));
   $result = $stmt->fetch(PDO::FETCH_ASSOC);
   $res['loggedIn'] = true;
@@ -35,7 +35,7 @@ if (isset($_SESSION['uid'])) {
       case 2: $res['utype'] = "admin"; break;
       default: $res['utype'] = "student"; break;
     }
-    $res['hasAvatar'] = 0;
+    $res['hasAvatar'] = $result['hasAvatar'];
   }
 }
 

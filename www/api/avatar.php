@@ -15,7 +15,7 @@ require_once 'classes/DB.php';
 $db = DB::getDBConnection();
 
 if ($_SESSION['uid']) {
-  $stmt = $db->prepare('SELECT avatar FROM user WHERE id=?');
+  $stmt = $db->prepare('SELECT avatar FROM users WHERE id=?');
   $stmt->execute(array($_SESSION['uid']));
   $res = $stmt->fetch(PDO::FETCH_ASSOC);
   if ($res) {

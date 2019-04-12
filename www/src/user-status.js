@@ -138,6 +138,7 @@ class UserStatus extends LitElement {
     })
     .then(res=>res.json())
     .then(res=>{
+      console.log(res);
       if (res.loggedIn) {         // User is logged in
         this.updateStatus(res);   // Sets user name, user id and such
         this.showStatus = false;  // We do not want to open the status pane

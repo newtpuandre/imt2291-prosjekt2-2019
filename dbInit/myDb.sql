@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL DEFAULT '0',
   `password` varchar(255) NOT NULL DEFAULT '0',
-  `picture_path` varchar(255) DEFAULT 'https://propertymarketersllc.com/wp-content/uploads/2018/05/profile-picture-placeholder.png',
+  `avatar` blob,
   `privileges` varchar(255) NOT NULL DEFAULT '0' COMMENT '0 = user, 1 = teacher, 2 = admin',
   `isTeacher` int(11) DEFAULT '0' COMMENT '0 = not checked, 1 = checked',
   PRIMARY KEY (`id`),

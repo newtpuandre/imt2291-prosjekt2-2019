@@ -25,8 +25,8 @@ if ($sth->rowCount()==1) {
     $res['status'] = 'SUCCESS';
     $res['uid'] = $db->lastInsertId();
     $res['uname'] = $_POST['email'];
-    $res['utype'] = "student";
-    $res['hasAvatar'] = 0;
+    $res['utype'] = "student"; //User is always set as student when registered
+    $res['hasAvatar'] = 0; //User dont have any avatar set as default
     $_SESSION['uid'] = $db->lastInsertId();
     echo json_encode($res);
 

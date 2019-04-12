@@ -22,7 +22,7 @@ if (isset($_SESSION['uid'])) {
     $content = file_get_contents($_FILES['file']['tmp_name']);
     $scaledContent = scale (imagecreatefromstring($content), 80, 80);
     unset ($content);     // Free up memory from old/unscaled image
-    $sql = 'UPDATE user SET avatar=? WHERE id=?';
+    $sql = 'UPDATE users SET avatar=? WHERE id=?';
     $sth = $db->prepare ($sql);
     $sth->execute(array($scaledContent, $_SESSION['uid']));
     if ($sth->rowCount()==1) {
