@@ -16,13 +16,17 @@ $db = DB::getDBConnection();
 $res = [];
 
 if (isset($_SESSION['uid'])) {
-
+    $sql = 'INSERT INTO playlists (ownerId, name, description, thumbnail) values (?, ?, ?, ?)';
+    $sth = $db->prepare($sql);
+    /* Use password_hash to encrypt password : http://php.net/manual/en/function.password-hash.php */
+    $sth->execute (array ($_SESSION['uid'], $_POST['name'],$_POST['description'],$_POST['thumbnail']));
     //Create playlist
 
-    //if successfull
-    //return success
-    //else
-    //return error.
-
+    if ($sth->rowCount()==1) {
+        $res['status'] = 'SUCCESS';
+    } else {
+        $res['status'] = 'ERROR';
+    }
+    echo json_encode($res);
 
 }

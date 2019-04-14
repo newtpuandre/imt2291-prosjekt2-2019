@@ -42,11 +42,11 @@ class TeacherCPlaylist extends PolymerElement {
         <h1>Lag spilleliste</h1>
         <form class="createPlaylist" name="createPlaylist" id="createPlaylist" onsubmit="javascript: return false;">
         <p>Spilleliste navn</p>
-        <input type="text"/>
+        <input type="text" name="name"/>
         <p>Beskrivelse</p>
-        <input type="text"/>
+        <input type="text" name="description"/>
         <p>miniatyrbilde</p>
-        <input type="file" name="pic" accept="image/*">
+        <input type="file" name="thumbnail" accept="image/*">
         <h1>Velg Videoer (Videoer kan velges senere)</h1>
         <p><button on-click="create">Lag spilleliste</button></p>
         </form>
@@ -74,9 +74,9 @@ class TeacherCPlaylist extends PolymerElement {
     `;
   }
 
-  updateUser(e) {
+  create(e) {
     const data = new FormData(e.target.form); // Wrap the form in a FormData object
-    fetch (`${window.MyAppGlobals.serverURL}api/updatePrivilege.php`, {
+    fetch (`${window.MyAppGlobals.serverURL}api/createPlaylist.php`, {
         method: 'POST',
         credentials: "include",
         body: data
