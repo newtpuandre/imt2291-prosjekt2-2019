@@ -1,7 +1,7 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import './shared-styles.js';
 
-class AdminView1 extends PolymerElement {
+class TeacherCPlaylist extends PolymerElement {
 
   constructor () {
     super();
@@ -39,8 +39,18 @@ class AdminView1 extends PolymerElement {
       </style>
 
       <div class="card">
-        <h1>Endre bruker privilegier</h1>
-        <div class="grid-container">
+        <h1>Lag spilleliste</h1>
+        <form class="createPlaylist" name="createPlaylist" id="createPlaylist" onsubmit="javascript: return false;">
+        <p>Spilleliste navn</p>
+        <input type="text"/>
+        <p>Beskrivelse</p>
+        <input type="text"/>
+        <p>miniatyrbilde</p>
+        <input type="file" name="pic" accept="image/*">
+        <h1>Velg Videoer (Videoer kan velges senere)</h1>
+        <p><button on-click="create">Lag spilleliste</button></p>
+        </form>
+        <!--<div class="grid-container">
           <template is="dom-repeat" items="[[students]]">
             <div class="grid-item">
             <form class="updatePriv" name="updatePriv" id="updatePriv" onsubmit="javascript: return false;">
@@ -58,7 +68,7 @@ class AdminView1 extends PolymerElement {
             </form>
             </div>
           </template>
-        </div>
+        </div>-->
       </div>
 
     `;
@@ -93,4 +103,4 @@ class AdminView1 extends PolymerElement {
   }
 }
 
-customElements.define('admin-view1', AdminView1);
+customElements.define('teacher-cplaylist', TeacherCPlaylist);
