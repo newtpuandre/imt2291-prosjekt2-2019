@@ -128,7 +128,7 @@ class MyApp extends PolymerElement {
             <template is="dom-if" if="{{user.isTeacher}}">
               <!-- Only teachers will see this. -->
               <a>Lærer</a>
-              <a class="tab" name="teacher" href="[[rootPath]]teacher"><i>Last opp video</i></a>
+              <a class="tab" name="teacher" href="[[rootPath]]upload"><i>Last opp video</i></a>
               <a class="tab" name="teacher" href="[[rootPath]]teacher"><i>Rediger video</i></a>
               <a class="tab" name="teacher" href="[[rootPath]]teacher"><i>Lag spilleliste</i></a>
               <a class="tab" name="teacher" href="[[rootPath]]teacher"><i>Endre spilleliste</i></a>
@@ -162,6 +162,7 @@ class MyApp extends PolymerElement {
             <my-view3 name="view3"></my-view3>
             <student-view1 name="student"></student-view1>
             <teacher-view1 name="teacher"></teacher-view1>
+            <upload-video-view name="upload"></upload-video-view>
             <admin-view1 name="admin"></admin-view1>
             <my-view404 name="view404"></my-view404>
           </iron-pages>
@@ -209,7 +210,7 @@ class MyApp extends PolymerElement {
      // Show 'view1' in that case. And if the page doesn't exist, show 'view404'.
     if (!page) {
       this.page = 'view1';
-    } else if (['view1', 'view2', 'view3', 'teacher', 'student', 'admin'].indexOf(page) !== -1) {
+    } else if (['view1', 'view2', 'view3', 'teacher', 'upload', 'student', 'admin'].indexOf(page) !== -1) {
       this.page = page;
     } else {
       this.page = 'view404';
@@ -238,6 +239,9 @@ class MyApp extends PolymerElement {
         break;
       case 'teacher':
         import('./teacher-view1.js');
+        break;
+      case 'upload':
+        import('./upload-video-view.js');
         break;
       case 'admin':
         import('./admin-view1.js');
