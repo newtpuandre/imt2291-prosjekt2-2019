@@ -9,7 +9,6 @@ $http_origin = $_SERVER['HTTP_ORIGIN'];
 if ($http_origin == "http://www" || $http_origin == "http://localhost:8080") {
     header("Access-Control-Allow-Origin: $http_origin");
 }
-
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Access-Control-Allow-Headers: Origin");
 header("Access-Control-Allow-Credentials: true");
@@ -61,11 +60,11 @@ if(isset($_SESSION['uid'])) {
 
             if(move_uploaded_file($_FILES["videoFile"]["tmp_name"], $videoFull)
                     && move_uploaded_file($_FILES["thumbNail"]["tmp_name"], $thumbFull)) {
-                $res["status"] = "SUCCESS"
+                $res["status"] = "SUCCESS";
             } else { // If the files couldn't be moved, delete the video entry from the database
                 $db->deleteVideo($id);
             }
         }
   }
-  
+}
   echo json_encode($res);
