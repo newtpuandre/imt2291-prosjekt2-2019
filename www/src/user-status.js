@@ -185,7 +185,7 @@ class UserStatus extends LitElement {
           <label for="name">Fullt navn</label><input type="text" id="name" name="name"><br/>
           <label for="email">E-Post</label><input type="email" id="email" name="email"><br/>
           <label for="pwd">Passord</label><input type="password" id="pwd" name="pwd"><br/>
-          <label for="isTeacher">Jeg er lærer.<input type="checkbox" name="isTeacher" value="1"></br>
+          <label for="isTeacher">Jeg er lærer.</label><input type="checkbox" name="isTeacher" value="1"></br>
           <button @click="${this.register}">Registrer bruker</button>
           </form>
           </div>`:

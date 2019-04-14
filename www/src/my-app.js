@@ -110,7 +110,7 @@ class MyApp extends PolymerElement {
             <a name="view2" href="[[rootPath]]view2">Emner</a>
             <a name="view3" href="[[rootPath]]view3">Videoer</a>
             <a name="view3" href="[[rootPath]]view3">Spillelister</a>
-            <hr></hr>
+            <hr>
             <template is="dom-if" if="{{user.isAdmin}}">
               <!-- Only admins will see this. -->
               <a>Admin</a>
@@ -119,7 +119,7 @@ class MyApp extends PolymerElement {
               <a>Lærer</a>
               <a class="tab" name="teacher" href="[[rootPath]]teacher"><i>Last opp video</i></a>
               <a class="tab" name="teacher" href="[[rootPath]]teacher"><i>Rediger video</i></a>
-              <a class="tab" name="teacher" href="[[rootPath]]teacher"><i>Lag spilleliste</i></a>
+              <a class="tab" name="teachercplaylist" href="[[rootPath]]teachercplaylist"><i>Lag spilleliste</i></a>
               <a class="tab" name="teacher" href="[[rootPath]]teacher"><i>Endre spilleliste</i></a>
 
               <a>Student</a>
@@ -130,7 +130,7 @@ class MyApp extends PolymerElement {
               <a>Lærer</a>
               <a class="tab" name="teacher" href="[[rootPath]]upload"><i>Last opp video</i></a>
               <a class="tab" name="teacher" href="[[rootPath]]teacher"><i>Rediger video</i></a>
-              <a class="tab" name="teacher" href="[[rootPath]]teacher"><i>Lag spilleliste</i></a>
+              <a class="tab" name="teachercplaylist" href="[[rootPath]]teachercplaylist"><i>Lag spilleliste</i></a>
               <a class="tab" name="teacher" href="[[rootPath]]teacher"><i>Endre spilleliste</i></a>
 
               <a>Student</a>
@@ -163,6 +163,7 @@ class MyApp extends PolymerElement {
             <student-view1 name="student"></student-view1>
             <teacher-view1 name="teacher"></teacher-view1>
             <upload-video-view name="upload"></upload-video-view>
+            <teacher-cplaylist name="teachercplaylist"></teacher-cplaylist>
             <admin-view1 name="admin"></admin-view1>
             <my-view404 name="view404"></my-view404>
           </iron-pages>
@@ -191,10 +192,12 @@ class MyApp extends PolymerElement {
     super();
     const data = store.getState();
     this.user = data.user;
+
     store.subscribe((state)=>{
       this.user = store.getState().user;
-      console.log(this.user);
     })
+
+
   }
 
   static get observers() {
@@ -208,10 +211,11 @@ class MyApp extends PolymerElement {
      //
      // If no page was found in the route data, page will be an empty string.
      // Show 'view1' in that case. And if the page doesn't exist, show 'view404'.
+
     if (!page) {
       this.page = 'view1';
-    } else if (['view1', 'view2', 'view3', 'teacher', 'upload', 'student', 'admin'].indexOf(page) !== -1) {
-      this.page = page;
+    } else if (['view1', 'view2', 'view3', 'teacher', 'teachercplaylist', 'upload', 'student', 'admin'].indexOf(page) !== -1) {
+      this.page = page; 
     } else {
       this.page = 'view404';
     }
@@ -242,6 +246,8 @@ class MyApp extends PolymerElement {
         break;
       case 'upload':
         import('./upload-video-view.js');
+      case 'teachercplaylist':
+        import('./teacher-cplaylist.js');
         break;
       case 'admin':
         import('./admin-view1.js');
