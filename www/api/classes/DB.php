@@ -193,9 +193,9 @@ class DB {
       $sth->execute(array($user, $title, $desc, $topic, $course, $thumb_path, $video_path));
 
       if ($sth->rowCount()==1) {
-          return $this->dbh->lastInsertId();
+        return $this->dbh->lastInsertId();
       } else {
-          return -1;
+        return -1;
       }
   }
 

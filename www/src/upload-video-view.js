@@ -43,6 +43,9 @@ class UploadVideoView extends PolymerElement {
           <label for="video">Video</label>
           <input type="file" name="video" id="video" accept="video/*" required>
 
+          <label for="subs">Undertekster</label>
+          <input type="file" name="subs" id="subs">
+
           <br><br>
           <button on-click="uploadVideo">Last opp video</button>
         </form>
