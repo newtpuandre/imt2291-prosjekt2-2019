@@ -185,7 +185,7 @@ class DB {
    * @param string $course
    * @param string $thumb_path
    * @param string $video_path
-   * @return bool
+   * @return int The ID of the new video, or -1 on fail
    */
   public function newVideo($user, $title, $desc, $topic, $course, $thumb_path, $video_path) {
       $sql = 'INSERT INTO video (userid, title, description, topic, course, thumbnail_path, video_path) values (?, ?, ?, ?, ?, ?, ?)';
@@ -193,9 +193,9 @@ class DB {
       $sth->execute(array($user, $title, $desc, $topic, $course, $thumb_path, $video_path));
 
       if ($sth->rowCount()==1) {
-          return true;
+          return $this->dbh->lastInsertId();
       } else {
-          return false;
+          return -1;
       }
   }
 
