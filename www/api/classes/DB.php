@@ -385,7 +385,7 @@ class DB {
    * @return array|null
    */
   public function returnAllCourses(){
-      $sql = 'SELECT COUNT(*), course,id, topic, time FROM video GROUP BY course';
+      $sql = 'SELECT COUNT(*) AS count, course,id, topic, time FROM video GROUP BY course';
       $sth = $this->dbh->prepare($sql);
       $sth->execute();
 
