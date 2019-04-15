@@ -115,27 +115,14 @@ class MyApp extends PolymerElement {
               <!-- Only admins will see this. -->
               <a>Admin</a>
               <a class="tab" name="admin" href="[[rootPath]]admin"><i>Endre Privilegier</i></a>
-
-              <a>Lærer</a>
-              <a class="tab" name="teacher" href="[[rootPath]]teacher"><i>Last opp video</i></a>
-              <a class="tab" name="teacher" href="[[rootPath]]teacher"><i>Rediger video</i></a>
-              <a class="tab" name="teachercplaylist" href="[[rootPath]]teachercplaylist"><i>Lag spilleliste</i></a>
-              <a class="tab" name="teacher" href="[[rootPath]]teacher"><i>Endre spilleliste</i></a>
-
-              <a>Student</a>
-              <a class="tab" name="student" href="[[rootPath]]student"><i>See abonnerte spillelister</i></a>
             </template>
             <template is="dom-if" if="{{user.isTeacher}}">
               <!-- Only teachers will see this. -->
               <a>Lærer</a>
-              <a class="tab" name="teacher" href="[[rootPath]]upload"><i>Last opp video</i></a>
+              <a class="tab" name="upload" href="[[rootPath]]upload"><i>Last opp video</i></a>
               <a class="tab" name="teacher" href="[[rootPath]]teacher"><i>Rediger video</i></a>
               <a class="tab" name="teachercplaylist" href="[[rootPath]]teachercplaylist"><i>Lag spilleliste</i></a>
               <a class="tab" name="teacher" href="[[rootPath]]teacher"><i>Endre spilleliste</i></a>
-
-              <a>Student</a>
-              <a class="tab" name="student" href="[[rootPath]]student"><i>See abonnerte spillelister</i></a>
-
             </template>
             <template is="dom-if" if="{{user.isStudent}}">
               <!-- Only students will see this. -->

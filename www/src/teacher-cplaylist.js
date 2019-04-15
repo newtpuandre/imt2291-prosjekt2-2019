@@ -1,17 +1,26 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import './shared-styles.js';
+import store from './js/store/index';
 
 class TeacherCPlaylist extends PolymerElement {
 
   constructor () {
     super();
-    this.students = [];
-    fetch (`${window.MyAppGlobals.serverURL}api/getUsers.php`)
-    .then(res=>res.json())
-    .then(data=>{
-      console.log(data);
-      this.students = data;
-    });
+    const data = store.getState();
+    this.user = data.user;
+
+    store.subscribe((state)=>{
+      this.user = store.getState().user;
+    })
+  }
+
+  static get properties() {
+    return {
+      user: {
+        type: Object,
+       value: { student: false, teacher: false, admin: false }
+      }
+    };
   }
 
   static get template() {
@@ -39,6 +48,7 @@ class TeacherCPlaylist extends PolymerElement {
       </style>
 
       <div class="card">
+      <template is="dom-if" if="{{user.isTeacher}}">
         <h1>Lag spilleliste</h1>
         <form class="createPlaylist" name="createPlaylist" id="createPlaylist" onsubmit="javascript: return false;">
         <p>Spilleliste navn</p>
@@ -69,6 +79,10 @@ class TeacherCPlaylist extends PolymerElement {
             </div>
           </template>
         </div>-->
+        </template>
+        <template is="dom-if" if="{{!user.isTeacher}}">
+         <h1>Du må være lærer for å se denne siden.</h1>
+        </template>
       </div>
 
     `;
@@ -85,7 +99,7 @@ class TeacherCPlaylist extends PolymerElement {
     .then(res=>{
       console.log(res);
 
-      if (res.status=='SUCCESS') {  //Hamdle error
+      if (res.status=='SUCCESS') {  //Handle error
 
       } else {
 
@@ -94,13 +108,6 @@ class TeacherCPlaylist extends PolymerElement {
     })
   }
 
-  static get properties () {
-    return {
-      students: {
-        type: Array
-      }
-    }
-  }
 }
 
 customElements.define('teacher-cplaylist', TeacherCPlaylist);

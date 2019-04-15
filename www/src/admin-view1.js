@@ -1,15 +1,22 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import './shared-styles.js';
+import store from './js/store/index';
 
 class AdminView1 extends PolymerElement {
 
   constructor () {
     super();
+    const data = store.getState();
+    this.user = data.user;
+
+    store.subscribe((state)=>{
+      this.user = store.getState().user;
+    })
+
     this.students = [];
     fetch (`${window.MyAppGlobals.serverURL}api/getUsers.php`)
     .then(res=>res.json())
     .then(data=>{
-      console.log(data);
       this.students = data;
     });
   }
@@ -39,6 +46,7 @@ class AdminView1 extends PolymerElement {
       </style>
 
       <div class="card">
+      <template is="dom-if" if="{{user.isAdmin}}">
         <h1>Endre bruker privilegier</h1>
         <div class="grid-container">
           <template is="dom-repeat" items="[[students]]">
@@ -59,6 +67,10 @@ class AdminView1 extends PolymerElement {
             </div>
           </template>
         </div>
+        </template>
+        <template is="dom-if" if="{{!user.isAdmin}}">
+          <h1>Du må være lærer for å se denne siden.</h1>
+        </template>
       </div>
 
     `;
@@ -88,9 +100,14 @@ class AdminView1 extends PolymerElement {
     return {
       students: {
         type: Array
+      },
+      user: {
+        type: Object,
+       value: { student: false, teacher: false, admin: false }
       }
     }
   }
+
 }
 
 customElements.define('admin-view1', AdminView1);

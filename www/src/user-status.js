@@ -325,8 +325,11 @@ class UserStatus extends LitElement {
       case 'student': this.student = true;
         break;
       case 'teacher': this.teacher = true;
+      this.student = true;
         break;
       case 'admin': this.admin = true;
+      this.teacher = true;
+      this.student = true;
         break;
     }
   }
