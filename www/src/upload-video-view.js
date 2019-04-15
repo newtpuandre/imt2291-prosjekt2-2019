@@ -1,10 +1,27 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import './shared-styles.js';
+import store from './js/store/index';
 
 class UploadVideoView extends PolymerElement {
 
   constructor() {
     super();
+    
+    const data = store.getState();
+    this.user = data.user;
+
+    store.subscribe((state)=>{
+      this.user = store.getState().user;
+    })
+  }
+
+  static get properties() {
+    return {
+      user: {
+        type: Object,
+        value: { student: false, teacher: false, admin: false }
+      }
+    };
   }
 
   static get template() {
@@ -22,33 +39,39 @@ class UploadVideoView extends PolymerElement {
       </style>
 
       <div class="card">
-        <h1>Last opp video</h1>
+        <template is="dom-if" if="{{user.isTeacher}}">
+          <h1>Last opp video</h1>
         
-        <form onsubmit="javascript: return false;" id="uploadForm" enctype="multipart/form-data">
-          <label for="title">Tittel</label>
-          <input type="text" name="title" id="title" maxlength="64" required>
+          <form onsubmit="javascript: return false;" id="uploadForm" enctype="multipart/form-data">
+            <label for="title">Tittel</label>
+            <input type="text" name="title" id="title" maxlength="64" required>
 
-          <label for="desc">Beskrivelse</label>
-          <input type="text" name="desc" id="desc" maxlength="512">
+            <label for="desc">Beskrivelse</label>
+            <input type="text" name="desc" id="desc" maxlength="512">
 
-          <label for="topic">Emne</label>
-          <input type="text" name="topic" id="topic" maxlength="64" required>
+            <label for="topic">Emne</label>
+            <input type="text" name="topic" id="topic" maxlength="64" required>
 
-          <label for="course">Fag</label>
-          <input type="text" name="course" id="course" maxlength="64" required>
+            <label for="course">Fag</label>
+            <input type="text" name="course" id="course" maxlength="64" required>
 
-          <label for="thumbnail">Thumbnail</label>
-          <input type="file" name="thumbnail" id="thumbnail" accept="image/*">
+            <label for="thumbnail">Thumbnail</label>
+            <input type="file" name="thumbnail" id="thumbnail" accept="image/*">
 
-          <label for="video">Video</label>
-          <input type="file" name="video" id="video" accept="video/*" required>
+            <label for="video">Video</label>
+            <input type="file" name="video" id="video" accept="video/*" required>
 
-          <label for="subs">Undertekster</label>
-          <input type="file" name="subs" id="subs">
+            <label for="subs">Undertekster</label>
+            <input type="file" name="subs" id="subs">
 
-          <br><br>
-          <button on-click="uploadVideo">Last opp video</button>
-        </form>
+            <br><br>
+            <button on-click="uploadVideo">Last opp video</button>
+          </form>
+        </template>
+
+        <template is="dom-if" if="{{!user.isTeacher}}">
+          <h1>Du må være lærer for å se denne siden.</h1>
+        </template>
       </div>
     `;
   }
