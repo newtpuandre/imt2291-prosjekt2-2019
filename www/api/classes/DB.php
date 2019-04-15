@@ -965,11 +965,11 @@ class DB {
 
    /**
    * @function getNewVideos
-   * @brief returns the eight newest videos
+   * @brief returns the nine newest videos
    * @return array|null
    */
   public function getNewVideos(){
-      $sql = 'SELECT id, title, description, topic, course, thumbnail_path FROM video ORDER BY id DESC LIMIT 8';
+      $sql = 'SELECT id, title, description, topic, course, thumbnail_path FROM video ORDER BY id DESC LIMIT 9';
       $sth = $this->dbh->prepare($sql);
 
       $sth->execute();

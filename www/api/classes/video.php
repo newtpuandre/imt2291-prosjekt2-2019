@@ -1,6 +1,6 @@
 <?php
 
-require_once 'db.php';
+require_once 'DB.php';
 
 /**
   *  Class Video. Represents a single video.
