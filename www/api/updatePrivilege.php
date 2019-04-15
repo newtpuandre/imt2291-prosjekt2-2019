@@ -10,17 +10,14 @@ header("Access-Control-Allow-Headers: Origin");
 header("Access-Control-Allow-Credentials: true");
 header("Content-Type: application/json; charset=utf-8");
 
-require_once 'classes/DB.php';
-$db = DB::getDBConnection();
+require_once 'classes/admin.php';
+$admin = new Admin();
 
 $res = [];
-
-$sql = 'UPDATE users SET privileges=? WHERE id=?';
-$sth = $db->prepare ($sql);
-$sth->execute(array($_POST['privilege'], $_POST['id']));
-if ($sth->rowCount()==1) {
+if($admin->updatePrivileges($_POST['id'], $_POST['privilege'])){
     $res['status'] = 'SUCCESS';
 } else {
     $res['status'] = 'ERROR';
 }
+
 echo json_encode($res);

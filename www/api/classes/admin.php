@@ -1,6 +1,6 @@
 <?php
 
-require_once 'db.php';
+require_once 'DB.php';
 
 /**
   *  Class Video. Represents the admin role of the system.
@@ -14,8 +14,6 @@ class Admin
     /*Constructor*/
     function __construct() {
         $this->db = new DB();
-
-        $this->dbh = $this->db->getDBConnection();
     }
 
     function __destruct() {}
@@ -32,16 +30,12 @@ class Admin
      /**
      * @function updatePrivileges
      * @brief updates a specific users privilege
-     * @param string $m_email
+     * @param string $m_id
      * @param string $m_privlevel 
      * @return bool
      */
-    public function updatePrivileges($m_email, $m_privlevel){ 
-        if($this->db->updatePrivileges($m_email,$m_privlevel)) {
-            return true;
-        } else {
-            return false;
-        }
+    public function updatePrivileges($m_id, $m_privlevel){ 
+        return ($this->db->updatePrivileges($m_id,$m_privlevel));
     }
 
      /**

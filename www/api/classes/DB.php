@@ -1,5 +1,4 @@
 <?php
-
 class DB {
   private static $db=null;
   private $dsn = 'mysql:dbname=myDb;host=db';
@@ -7,7 +6,7 @@ class DB {
   private $password = 'test';
   private $dbh = null;
 
-  private function __construct() {
+  public function __construct() {
     try {
         $this->dbh = new PDO($this->dsn, $this->user, $this->password);
     } catch (PDOException $e) {
@@ -165,7 +164,7 @@ class DB {
    * @return array|null
    */
   public function gatherUsers(){
-      $sql = 'SELECT id, email, privileges, isTeacher FROM users ORDER BY id DESC ';
+      $sql = 'SELECT id, name, email, privileges, isTeacher FROM users ORDER BY id DESC ';
       $sth = $this->dbh->prepare ($sql);
       $sth->execute();
       if ($rows = $sth->fetchAll()) {
@@ -409,7 +408,6 @@ class DB {
       $sth = $this->dbh->prepare ($sql);
       $sth->bindParam(':thumbnail_path', $m_thumb_path);
       $sth->bindParam(':videoid', $m_videoid);
-
       $sth->execute();
       if ($row = $sth->fetch()) {
           return true;
@@ -422,17 +420,18 @@ class DB {
   /**
    * @function updatePrivileges
    * @brief updates the privileges for one user
-   * @param string $m_email
+   * @param string $m_id
    * @param string $m_privilevel
    * @return bool
    */
-  public function updatePrivileges($m_email, $m_privilevel) {
-      $sql = 'UPDATE users SET PRIVILEGES = :privileges WHERE email=:email';
+  public function updatePrivileges($m_id, $m_privilevel) {
+      //echo $this->dbh->;
+      $sql = 'UPDATE users SET privileges = :privileges WHERE id=:id';
       $sth = $this->dbh->prepare ($sql);
       $sth->bindParam(':privileges',$m_privilevel);
-      $sth->bindParam(':email', $m_email);
+      $sth->bindParam(':id', $m_id);
       $sth->execute();
-      if ($row = $sth->fetch()) {
+      if ($sth->rowCount() > 0) {
           return true;
       } else {
           return false;
