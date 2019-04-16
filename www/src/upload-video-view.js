@@ -83,16 +83,15 @@ class UploadVideoView extends PolymerElement {
       credentials: "include",
       body: data
     }
-    ).then(res=>res.json())         // When a reply has arrived
-    .then(res=>{
+    ).then(res => res.json())
+    .then(res => {
       console.log(res);
 
-      if (res.status=='SUCCESS') {  //Hamdle error
-
+      if(res.status == 'SUCCESS') {
+        console.log("Video uploaded");
       } else {
-
+        console.log("Error uploading video");
       }   
-
     })
   }
 }

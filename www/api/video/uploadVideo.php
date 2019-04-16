@@ -1,16 +1,23 @@
 <?php
+/**
+ * Uploads a new video
+ * Methods supported: POST
+ * Parameters required: title, desc, topic, course
+ * Required files: video
+ * Optional files: thumbnail, subtitles
+ */
+
+require_once '../classes/DB.php';
+
 session_start();
 
-/**
- * Laster opp en ny video
- */
 
 $http_origin = $_SERVER['HTTP_ORIGIN'];
 
 if ($http_origin == "http://www" || $http_origin == "http://localhost:8080") {
     header("Access-Control-Allow-Origin: $http_origin");
 }
-header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Origin");
 header("Access-Control-Allow-Credentials: true");
 header("Content-Type: application/json; charset=utf-8");
@@ -18,8 +25,7 @@ header("Content-Type: application/json; charset=utf-8");
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-require_once '../classes/DB.php';
-$db = DB::getDBConnection();
+$db = new DB();
 
 $res["status"] = "FAILED";
 
@@ -29,43 +35,62 @@ if(isset($_SESSION['uid'])) {
     $topic = $_POST["topic"];
     $course = $_POST["course"];
 
-    $sql = 'INSERT INTO video (userid, title, description, topic, course, thumbnail_path, video_path) values (?, ?, ?, ?, ?, ?, ?)';
-    $sth = $db->prepare($sql);
-    $sth->execute(array($_SESSION["uid"], $title, $desc, $topic, $course, "", ""));
-    
-    if($sth->rowCount() == 1) {
-        $res['status'] = 'Uploaded';
-        $id = $db->lastInsertId();
+    $id = $db->newVideo($_SESSION["uid"], $title, $desc, $topic, $course, "", "");
 
-        $videoDir = "/shared/httpd/uploadedFiles/thumbnails/";
-        $thumbDir = "uploadedFiles/videos/";
+    if($id != -1) {
 
-        $videoName = $_FILES["video"]["name"];
-        $videoFull = $videoDir . $id;
-            
-        $thumbName = $_FILES["thumbnail"]["name"];
-        $thumbFull = $thumbDir . $id;
+        // Every user has their own folder, and in that folder there are
+        // subfolders for videos, thumbnails and subtitles
+        // The current folder is "www/api/video", the "userFiles" folder
+        // is located at "/www/userfiles"
+        $videoDir = "../../userFiles/" . $_SESSION["uid"] . "/videos";
+        $thumbDir = "../../userFiles/" . $_SESSION["uid"] . "/thumbnails";
+        $subtitlesDir = "../../userFiles/" . $_SESSION["uid"] . "/subtitles";
 
-        /* This fails, needs some permission stuff I don't know how to fix with docker
-        // Create the directories if they dont exist
-        if(!file_exists($thumbDir)) {
-            mkdir($thumbDir, 0777, true);
-        }
         if(!file_exists($videoDir)) {
             mkdir($videoDir, 0777, true);
         }
 
-        $videoFile = file_get_contents($_FILES["video"]["tmp_name"]);
-
-        if(move_uploaded_file($_FILES["videoFile"]["tmp_name"], $videoFull)
-                && move_uploaded_file($_FILES["thumbNail"]["tmp_name"], $thumbFull)) {
-            $res["status"] = "SUCCESS";
-        } else { // If the files couldn't be moved, delete the video entry from the database
-           // $db->deleteVideo($id);
-           $res["status"] = "video needs deletion";
+        if(!file_exists($thumbDir)) {
+            mkdir($thumbDir, 0777, true);
         }
-        */
+
+        if(!file_exists($subtitlesDir)) {
+            mkdir($subtitlesDir, 0777, true);
+        }
+
+        if(@$_FILES["thumbnail"]["error"] === UPLOAD_ERR_OK) {
+            if(move_uploaded_file($_FILES["thumbnail"]["tmp_name"], $thumbDir . "/" . $id)) {
+                $res["status"] = "SUCCESS";
+            }
+        }
+        
+        if(@$_FILES["subtitles"]["error"] === UPLOAD_ERR_OK) {
+            if(move_uploaded_file($_FILES["subtitles"]["tmp_name"], $subtitlesDir . "/" . $id)) {
+                $res["status"] = "SUCCESS";
+            }
+        }
+
+        if(move_uploaded_file($_FILES["video"]["tmp_name"], $videoDir . "/"  . $id)) {
+            $res["status"] = "SUCCESS";
+        }
     }
+}
+
+// Something failed, remove the database entry and delete the files from disk
+if($res["status"] == "FAILED") {
+    $db->deleteVideo($id);
+
+    unlink($videoDir . "/" . $id);
+
+    if(file_exists($thumbDir . "/" . $id)) {
+        unlink($thumbDir . "/" . $id);
+    }
+
+    if(file_exists($subtitlesDir . "/" . $id)) {
+        unlink($subtitlesDir . "/" . $id);
+    }
+    $res["deleted"] = $id;
 }
 
 echo json_encode($res);
