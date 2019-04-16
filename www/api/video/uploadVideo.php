@@ -74,23 +74,24 @@ if(isset($_SESSION['uid'])) {
         if(move_uploaded_file($_FILES["video"]["tmp_name"], $videoDir . "/"  . $id)) {
             $res["status"] = "SUCCESS";
         }
+
+        // Something failed, remove the database entry and delete the files from disk
+        if($res["status"] == "FAILED") {
+            $db->deleteVideo($id);
+
+            unlink($videoDir . "/" . $id);
+
+            if(file_exists($thumbDir . "/" . $id)) {
+                unlink($thumbDir . "/" . $id);
+            }
+
+            if(file_exists($subtitlesDir . "/" . $id)) {
+                unlink($subtitlesDir . "/" . $id);
+            }
+        }
+    } else {
+        $res["status"] = "FAILED";
     }
-}
-
-// Something failed, remove the database entry and delete the files from disk
-if($res["status"] == "FAILED") {
-    $db->deleteVideo($id);
-
-    unlink($videoDir . "/" . $id);
-
-    if(file_exists($thumbDir . "/" . $id)) {
-        unlink($thumbDir . "/" . $id);
-    }
-
-    if(file_exists($subtitlesDir . "/" . $id)) {
-        unlink($subtitlesDir . "/" . $id);
-    }
-    $res["deleted"] = $id;
 }
 
 echo json_encode($res);
