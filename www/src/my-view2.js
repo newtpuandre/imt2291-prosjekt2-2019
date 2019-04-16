@@ -36,6 +36,9 @@ class MyView2 extends PolymerElement {
       </style>
 
       <div class="card">
+      <h1>Søk</h1>
+      <input type="text">
+      <button>Søk</button>
         <h1>Emner</h1>
         <template is="dom-repeat" items="[[courses]]">
         <!-- <a href=""> -->

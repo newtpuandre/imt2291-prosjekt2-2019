@@ -10,8 +10,41 @@
 
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import './shared-styles.js';
+import store from './js/store/index';
 
 class MyView3 extends PolymerElement {
+
+  static get properties () {
+    return {
+      videos: {
+        type: Array
+      },
+      user: {
+        type: Object,
+       value: { student: false, teacher: false, admin: false }
+      }
+    }
+  }
+
+  constructor () {
+    super();
+
+    const data = store.getState();
+    this.user = data.user;
+
+    store.subscribe((state)=>{
+      this.user = store.getState().user;
+    })
+
+    this.videos = [];
+    fetch (`${window.MyAppGlobals.serverURL}api/getAllVideos.php`)
+    .then(res=>res.json())
+    .then(data=>{
+      this.videos = data;
+      console.log(data);
+    });
+  }
+
   static get template() {
     return html`
       <style include="shared-styles">
@@ -19,14 +52,42 @@ class MyView3 extends PolymerElement {
           display: block;
 
           padding: 10px;
+          
         }
+
+        .grid-container {
+          display: grid;
+          grid-template-columns: auto auto auto;
+          padding: 5px;
+        }
+    
+        .grid-item {
+          background-color: rgba(255, 255, 255, 0.8);
+          border: 1px solid rgba(0, 0, 0, 0.8);
+          border-radius: 5px;
+          margin: 2px;
+          padding: 10px;
+          text-align: left;
+        }
+
       </style>
 
       <div class="card">
-        <div class="circle">3</div>
-        <h1>View Three</h1>
-        <p>Modus commodo minimum eum te, vero utinam assueverit per eu.</p>
-        <p>Ea duis bonorum nec, falli paulo aliquid ei eum.Has at minim mucius aliquam, est id tempor laoreet.Pro saepe pertinax ei, ad pri animal labores suscipiantur.</p>
+      <h1>Søk</h1>
+      <input type="text">
+      <button>Søk</button>
+        <h1>Alle Videoer</h1>
+        <div class="grid-container">
+          <template is="dom-repeat" items="[[videos]]">
+            <div class="grid-item">
+            <b>[[item.title]]</b>
+            <p><img src="[[item.thumbnail]]"></p>
+            <p>Beskrivelse: [[item.description]]</p>
+            <p>Emne: [[item.topic]]</p>
+            <p>Fag: [[item.course]]</p>
+            </div>
+          </template>
+      </div>
       </div>
     `;
   }
