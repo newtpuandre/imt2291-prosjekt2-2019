@@ -5,6 +5,10 @@ André Gyrud Gunhildberget - 493561
 
 Håkon Schia - 480631
 
+
+## Konfigurasjon
+Alle filer lastet opp blir lagret i ```www/userFiles```, denne mappen må være eid av brukeren ```www-data```. Dette gjøres om med kommandoen ```chown -R www-data www/userFiles```.
+
 ## Prosjekt beskrivelse
 
 Rediger readme filen og legg inn navnene på deltakerne på gruppen før dere begynner med noe annet :-).
