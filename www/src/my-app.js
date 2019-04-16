@@ -109,7 +109,7 @@ class MyApp extends PolymerElement {
             <a name="view1" href="[[rootPath]]view1">Hjem</a>
             <a name="view2" href="[[rootPath]]view2">Emner</a>
             <a name="view3" href="[[rootPath]]view3">Videoer</a>
-            <a name="view3" href="[[rootPath]]view3">Spillelister</a>
+            <a name="view4" href="[[rootPath]]view4">Spillelister</a>
             <hr>
             <template is="dom-if" if="{{user.isAdmin}}">
               <!-- Only admins will see this. -->
@@ -147,6 +147,7 @@ class MyApp extends PolymerElement {
             <my-view1 name="view1"></my-view1>
             <my-view2 name="view2"></my-view2>
             <my-view3 name="view3"></my-view3>
+            <my-view4 name="view4"></my-view4>
             <student-view1 name="student"></student-view1>
             <teacher-view1 name="teacher"></teacher-view1>
             <upload-video-view name="upload"></upload-video-view>
@@ -201,7 +202,7 @@ class MyApp extends PolymerElement {
 
     if (!page) {
       this.page = 'view1';
-    } else if (['view1', 'view2', 'view3', 'teacher', 'teachercplaylist', 'upload', 'student', 'admin'].indexOf(page) !== -1) {
+    } else if (['view1', 'view2', 'view3', 'view4', 'teacher', 'teachercplaylist', 'upload', 'student', 'admin'].indexOf(page) !== -1) {
       this.page = page; 
     } else {
       this.page = 'view404';
@@ -227,6 +228,9 @@ class MyApp extends PolymerElement {
         break;
       case 'view3':
         import('./my-view3.js');
+        break;
+      case 'view4':
+        import('./my-view4.js');
         break;
       case 'teacher':
         import('./teacher-view1.js');
