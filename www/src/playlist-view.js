@@ -14,13 +14,12 @@ class PlaylistView extends PolymerElement {
         type:Array
       },
       playlistId:{
-        type: Number,
-        value: 1
+        type: Number
       },
       user: {
         type: Object,
        value: { student: false, teacher: false, admin: false }
-      } 
+      }
     }
   }
 
@@ -28,13 +27,12 @@ class PlaylistView extends PolymerElement {
 
   constructor () {
     super();
-
     const data = store.getState();
     this.user = data.user;
 
-    store.subscribe((state)=>{
-      this.user = store.getState().user;
-    })
+    this.playlistId = this.subroute.path;
+
+    console.log(this.playlistId);
 
     this.playlist = [];
     fetch (`${window.MyAppGlobals.serverURL}api/getPlaylist.php?id=` + this.playlistId)
@@ -49,7 +47,15 @@ class PlaylistView extends PolymerElement {
     .then(data=>{
       this.playlist = data;
     });
+    
+    store.subscribe((state)=>{
+      this.user = store.getState().user;
+    })
+
+
   }
+
+  
 
   static get template() {
     return html`
@@ -61,6 +67,9 @@ class PlaylistView extends PolymerElement {
         }
 
       </style>
+      <app-router>
+            <app-route path="/playlist/:playlistId"></app-route>
+        </app-router>
       <div class="card">
     
         <h1>Spilleliste: [[playlist.name]]</h1>
@@ -80,11 +89,7 @@ class PlaylistView extends PolymerElement {
       </div>
     `;
   }
-
-  test(e) {
-    console.log("xd");
-    console.log(this.route);
-    }
+    
 }
 
 customElements.define('playlist-view', PlaylistView);

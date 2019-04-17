@@ -17,9 +17,11 @@ header("Content-Type: application/json; charset=utf-8");
 
 require_once 'classes/playlist.php';
 
+$id = $_GET['id'];
+
 $playlist = new Playlist();
 
-$playlists = $playlist->returnPlaylistVideos($_GET['id']);
+$playlists = $playlist->returnPlaylistVideos(trim($id, "/"));
 
 echo json_encode($playlists);
 

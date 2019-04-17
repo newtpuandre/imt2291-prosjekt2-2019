@@ -31,9 +31,11 @@ class TeacherCPlaylist extends PolymerElement {
     return {
       userVideos:{
         type: Array,
+        notify: true
       },
       selectedVideos:{
-        type: Array
+        type: Array,
+        notify: true
       },
       user: {
         type: Object,

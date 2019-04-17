@@ -57,14 +57,14 @@ class StudentView1 extends PolymerElement {
           text-align: left;
         }
       </style>
-
       <div class="card">
       <template is="dom-if" if="{{user.isStudent}}">
         <h1>Abonnerte Spillelister</h1>
         <div class="grid-container">
           <template is="dom-repeat" items="[[playlists]]">
             <div class="grid-item">
-            <a href="/playlist/[[item.id]]"><b>[[item.name]]</b></a>
+            <a data-page="playlist" href="/playlist/{{item.id}}"><b>[[item.name]]</b></a>
+            <button on-click="test">123</button>
             <p><img src="[[item.thumbnail]]"></p>
             <p>Beskrivelse: [[item.description]]</p>
             <p>Laget av: [[item.lectname]]</p>
@@ -83,6 +83,9 @@ class StudentView1 extends PolymerElement {
       </div>
     `;
   }
+
+
+
 }
 
 customElements.define('student-view1', StudentView1);
