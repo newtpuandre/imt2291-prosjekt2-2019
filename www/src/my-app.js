@@ -98,7 +98,7 @@ class MyApp extends PolymerElement {
       <app-location route="{{route}}" url-space-regex="^[[rootPath]]">
       </app-location>
 
-      <app-route route="{{route}}" pattern="[[rootPath]]:page" data="{{routeData}}" tail="{{subroute}}">
+      <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}">
       </app-route>
 
       <app-drawer-layout fullbleed="" narrow="{{narrow}}">
@@ -148,6 +148,7 @@ class MyApp extends PolymerElement {
             <my-view2 name="view2"></my-view2>
             <my-view3 name="view3"></my-view3>
             <my-view4 name="view4"></my-view4>
+            <playlist-view name="playlist"></playlist-view>
             <student-view1 name="student"></student-view1>
             <teacher-view1 name="teacher"></teacher-view1>
             <upload-video-view name="upload"></upload-video-view>
@@ -202,7 +203,7 @@ class MyApp extends PolymerElement {
 
     if (!page) {
       this.page = 'view1';
-    } else if (['view1', 'view2', 'view3', 'view4', 'teacher', 'teachercplaylist', 'upload', 'student', 'admin'].indexOf(page) !== -1) {
+    } else if (['view1', 'view2', 'view3', 'view4', 'teacher', 'playlist', 'teachercplaylist', 'upload', 'student', 'admin'].indexOf(page) !== -1) {
       this.page = page; 
     } else {
       this.page = 'view404';
@@ -232,6 +233,9 @@ class MyApp extends PolymerElement {
       case 'view4':
         import('./my-view4.js');
         break;
+      case 'playlist':
+      import('./playlist-view.js');
+      break;
       case 'teacher':
         import('./teacher-view1.js');
         break;

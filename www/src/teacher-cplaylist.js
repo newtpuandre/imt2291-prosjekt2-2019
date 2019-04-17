@@ -83,7 +83,7 @@ class TeacherCPlaylist extends PolymerElement {
         <h1>Velg Videoer (Videoer kan velges senere)</h1>
 
         <div class="grid-container">
-          <template id="list" is="dom-repeat" items="{{userVideos}}">
+          <template id="list" is="dom-repeat" items="{{userVideos}}" >
           <div class="grid-item">
 
           <form class="selectVideo" name="selectVideo" id="selectVideo" onsubmit="javascript: return false;">
