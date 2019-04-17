@@ -76,7 +76,7 @@ class StudentView1 extends PolymerElement {
         </div>
         </template>
 
-        <template is="dom-if" if="{{!user.isTeacher}}">
+        <template is="dom-if" if="{{!user.isStudent}}">
         <h1>Du må være en student for å se denne siden!</h1>
         </template>
 
