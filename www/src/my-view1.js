@@ -8,6 +8,9 @@ class MyView1 extends PolymerElement {
       videos: {
         type: Array
       },
+      playlists: {
+        type: Array
+      },
       user: {
         type: Object,
        value: { student: false, teacher: false, admin: false }
@@ -25,14 +28,37 @@ class MyView1 extends PolymerElement {
     store.subscribe((state)=>{
       this.user = store.getState().user;
     })
+  }
 
-    this.videos = [];
-    fetch (`${window.MyAppGlobals.serverURL}api/getNewVideos.php`)
-    .then(res=>res.json())
-    .then(data=>{
-      this.videos = data;
-      console.log(data);
-    });
+
+  static get observers() {
+    return [
+        'loadData(subroute)'
+    ]
+  }
+
+  loadData(subroute){
+    if (subroute.prefix == "/view1" && subroute.path == ""){ //Only do the following if we are in the playlist page with ID
+
+      this.videos = [];
+      fetch (`${window.MyAppGlobals.serverURL}api/getNewVideos.php`)
+      .then(res=>res.json())
+      .then(data=>{
+        this.videos = data;
+        console.log(data);
+      });
+  
+      this.playlists = [];
+      fetch (`${window.MyAppGlobals.serverURL}api/getSubscribedPlaylists.php`,{
+        credentials: "include"
+      })
+      .then(res=>res.json())
+      .then(data=>{
+        this.playlists = data;
+        console.log(data);
+      });
+
+    }
   }
 
   static get template() {
@@ -79,36 +105,21 @@ class MyView1 extends PolymerElement {
       </div>
       <template is="dom-if" if="{{user.isStudent}}">
       <h1>Abonnerte spillelister</h1>
-      <p>spillelister</p>
-      </template>
-
-      <!--<template is="dom-if" if="{{user.isAdmin}}">
-        <h1>Endre bruker privilegier</h1>
-        <div class="grid-container">
-          <template is="dom-repeat" items="[[students]]">
+      <div class="grid-container">
+          <template is="dom-repeat" items="[[playlists]]">
             <div class="grid-item">
-            <form class="updatePriv" name="updatePriv" id="updatePriv" onsubmit="javascript: return false;">
-            <input type="hidden" name="id" id="id" value="[[item.id]]" />
-            <p><label for="name">Navn: [[item.name]]</label></p>
-            <p>E-post: [[item.email]]</p>
-            <p>Privilegier: <select id="privilege" name="privilege" value=[[item.privileges]]>
-            <option value="0">Student</option>
-            <option value="1">Lærer</option>
-            <option value="2">Admin</option>
-          </select>
-          </p>
-            <p>Er lærer?: <input type="checkbox" name="isTeacher" value="1" checked=[[item.isTeacher]] disabled></p>
-            <p><button on-click="updateUser">Oppdater bruker</button></p>
-            </form>
+            <a data-page="playlist" href="/playlist/{{item.id}}"><b>[[item.name]]</b></a>
+            <p><img src="[[item.thumbnail]]"></p>
+            <p>Beskrivelse: [[item.description]]</p>
+            <p>Laget av: [[item.lectname]]</p>
             </div>
           </template>
+          <template is="dom-if" if="[[!playlists]]">
+          <p>Du har ikke abonnert på noen spillelister enda..</p>
+          </template>
         </div>
-        </template>
-        <template is="dom-if" if="{{!user.isAdmin}}">
-          <h1>Du må være lærer for å se denne siden.</h1>
-        </template>-->
-        
-        </div>
+      </template>
+    </div>
 
     `;
   }
