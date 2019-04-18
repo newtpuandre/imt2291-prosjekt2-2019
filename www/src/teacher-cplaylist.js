@@ -78,14 +78,27 @@ class TeacherCPlaylist extends PolymerElement {
         <p>miniatyrbilde</p>
         <input type="file" name="thumbnail" accept="image/*">
         <p><button on-click="create">Lag spilleliste</button></p>
-        <template is="dom-repeat" items="[[selectedVideos]]">
-        [[item.title]]
-        </template>
+        <h1>Valgte Videoer</h1>
+        <div class="grid-container">
+          <template is="dom-repeat" items="[[selectedVideos]]">
+            <div class="grid-item">
+            <form class="removeVideo" name="removeVideo" id="removeVideo" onsubmit="javascript: return false;"></form>
+            <b>[[item.title]]</b>
+            <p><img src="[[item.thumbnail]]"></p>
+            <p>Beskrivelse: [[item.description]]</p>
+            <p>Emne: [[item.topic]]</p>
+            <p>Fag: [[item.course]]</p>
+            <input type="hidden" name="vidId" id="vidId" value="[[item.id]]" />
+            <p><button on-click="removeVid">Fjern fra valgt video</button></p>
+            </form>
+            </div>
+          </template>
+        </div>
         </form>
         <h1>Velg Videoer (Videoer kan velges senere)</h1>
 
         <div class="grid-container">
-          <template id="list" is="dom-repeat" items="{{userVideos}}" >
+          <template is="dom-repeat" id="list" items="{{userVideos}}" >
           <div class="grid-item">
 
           <form class="selectVideo" name="selectVideo" id="selectVideo" onsubmit="javascript: return false;">
@@ -101,7 +114,6 @@ class TeacherCPlaylist extends PolymerElement {
           </div>
           </template>
         </div>
-
 
         </template>
 
@@ -132,7 +144,6 @@ class TeacherCPlaylist extends PolymerElement {
   }
 
   selectVid(e){
-
     const data = new FormData(e.target.form);
     /*for (var pair of data.entries())
     {
@@ -140,15 +151,34 @@ class TeacherCPlaylist extends PolymerElement {
     }*/
     let i = 0;
     for (var idx of this.userVideos){ //Loop over all userVideos
-      console.log(i);
       if (idx[0] == data.get('vidId')) { //Find selected and remove it from userVideos
-        console.log(i + "delete");
-        this.userVideos.splice(i, 1);
-        console.log(this.userVideos);
+
+        var video = this.get(["userVideos", i]); //Get array element
+        this.push("selectedVideos", video); //Add to selected video list
+
+        this.splice("userVideos", i, 1); //Remove from the other list
       }
         i++;
     }
+  }
 
+  removeVid(e){
+    const data = new FormData(e.target.form);
+    /*for (var pair of data.entries())
+    {
+      console.log(pair[0]+ ', '+ pair[1]); 
+    }*/
+    let i = 0;
+    for (var idx of this.selectedVideos){ //Loop over all userVideos
+      if (idx[0] == data.get('vidId')) { //Find selected and remove it from userVideos
+
+        var video = this.get(["selectedVideos", i]); //Get array element
+        this.push("userVideos", video); //Add to selected video list
+
+        this.splice("selectedVideos", i, 1); //Remove from the other list
+      }
+        i++;
+    }
   }
 
 }
