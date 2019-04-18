@@ -80,7 +80,7 @@ class MyView4 extends PolymerElement {
         <div class="grid-container">
           <template is="dom-repeat" items="[[playlists]]">
             <div class="grid-item">
-            <b>[[item.name]]</b>
+            <b><a href="/playlist/[[item.id]]">[[item.name]]</a></b>
             <p><img src="[[item.thumbnail]]"></p>
             <p>Beskrivelse: [[item.description]]</p>
             <p>Laget av: [[item.lectname]]</p>

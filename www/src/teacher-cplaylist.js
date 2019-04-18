@@ -75,7 +75,7 @@ class TeacherCPlaylist extends PolymerElement {
         <input type="text" name="name"/>
         <p>Beskrivelse</p>
         <input type="text" name="description"/>
-        <p>miniatyrbilde</p>
+        <p>Miniatyrbilde</p>
         <input type="file" name="thumbnail" accept="image/*">
         <p><button on-click="create">Lag spilleliste</button></p>
         <h1>Valgte Videoer</h1>
@@ -88,7 +88,7 @@ class TeacherCPlaylist extends PolymerElement {
             <p>Beskrivelse: [[item.description]]</p>
             <p>Emne: [[item.topic]]</p>
             <p>Fag: [[item.course]]</p>
-            <input type="hidden" name="vidId" id="vidId" value="[[item.id]]" />
+            <input type="hidden" name="vidId[]" id="vidId" value="[[item.id]]" />
             <p><button on-click="removeVid">Fjern fra valgt video</button></p>
             </form>
             </div>
@@ -126,7 +126,7 @@ class TeacherCPlaylist extends PolymerElement {
   }
 
   create(e) {
-    const data = new FormData(e.target.form); // Wrap the form in a FormData object
+    const data = new FormData(e.target.form);
     fetch (`${window.MyAppGlobals.serverURL}api/createPlaylist.php`, {
         method: 'POST',
         credentials: "include",
@@ -180,7 +180,6 @@ class TeacherCPlaylist extends PolymerElement {
         i++;
     }
   }
-
 }
 
 customElements.define('teacher-cplaylist', TeacherCPlaylist);
