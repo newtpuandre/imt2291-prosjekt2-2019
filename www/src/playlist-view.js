@@ -47,12 +47,12 @@ class PlaylistView extends PolymerElement {
         this.playlist = data;
       });
   
-      /*this.playlistVideos = [];
+      this.playlistVideos = [];
       fetch (`${window.MyAppGlobals.serverURL}api/getPlaylistVideos.php?id=` + subroute.path)
       .then(res=>res.json())
       .then(data=>{
-        this.playlist = data;
-      });*/
+        this.playlistVideos = data;
+      });
     }
   }
 
@@ -65,10 +65,11 @@ class PlaylistView extends PolymerElement {
           padding: 10px;
         }
 
+        ul {
+          list-style-type: none;
+        }
+
       </style>
-      <app-router>
-            <app-route path="/playlist/:playlistId"></app-route>
-        </app-router>
       <div class="card">
         <h1>Spilleliste: [[playlist.name]]</h1>
         <p><img src="[[playlist.thumbnail]]"></p>
@@ -77,12 +78,17 @@ class PlaylistView extends PolymerElement {
         <button>Abonner</button>
         </template>
         <h1>Videoer i denne spillelisten</h1>
-        <template is="dom-if" if="[[!playlistVideos]]">
-        <p>Det finnes ingen videoer i denne spillelisten enda..</p>
-        </template>
-        <template is="dom-if" if="[[playlistVideos]]">
-        <p>Videoer</p>
-        </template>
+        <ul>
+          <template is="dom-repeat" items="[[playlistVideos]]">
+            <li>
+            <b>[[item.title]]</b>
+            <p><img src="[[item.thumbnail]]"></p>
+            <p>Beskrivelse: [[item.description]]</p>
+            <p>Emne: [[item.topic]]</p>
+            <p>Fag: [[item.course]]</p>
+            </li>
+          </template>
+        </ul>
 
       </div>
     `;

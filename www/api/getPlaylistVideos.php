@@ -22,6 +22,8 @@ $id = $_GET['id'];
 $playlist = new Playlist();
 
 $playlists = $playlist->returnPlaylistVideos(trim($id, "/"));
+$resolvedVideo = $playlist->resolveVideos(trim($id, "/"));
 
-echo json_encode($playlists);
+//print_r(array_intersect( $resolvedVideo, $playlists));
+echo json_encode(array_intersect( $resolvedVideo, $playlists));
 
