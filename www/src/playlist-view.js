@@ -13,9 +13,6 @@ class PlaylistView extends PolymerElement {
       playlistVideos:{
         type:Array
       },
-      playlistId:{
-        type: Number
-      },
       user: {
         type: Object,
        value: { student: false, teacher: false, admin: false }
@@ -29,33 +26,35 @@ class PlaylistView extends PolymerElement {
     super();
     const data = store.getState();
     this.user = data.user;
-
-    this.playlistId = this.subroute.path;
-
-    console.log(this.playlistId);
-
-    this.playlist = [];
-    fetch (`${window.MyAppGlobals.serverURL}api/getPlaylist.php?id=` + this.playlistId)
-    .then(res=>res.json())
-    .then(data=>{
-      this.playlist = data;
-    });
-
-    this.playlistVideos = [];
-    fetch (`${window.MyAppGlobals.serverURL}api/getPlaylistVideos.php?id=` + this.playlistId)
-    .then(res=>res.json())
-    .then(data=>{
-      this.playlist = data;
-    });
     
     store.subscribe((state)=>{
       this.user = store.getState().user;
     })
-
-
   }
 
+  static get observers() {
+    return [
+        'loadData(subroute)'
+    ]
+  }
+
+  loadData(subroute){
+    if (subroute.prefix == "/playlist" && subroute.path != ""){ //Only do the following if we are in the playlist page with ID
+      this.playlist = [];
+      fetch (`${window.MyAppGlobals.serverURL}api/getPlaylist.php?id=` + subroute.path)
+      .then(res=>res.json())
+      .then(data=>{
+        this.playlist = data;
+      });
   
+      /*this.playlistVideos = [];
+      fetch (`${window.MyAppGlobals.serverURL}api/getPlaylistVideos.php?id=` + subroute.path)
+      .then(res=>res.json())
+      .then(data=>{
+        this.playlist = data;
+      });*/
+    }
+  }
 
   static get template() {
     return html`
@@ -71,7 +70,6 @@ class PlaylistView extends PolymerElement {
             <app-route path="/playlist/:playlistId"></app-route>
         </app-router>
       <div class="card">
-    
         <h1>Spilleliste: [[playlist.name]]</h1>
         <p><img src="[[playlist.thumbnail]]"></p>
         <p>Beskrivelse: [[playlist.description]]</p>

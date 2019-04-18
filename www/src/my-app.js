@@ -234,8 +234,8 @@ class MyApp extends PolymerElement {
         import('./my-view4.js');
         break;
       case 'playlist':
-      import('./playlist-view.js');
-      break;
+        import('./playlist-view.js');
+        break;
       case 'teacher':
         import('./teacher-view1.js');
         break;
