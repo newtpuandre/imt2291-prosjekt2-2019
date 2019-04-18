@@ -64,7 +64,6 @@ class StudentView1 extends PolymerElement {
           <template is="dom-repeat" items="[[playlists]]">
             <div class="grid-item">
             <a data-page="playlist" href="/playlist/{{item.id}}"><b>[[item.name]]</b></a>
-            <button on-click="test">123</button>
             <p><img src="[[item.thumbnail]]"></p>
             <p>Beskrivelse: [[item.description]]</p>
             <p>Laget av: [[item.lectname]]</p>
