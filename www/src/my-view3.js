@@ -41,7 +41,7 @@ class MyView3 extends PolymerElement {
     .then(res=>res.json())
     .then(data=>{
       this.videos = data;
-      console.log(data);
+      //console.log(data);
     });
   }
 
@@ -80,7 +80,7 @@ class MyView3 extends PolymerElement {
         <div class="grid-container">
           <template is="dom-repeat" items="[[videos]]">
             <div class="grid-item">
-            <b>[[item.title]]</b>
+            <a href="/video/[[item.id]]"><b>[[item.title]]</b></a>
             <p><img src="[[item.thumbnail]]"></p>
             <p>Beskrivelse: [[item.description]]</p>
             <p>Emne: [[item.topic]]</p>

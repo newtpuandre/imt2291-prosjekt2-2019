@@ -148,6 +148,7 @@ class MyApp extends PolymerElement {
             <my-view2 name="view2"></my-view2>
             <my-view3 name="view3"></my-view3>
             <my-view4 name="view4"></my-view4>
+            <video-view name="video" subroute="{{subroute}}"></video-view>
             <playlist-view name="playlist" subroute="{{subroute}}"></playlist-view>
             <student-view1 name="student" subroute="{{subroute}}"></student-view1>
             <teacher-view1 name="teacher"></teacher-view1>
@@ -203,7 +204,7 @@ class MyApp extends PolymerElement {
 
     if (!page) {
       this.page = 'view1';
-    } else if (['view1', 'view2', 'view3', 'view4', 'teacher', 'playlist', 'teachercplaylist', 'upload', 'student', 'admin'].indexOf(page) !== -1) {
+    } else if (['view1', 'view2', 'view3', 'view4', 'teacher', 'playlist', 'teachercplaylist', 'upload', 'student', 'admin', 'video'].indexOf(page) !== -1) {
       this.page = page; 
     } else {
       this.page = 'view404';
@@ -249,6 +250,9 @@ class MyApp extends PolymerElement {
         break;
       case 'student':
         import('./student-view1.js');
+        break;
+      case 'video':
+        import('./video-view.js');
         break;
       case 'view404':
         import('./my-view404.js');
