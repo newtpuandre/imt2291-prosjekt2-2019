@@ -823,7 +823,7 @@ class DB {
    */
   public function returnAllComments($m_videoid){
     
-      $sql = 'SELECT users.email, users.name, comment.id, comment.comment FROM comment 
+      $sql = 'SELECT comment.userid, users.email, users.name, comment.id, comment.comment FROM comment 
       JOIN users ON comment.userid = users.id WHERE videoid=:videoid ORDER BY comment.id DESC';
       $sth = $this->dbh->prepare($sql);
       $sth->bindParam(':videoid', $m_videoid);

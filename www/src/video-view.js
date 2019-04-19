@@ -34,6 +34,12 @@ class VideoView extends PolymerElement {
     store.subscribe((state)=>{
       this.user = store.getState().user;
     });
+    console.log(this.user);
+    if(this.user.uid) {
+      console.log("logged in");
+    } else {
+      console.log("not logged in");
+    }
   }
 
   static get observers() {
@@ -62,13 +68,14 @@ class VideoView extends PolymerElement {
       .then(res => res.json())
       .then(res => {
         this.comments = res;
+        console.log(res);
       });
     }
   }
 
   /**
    * Adds a comment to the video
-   * @param {*} e the event
+   * @param {*} e The event holding the form data
    */
   addComment(e) {
     let data = new FormData(e.target.form);
@@ -82,11 +89,9 @@ class VideoView extends PolymerElement {
       }
       ).then(res => res.json())
       .then(res => {
-        console.log(res);
-  
         if(res.status == 'SUCCESS') {
           console.log("Comment added");
-         // this.comments.push(data.get("comment"));
+          this.comments.push(data.get("comment"));
         } else {
           console.log("Error adding comment");
         }   
@@ -94,6 +99,33 @@ class VideoView extends PolymerElement {
     }
   }
 
+  /**
+   * Deletes a comment
+   * @param {event} e The event holding the form data
+   */
+  deleteComment(e) {
+    const cid = e.target.form.id.value; // The ID of the comment
+    fetch(`${window.MyAppGlobals.serverURL}api/video/deleteComment.php?cid=${cid}`)
+    .then(res => res.json())
+    .then(res => {
+      if(res.status == "SUCCESS") {
+        // Remove the comment from the array
+        this.comments = this.comments.filter(comment => comment.id != cid);
+      } else {
+        console.log("Couldn't delete comment");
+      }
+    });
+  }
+
+  /**
+   * Checks that the ID matches the logged in user
+   * @param {int} id The ID of the user
+   */
+  postedByUser(id) {
+    console.log(id, this.user.uid);
+    return id == this.user.uid;
+  }
+  
   static get template() {
     return html`
       <style include="shared-styles">
@@ -102,35 +134,50 @@ class VideoView extends PolymerElement {
 
           padding: 10px;
         }
+
+        .video {
+          width: 65%; /* Empty space on side for subtitles */
+          height: 56.25%; /* 16:9 Aspect Ratio */
+        }
       </style>
 
       <div class="card">
         <h1>[[videoInfo.title]]</h1>
         
-        <video width="900" height="506" controls>
+        <video controls class="video">
           <source src="[[videoURL]]" type="video/*">
             Your browser does not support the video tag.
         </video>
 
         <br><br>
 
-        <!-- TODO: Only show if logged in -->
-        <form onsubmit="javascript: return false;" id="addComment">
-          <input type="text" maxlength="500" name="comment" id="comment" required> <br>
-          <button on-click="addComment">Kommenter</button>
-        </form>
+        <!-- If logged in -->
+        <template is="dom-if" if="[[user.uid]]">
+          <form onsubmit="javascript: return false;" id="addComment">
+            <input type="text" maxlength="500" name="comment" id="comment" required> <br>
+            <button on-click="addComment">Kommenter</button>
+          </form>
+        </template>
 
         <!-- TODO: Make this not look like shit -->
         <template is="dom-repeat" items="[[comments]]">
           <div class="card">
             <p>[[item.name]]</p>
             <p>[[item.comment]]</p>
-
-            <!-- Delete button -->
+            
+            <!-- The comment is posted by the current user, show delete button -->
+            <template is="dom-if" if="{{postedByUser(item.userid)}}">
+              <form onsubmit="javascript: return false;" id="deleteComment">
+                <input type="hidden" name="id" value="[[item.id]]">
+                <button on-click="deleteComment">Slett kommentar</button>
+              </form>
+            </template>
           </div>
         </template>
 
         <!-- TODO: Allow rating -->
+
+        <!-- TODO: Subtitles on the side -->
       </div>
     `;
   }

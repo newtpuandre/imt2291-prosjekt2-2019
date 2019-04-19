@@ -1,4 +1,16 @@
 <?php
+/**
+ * Adds a comment to a video
+ * 
+ * Supported methods: POST
+ * 
+ * Required parameters:
+ * - id, int: The ID of the video
+ * - comment, string: The comment to add
+ * 
+ * Return:
+ * - status, string: SUCCESS/FAILED
+ */
 
 
 require_once "../classes/DB.php";
@@ -36,11 +48,7 @@ if(isset($_POST["id"])) {
         if($db->newComment($uid, $vid, $comment)) {
             $res["status"] = "SUCCESS";
         }
-    } else {
-        $res["msg"] = "User not logged in";
     }
-} else {
-    $res["msg"] = "No video ID";
 }
 
 echo json_encode($res);
