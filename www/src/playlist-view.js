@@ -8,10 +8,17 @@ class PlaylistView extends PolymerElement {
   static get properties () {
     return {
       playlist:{
-        type:Array
+        type: Array
       },
       playlistVideos:{
-        type:Array
+        type: Array
+      },
+      isSubscribed:{
+        type: Boolean,
+        value: false
+      },
+      route:{
+        type: Object
       },
       user: {
         type: Object,
@@ -40,6 +47,9 @@ class PlaylistView extends PolymerElement {
 
   loadData(subroute){
     if (subroute.prefix == "/playlist" && subroute.path != ""){ //Only do the following if we are in the playlist page with ID
+
+      this.route = subroute;
+
       this.playlist = [];
       fetch (`${window.MyAppGlobals.serverURL}api/getPlaylist.php?id=` + subroute.path)
       .then(res=>res.json())
@@ -52,6 +62,14 @@ class PlaylistView extends PolymerElement {
       .then(res=>res.json())
       .then(data=>{
         this.playlistVideos = data;
+      });
+
+      fetch (`${window.MyAppGlobals.serverURL}api/getSubscriptionStatus.php?id=` + subroute.path ,{
+        credentials: "include"
+      })
+      .then(res=>res.json())
+      .then(data=>{
+        this.isSubscribed = data;
       });
     }
   }
@@ -70,12 +88,18 @@ class PlaylistView extends PolymerElement {
         }
 
       </style>
+
       <div class="card">
         <h1>Spilleliste: [[playlist.name]]</h1>
         <p><img src="[[playlist.thumbnail]]"></p>
         <p>Beskrivelse: [[playlist.description]]</p>
         <template is="dom-if" if="{{user.isStudent}}">
-        <button>Abonner</button>
+        <template is="dom-if" if="{{isSubscribed}}">
+        <button on-click="subButton">Avslutt abonnementet</button>
+        </template>
+        <template is="dom-if" if="{{!isSubscribed}}">
+        <button on-click="subButton">Abonner</button>
+        </template>
         </template>
         <h1>Videoer i denne spillelisten</h1>
         <ul>
@@ -93,7 +117,29 @@ class PlaylistView extends PolymerElement {
       </div>
     `;
   }
-    
+ 
+  subButton(e){
+    this.set('isSubscribed', !this.isSubscribed);
+    let sub;
+    if(!this.isSubscribed) {
+      console.log("Unsub");
+      sub = 0;
+    } else {
+      console.log("subscribed");
+      sub = 1;
+    }
+
+    fetch (`${window.MyAppGlobals.serverURL}api/changeSubStatus.php?id=` + this.route.path + `&sub=` + sub,{
+      credentials: "include"
+    })
+    .then(res=>res.json())
+    .then(data=>{
+      console.log(data);
+    });
+
+
+  }
+
 }
 
 customElements.define('playlist-view', PlaylistView);

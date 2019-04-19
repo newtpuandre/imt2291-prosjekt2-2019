@@ -1,7 +1,6 @@
 <?php
 
-//GRABS VIDEOS FROM A PLAYLIST WITH A SPECIFIC ID.
-error_reporting(E_ERROR | E_PARSE);
+session_start();
 
 $http_origin = $_SERVER['HTTP_ORIGIN'];
 
@@ -21,14 +20,7 @@ $id = $_GET['id'];
 
 $playlist = new Playlist();
 
-$playlists = $playlist->returnPlaylistVideos(trim($id, "/"));
-$resolvedVideo = $playlist->resolveVideos(trim($id, "/"));
-if(count($resolvedVideo) > 0){
-    echo json_encode(array_intersect( $resolvedVideo, $playlists));
-} else {
-    echo json_encode(null);
-}
+$playlists = $playlist->returnSubscriptionStatus(trim($id, "/"),$_SESSION['uid']);
 
-//print_r(array_intersect( $resolvedVideo, $playlists));
-//echo json_encode(array_intersect( $resolvedVideo, $playlists));
+echo json_encode($playlists);
 

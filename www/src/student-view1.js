@@ -25,15 +25,28 @@ class StudentView1 extends PolymerElement {
       this.user = store.getState().user;
     })
 
-    this.playlists = [];
-    fetch (`${window.MyAppGlobals.serverURL}api/getSubscribedPlaylists.php`,{
-      credentials: "include"
-    })
-    .then(res=>res.json())
-    .then(data=>{
-      this.playlists = data;
-      console.log(data);
-    });
+  }
+
+  static get observers() {
+    return [
+        'loadData(subroute)'
+    ]
+  }
+
+  loadData(subroute){
+    if (subroute.prefix == "/student" && subroute.path == ""){
+
+      this.playlists = [];
+      fetch (`${window.MyAppGlobals.serverURL}api/getSubscribedPlaylists.php`,{
+        credentials: "include"
+      })
+      .then(res=>res.json())
+      .then(data=>{
+        this.playlists = data;
+        console.log(data);
+      });
+
+    }
   }
 
   static get template() {

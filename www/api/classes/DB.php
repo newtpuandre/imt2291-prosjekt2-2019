@@ -591,10 +591,10 @@ class DB {
       $sth->bindParam(':userid', $m_userid);
       $sth->execute();
 
-      if ($row = $sth->fetch()) {
+      if ($row = $sth->fetch(PDO::FETCH_ASSOC)) {
           return $row;
       } else {
-          return null;
+          return false;
       }
   }
 

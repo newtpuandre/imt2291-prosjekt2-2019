@@ -1,7 +1,6 @@
 <?php
 
-//GRABS VIDEOS FROM A PLAYLIST WITH A SPECIFIC ID.
-error_reporting(E_ERROR | E_PARSE);
+session_start();
 
 $http_origin = $_SERVER['HTTP_ORIGIN'];
 
@@ -18,17 +17,25 @@ header("Content-Type: application/json; charset=utf-8");
 require_once 'classes/playlist.php';
 
 $id = $_GET['id'];
+$sub = $_GET['sub']; //1 for subscribe, 0 for unsub.
+
+$res = [];
 
 $playlist = new Playlist();
 
-$playlists = $playlist->returnPlaylistVideos(trim($id, "/"));
-$resolvedVideo = $playlist->resolveVideos(trim($id, "/"));
-if(count($resolvedVideo) > 0){
-    echo json_encode(array_intersect( $resolvedVideo, $playlists));
+if($sub) {
+    $status = $playlist->subscribeToPlaylist(trim($id, "/"),$_SESSION['uid']);
 } else {
-    echo json_encode(null);
+    $status = $playlist->unsubscribeToPlaylist(trim($id, "/"),$_SESSION['uid']);
 }
 
-//print_r(array_intersect( $resolvedVideo, $playlists));
-//echo json_encode(array_intersect( $resolvedVideo, $playlists));
+if($status) {
+    $res['status'] = 'SUCCESSFUL';
+} else {
+    $res['status'] = 'ERROR';
+}
+
+
+
+echo json_encode($res);
 

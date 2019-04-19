@@ -149,7 +149,7 @@ class MyApp extends PolymerElement {
             <my-view3 name="view3"></my-view3>
             <my-view4 name="view4"></my-view4>
             <playlist-view name="playlist" subroute="{{subroute}}"></playlist-view>
-            <student-view1 name="student"></student-view1>
+            <student-view1 name="student" subroute="{{subroute}}"></student-view1>
             <teacher-view1 name="teacher"></teacher-view1>
             <upload-video-view name="upload"></upload-video-view>
             <teacher-cplaylist name="teachercplaylist"></teacher-cplaylist>
