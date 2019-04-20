@@ -34,12 +34,6 @@ class VideoView extends PolymerElement {
     store.subscribe((state)=>{
       this.user = store.getState().user;
     });
-    console.log(this.user);
-    if(this.user.uid) {
-      console.log("logged in");
-    } else {
-      console.log("not logged in");
-    }
   }
 
   static get observers() {
@@ -143,7 +137,7 @@ class VideoView extends PolymerElement {
         <h1>[[videoInfo.title]]</h1>
         
         <video controls class="video" src="[[videoURL]]" type="video/*">
-            Your browser does not support the video tag.
+          Your browser does not support the video tag.
         </video>
 
         <br>
@@ -178,7 +172,7 @@ class VideoView extends PolymerElement {
 
         <!-- TODO: Subtitles on the side -->
       </div>
-    `;
+      `;
   }
 }
 
