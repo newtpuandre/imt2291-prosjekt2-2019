@@ -16,12 +16,23 @@ class EditPlaylistView extends PolymerElement {
       userPlaylists:{
         type: Array
       },
+      userVideos:{
+        type: Array
+      },
       route:{
         type: Object
       },
       editMode:{
         type: Boolean,
         value: false
+      },
+      addVideo:{
+        type: Boolean,
+        value: false
+      },
+      posEdit:{
+        type:Boolean,
+        value: true
       },
       user: {
         type: Object,
@@ -58,7 +69,6 @@ class EditPlaylistView extends PolymerElement {
       .then(res=>res.json())
       .then(data=>{
         this.playlist = data;
-        console.log(data);
       });
   
       this.playlistVideos = [];
@@ -66,6 +76,15 @@ class EditPlaylistView extends PolymerElement {
       .then(res=>res.json())
       .then(data=>{
         this.playlistVideos = data;
+      });
+
+      this.userVideos = [];
+      fetch (`${window.MyAppGlobals.serverURL}api/getUserVideos.php`,{
+        credentials: "include"
+      })
+      .then(res=>res.json())
+      .then(data=>{
+        this.userVideos = data;
       });
 
     } else if (subroute.prefix =="/editplaylist" && subroute.path == "") { //Load all users playlists
@@ -79,6 +98,7 @@ class EditPlaylistView extends PolymerElement {
       .then(res=>res.json())
       .then(data=>{
         this.userPlaylists = data;
+
       });
     }
     
@@ -160,6 +180,69 @@ class EditPlaylistView extends PolymerElement {
     }   
   })
   }
+  
+  addremvideo(e) {
+    console.log(this.addVideo);
+    if(this.addVideo == false)
+    this.set('addVideo', true);
+    this.set('posEdit', false);
+
+    //Dont show duplicate videos.
+    for(var myVideo of this.playlistVideos){
+      let i = 0;
+      for(var userVideo of this.userVideos){
+        if (myVideo[0] == userVideo[0]){
+          this.splice("userVideos", i , 1 );
+        }
+        i++;
+      }
+    }
+  }
+
+  posedit(e) {
+    console.log(this.posEdit);
+    if(this.posEdit == false)
+    this.set('posEdit', true);
+    this.set('addVideo', false);
+  }
+
+  selectVid(e){
+    const data = new FormData(e.target.form);
+    /*for (var pair of data.entries())
+    {
+      console.log(pair[0]+ ', '+ pair[1]); 
+    }*/
+    let i = 0;
+    for (var idx of this.userVideos){ //Loop over all userVideos
+      if (idx[0] == data.get('vidId')) { //Find selected and remove it from userVideos
+
+        var video = this.get(["userVideos", i]); //Get array element
+        this.push("playlistVideos", video); //Add to selected video list
+
+        this.splice("userVideos", i, 1); //Remove from the other list
+      }
+        i++;
+    }
+  }
+
+  removeVid(e){
+    const data = new FormData(e.target.form);
+    for (var pair of data.entries())
+    {
+      console.log(pair[0]+ ', '+ pair[1]); 
+    }
+    let i = 0;
+    for (var idx of this.playlistVideos){ //Loop over all userVideos
+      if (idx[0] == data.get('vidId[]')) { //Find selected and remove it from userVideos
+
+        var video = this.get(["playlistVideos", i]); //Get array element
+        this.push("userVideos", video); //Add to selected video list
+
+        this.splice("playlistVideos", i, 1); //Remove from the other list
+      }
+        i++;
+    }
+  }
 
   static get template() {
     return html`
@@ -205,6 +288,9 @@ class EditPlaylistView extends PolymerElement {
         <input type="text" name="pdesc" id="pdesc" value="[[playlist.description]]">
         <p><button on-click="updatePlaylist">Oppdater</button></p>
         </form>
+        <button on-click="posedit" >Endre Video rekkefølge</button>
+        <button on-click="addremvideo">Legg til / fjern Videoer</button>
+        <template is="dom-if" if="{{posEdit}}">
         <h1>Videoer i denne spillelisten</h1>
         <ul>
           <template is="dom-repeat" items="[[playlistVideos]]">
@@ -219,11 +305,53 @@ class EditPlaylistView extends PolymerElement {
             <p>Fag: [[item.course]]</p>
             <button on-click="moveUp">Flytt opp</button>
             <button on-click="moveDown">Flytt ned</button>
-            <button>Bruk video Miniatyrbilde for denne spillelisten</button>
+            <!-- <button>Bruk video Miniatyrbilde for denne spillelisten</button> -->
             </form>
             </li>
           </template>
         </ul>
+        </template>
+        <template is="dom-if" if="{{addVideo}}">
+
+        <h1>Videoer i spillelisten</h1>
+        <div class="grid-container">
+          <template is="dom-repeat" items="{{playlistVideos}}">
+            <div class="grid-item">
+
+            <form class="removeVideo" name="removeVideo" id="removeVideo" onsubmit="javascript: return false;">
+            <b>[[item.title]]</b>
+            <p><img src="[[item.thumbnail]]"></p>
+            <p>Beskrivelse: [[item.description]]</p>
+            <p>Emne: [[item.topic]]</p>
+            <p>Fag: [[item.course]]</p>
+            <input type="hidden" name="vidId[]" id="vidId" value="[[item.id]]" />
+            <p><button on-click="removeVid">Fjern fra spillelisten</button></p>
+            </form>
+
+            </div>
+          </template>
+        </div>
+
+        <h1>Tilgjengelige Videoer</h1>
+        <div class="grid-container">
+          <template is="dom-repeat" id="list" items="{{userVideos}}" >
+          <div class="grid-item">
+
+          <form class="selectVid" name="selectVid" id="selectVid" onsubmit="javascript: return false;">
+            <b>[[item.title]]</b>
+            <p><img src="[[item.thumbnail]]"></p>
+            <p>Beskrivelse: [[item.description]]</p>
+            <p>Emne: [[item.topic]]</p>
+            <p>Fag: [[item.course]]</p>
+            <input type="hidden" name="vidId" id="vidId" value="[[item.id]]" />
+            <p><button on-click="selectVid">Velg Video</button></p>
+          </form>
+
+          </div>
+          </template>
+        </div>
+
+        </template>
         </template>
 
         <template is="dom-if" if="{{!editMode}}">

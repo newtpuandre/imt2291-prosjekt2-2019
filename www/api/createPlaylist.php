@@ -26,8 +26,11 @@ if (isset($_SESSION['uid'])) {
     
     $id = $db->lastInsertId(); 
 
-    foreach ($_POST['vidId'] as &$vid) {
-        $playlist->addVideoToPlaylist($id, $vid);
+
+    if($_POST['vidId']){
+        foreach ($_POST['vidId'] as &$vid) {
+            $playlist->addVideoToPlaylist($id, $vid);
+        }
     }
     
     if ($sth->rowCount()==1) {

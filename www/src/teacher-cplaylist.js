@@ -82,7 +82,7 @@ class TeacherCPlaylist extends PolymerElement {
         <div class="grid-container">
           <template is="dom-repeat" items="[[selectedVideos]]">
             <div class="grid-item">
-            <form class="removeVideo" name="removeVideo" id="removeVideo" onsubmit="javascript: return false;"></form>
+
             <b>[[item.title]]</b>
             <p><img src="[[item.thumbnail]]"></p>
             <p>Beskrivelse: [[item.description]]</p>
@@ -90,7 +90,7 @@ class TeacherCPlaylist extends PolymerElement {
             <p>Fag: [[item.course]]</p>
             <input type="hidden" name="vidId[]" id="vidId" value="[[item.id]]" />
             <p><button on-click="removeVid">Fjern fra valgt video</button></p>
-            </form>
+
             </div>
           </template>
         </div>
@@ -127,6 +127,10 @@ class TeacherCPlaylist extends PolymerElement {
 
   create(e) {
     const data = new FormData(e.target.form);
+    for (var pair of data.entries())
+    {
+      console.log(pair[0]+ ', '+ pair[1]); 
+    }
     fetch (`${window.MyAppGlobals.serverURL}api/createPlaylist.php`, {
         method: 'POST',
         credentials: "include",
@@ -170,7 +174,7 @@ class TeacherCPlaylist extends PolymerElement {
     }*/
     let i = 0;
     for (var idx of this.selectedVideos){ //Loop over all userVideos
-      if (idx[0] == data.get('vidId')) { //Find selected and remove it from userVideos
+      if (idx[0] == data.get('vidId[]')) { //Find selected and remove it from userVideos
 
         var video = this.get(["selectedVideos", i]); //Get array element
         this.push("userVideos", video); //Add to selected video list
