@@ -30,8 +30,6 @@ class EditPlaylistView extends PolymerElement {
     }
   }
 
-  
-
   constructor () {
     super();
     const data = store.getState();
@@ -146,7 +144,21 @@ class EditPlaylistView extends PolymerElement {
   }
 
   updatePlaylist(e){
+    const data = new FormData(e.target.form);
+    fetch (`${window.MyAppGlobals.serverURL}api/updatePlaylist.php`, {
+      method: 'POST',
+      credentials: 'include',
+      body: data
+    }
+  ).then(res=>res.json())         // When a reply has arrived
+  .then(res=>{
+    console.log(res);
+    if (res.status=='SUCCESS') {  //Handle error
+      
+    } else {
 
+    }   
+  })
   }
 
   static get template() {
@@ -182,14 +194,17 @@ class EditPlaylistView extends PolymerElement {
 
         <template is="dom-if" if="{{editMode}}">
         <h1>Endre Spilleliste: [[playlist.name]]</h1>
+        <form class="editPlaylist" onsubmit="javascript: return false;">
+        <input type="hidden" name="pId" id="pId" value="[[playlist.id]]" />
         <p>Spilleliste navn:</p>
-        <input type="text" value="[[playlist.name]]">
+        <input type="text" name="pname" id="pname" value="[[playlist.name]]">
         <p>Miniatyrbilde:</p>
         <p><img src="[[playlist.thumbnail]]"></p>
-        <p><input type="file"></p>
+        <p><input type="file" name="thumbnail" id="thumbnail"></p>
         <p>Beskrivelse:</p>
-        <input type="text" value="[[playlist.description]]">
-        <p><button>Oppdater</button></p>
+        <input type="text" name="pdesc" id="pdesc" value="[[playlist.description]]">
+        <p><button on-click="updatePlaylist">Oppdater</button></p>
+        </form>
         <h1>Videoer i denne spillelisten</h1>
         <ul>
           <template is="dom-repeat" items="[[playlistVideos]]">
