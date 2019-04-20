@@ -19,6 +19,9 @@ class MyView3 extends PolymerElement {
       videos: {
         type: Array
       },
+      serverURL: {
+        type: String
+      },
       user: {
         type: Object,
        value: { student: false, teacher: false, admin: false }
@@ -35,6 +38,8 @@ class MyView3 extends PolymerElement {
     store.subscribe((state)=>{
       this.user = store.getState().user;
     })
+
+    this.serverURL = window.MyAppGlobals.serverURL;
 
     this.videos = [];
     fetch (`${window.MyAppGlobals.serverURL}api/getAllVideos.php`)
@@ -81,7 +86,9 @@ class MyView3 extends PolymerElement {
           <template is="dom-repeat" items="[[videos]]">
             <div class="grid-item">
             <a href="/video/[[item.id]]"><b>[[item.title]]</b></a>
-            <p><img src="[[item.thumbnail]]"></p>
+            <!-- TODO: The serverURL shouldn't be hardcoded -->
+            <p><img src="[[serverURL]]api/video/getFile.php?id=[[item.id]]&type=thumbnail"
+                  width="100" height="52"></p>
             <p>Beskrivelse: [[item.description]]</p>
             <p>Emne: [[item.topic]]</p>
             <p>Fag: [[item.course]]</p>
