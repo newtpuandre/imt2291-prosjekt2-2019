@@ -61,8 +61,8 @@ class UploadVideoView extends PolymerElement {
             <label for="video">Video</label>
             <input type="file" name="video" id="video" accept="video/*" required>
 
-            <label for="subs">Undertekster</label>
-            <input type="file" name="subs" id="subs">
+            <label for="subtitles">Undertekster</label>
+            <input type="file" name="subtitles" id="subtitles">
 
             <br><br>
             <button on-click="uploadVideo">Last opp video</button>
@@ -85,6 +85,7 @@ class UploadVideoView extends PolymerElement {
     }
     ).then(res => res.json())
     .then(res => {
+      console.log(res);
       if(res.status == 'SUCCESS') {
         console.log("Video uploaded");
       } else {

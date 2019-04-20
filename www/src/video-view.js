@@ -60,7 +60,6 @@ class VideoView extends PolymerElement {
 
         // Used to retrieve the video file (when I get it to work)
         this.videoURL = `${window.MyAppGlobals.serverURL}api/video/getFile.php?id=${res.id}&type=video`;
-        console.log("videoinfo", this.videoInfo);
       });
 
       // Retrieve the comments of the video
@@ -68,7 +67,6 @@ class VideoView extends PolymerElement {
       .then(res => res.json())
       .then(res => {
         this.comments = res;
-        console.log(res);
       });
     }
   }
@@ -144,8 +142,7 @@ class VideoView extends PolymerElement {
       <div class="card">
         <h1>[[videoInfo.title]]</h1>
         
-        <video controls class="video">
-          <source src="[[videoURL]]" type="video/*">
+        <video controls class="video" src="[[videoURL]]" type="video/*">
             Your browser does not support the video tag.
         </video>
 
