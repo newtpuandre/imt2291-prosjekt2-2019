@@ -288,8 +288,8 @@ class Playlist
      */
     public function updatePlaylist($m_id, $m_ownerId, $m_name, $m_description, $m_thumbnail){
 
-        if (!$m_thumbnail['name']) { 
-            $this->db->updatePlaylist($m_id, $m_ownerId, $m_name, $m_description);
+        if (!$m_thumbnail) { 
+            return $this->db->updatePlaylist($m_id, $m_ownerId, $m_name, $m_description);
         } else {
 
             $thumb_file_type = strtolower(pathinfo(Playlist::$target_dir . basename($m_thumbnail["name"]), PATHINFO_EXTENSION));

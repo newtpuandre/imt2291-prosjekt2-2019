@@ -524,7 +524,7 @@ class DB {
       }
 
       $sth->execute();
-      if ($row = $sth->fetch()) {
+      if ($sth->rowCount()==1) {
           return true;
       } else {
           return false;
