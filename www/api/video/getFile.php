@@ -40,8 +40,11 @@ if(isset($_GET["id"])) {
     
             switch($_GET["type"]) {
                 case "video":
-                    header('Content-type: video/*');
                     $path .= "videos/$id";
+                    
+                    header('Content-type: video/*');
+                    header('Accept-Ranges: bytes');
+                    header('Content-Length: ' . filesize($path));
                     
                     break;
                 case "thumbnail":
