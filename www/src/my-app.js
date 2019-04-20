@@ -122,7 +122,7 @@ class MyApp extends PolymerElement {
               <a class="tab" name="upload" href="[[rootPath]]upload"><i>Last opp video</i></a>
               <a class="tab" name="teacher" href="[[rootPath]]teacher"><i>Rediger video</i></a>
               <a class="tab" name="teachercplaylist" href="[[rootPath]]teachercplaylist"><i>Lag spilleliste</i></a>
-              <a class="tab" name="teacher" href="[[rootPath]]teacher"><i>Endre spilleliste</i></a>
+              <a class="tab" name="editplaylist" href="[[rootPath]]editplaylist"><i>Endre spilleliste</i></a>
             </template>
             <template is="dom-if" if="{{user.isStudent}}">
               <!-- Only students will see this. -->
@@ -152,6 +152,7 @@ class MyApp extends PolymerElement {
             <playlist-view name="playlist" subroute="{{subroute}}"></playlist-view>
             <student-view1 name="student" subroute="{{subroute}}"></student-view1>
             <teacher-view1 name="teacher"></teacher-view1>
+            <editplaylist-view name="editplaylist" subroute="{{subroute}}"></editplaylist-view>
             <upload-video-view name="upload"></upload-video-view>
             <teacher-cplaylist name="teachercplaylist"></teacher-cplaylist>
             <admin-view1 name="admin"></admin-view1>
@@ -204,7 +205,7 @@ class MyApp extends PolymerElement {
 
     if (!page) {
       this.page = 'view1';
-    } else if (['view1', 'view2', 'view3', 'view4', 'teacher', 'playlist', 'teachercplaylist', 'upload', 'student', 'admin', 'video'].indexOf(page) !== -1) {
+    } else if (['view1', 'view2', 'view3', 'view4', 'teacher', 'playlist', 'teachercplaylist', 'editplaylist', 'upload', 'student', 'admin', 'video'].indexOf(page) !== -1) {
       this.page = page; 
     } else {
       this.page = 'view404';
@@ -242,8 +243,12 @@ class MyApp extends PolymerElement {
         break;
       case 'upload':
         import('./upload-video-view.js');
+        break;
       case 'teachercplaylist':
         import('./teacher-cplaylist.js');
+        break;
+      case 'editplaylist':
+        import('./editplaylist-view.js');
         break;
       case 'admin':
         import('./admin-view1.js');
