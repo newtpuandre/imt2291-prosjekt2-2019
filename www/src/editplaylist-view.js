@@ -227,10 +227,10 @@ class EditPlaylistView extends PolymerElement {
 
   removeVid(e){
     const data = new FormData(e.target.form);
-    for (var pair of data.entries())
+    /*for (var pair of data.entries())
     {
       console.log(pair[0]+ ', '+ pair[1]); 
-    }
+    }*/
     let i = 0;
     for (var idx of this.playlistVideos){ //Loop over all userVideos
       if (idx[0] == data.get('vidId[]')) { //Find selected and remove it from userVideos
