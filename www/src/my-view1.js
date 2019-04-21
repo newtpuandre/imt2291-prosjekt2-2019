@@ -38,7 +38,7 @@ class MyView1 extends PolymerElement {
   }
 
   loadData(subroute){
-    if (subroute.prefix == "/view1" && subroute.path == ""){ //Only do the following if we are in the playlist page with ID
+    if ((subroute.prefix == "/view1" || subroute.prefix == "/") && subroute.path == ""){ //Only do the following if we are in the playlist page with ID
 
       this.videos = [];
       fetch (`${window.MyAppGlobals.serverURL}api/getNewVideos.php`)
