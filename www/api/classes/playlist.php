@@ -50,13 +50,13 @@ class Playlist
      */
     public function addVideoToPlaylist($m_playlistid, $m_videoid){
 
-        //Check if video is already in playlist
+        //Check if video already exists in playlist
         if (!$this->db->returnPlaylistVideo($m_playlistid, $m_videoid)){
 
             $temp = $this->db->returnNewestPlaylistVideo($m_playlistid);
+            //print_r($temp);
 
             $lastPos = $temp['position'] + 1;
-            
             $res = $this->db->addVideoToPlaylist($m_playlistid, $m_videoid, $lastPos);
 
             return $res;

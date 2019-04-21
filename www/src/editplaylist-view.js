@@ -182,25 +182,26 @@ class EditPlaylistView extends PolymerElement {
   }
   
   addremvideo(e) {
-    console.log(this.addVideo);
     if(this.addVideo == false)
     this.set('addVideo', true);
     this.set('posEdit', false);
 
     //Dont show duplicate videos.
-    for(var myVideo of this.playlistVideos){
-      let i = 0;
-      for(var userVideo of this.userVideos){
-        if (myVideo[0] == userVideo[0]){
-          this.splice("userVideos", i , 1 );
+    if(this.playlistVideos != null){
+      for(var myVideo of this.playlistVideos){
+        let i = 0;
+        for(var userVideo of this.userVideos){
+          if (myVideo[0] == userVideo[0]){
+            this.splice("userVideos", i , 1 );
+          }
+          i++;
         }
-        i++;
       }
     }
   }
 
   posedit(e) {
-    console.log(this.posEdit);
+    console.log(this.playlistVideos);
     if(this.posEdit == false)
     this.set('posEdit', true);
     this.set('addVideo', false);
@@ -212,17 +213,31 @@ class EditPlaylistView extends PolymerElement {
     {
       console.log(pair[0]+ ', '+ pair[1]); 
     }*/
+    
+    fetch (`${window.MyAppGlobals.serverURL}api/addVideoToPlaylist.php?id=` + this.route.path, {
+      method: 'POST',
+      body: data
+    })
+    .then(res=>res.json())
+    .then(data=>{
+      console.log(data)
+    });
+
     let i = 0;
     for (var idx of this.userVideos){ //Loop over all userVideos
       if (idx[0] == data.get('vidId')) { //Find selected and remove it from userVideos
 
         var video = this.get(["userVideos", i]); //Get array element
+        if(this.playlistVideos == null) {
+          this.playlistVideos = [];
+        }
         this.push("playlistVideos", video); //Add to selected video list
 
         this.splice("userVideos", i, 1); //Remove from the other list
       }
         i++;
     }
+
   }
 
   removeVid(e){
@@ -239,6 +254,15 @@ class EditPlaylistView extends PolymerElement {
         this.push("userVideos", video); //Add to selected video list
 
         this.splice("playlistVideos", i, 1); //Remove from the other list
+
+        fetch (`${window.MyAppGlobals.serverURL}api/deleteVideoFromPlaylist.php?id=` + this.route.path, {
+          method: 'POST',
+          body: data
+        })
+        .then(res=>res.json())
+        .then(data=>{
+          console.log(data)
+        });
       }
         i++;
     }
@@ -293,7 +317,7 @@ class EditPlaylistView extends PolymerElement {
         <template is="dom-if" if="{{posEdit}}">
         <h1>Videoer i denne spillelisten</h1>
         <ul>
-          <template is="dom-repeat" items="[[playlistVideos]]">
+          <template is="dom-repeat" items="{{playlistVideos}}">
             <li>
             <form class="video" onsubmit="javascript: return false;">
             <input type="hidden" name="vidId" id="vidId" value="[[item.id]]" />

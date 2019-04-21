@@ -688,7 +688,7 @@ class DB {
    * @param int $m_position
    * @return bool
    */
-  public function AddVideoToPlaylist($m_playlistid, $m_videoid, $m_position)
+  public function addVideoToPlaylist($m_playlistid, $m_videoid, $m_position)
   {
       $sql = 'INSERT INTO playlistvideos (videoid, playlistid, position) values (?, ?, ?)';
       $sth = $this->dbh->prepare($sql);
@@ -733,7 +733,7 @@ class DB {
       $sth->bindParam(':playlistid', $m_playlistId);
       $sth->bindParam(':videoid', $m_videoid);
       $sth->execute();
-      if ($row = $sth->fetch()) {
+      if ($row = $sth->fetch(PDO::FETCH_ASSOC)) {
           return $row;
       } else {
           return null;
@@ -767,7 +767,7 @@ class DB {
       $sth = $this->dbh->prepare ($sql);
       $sth->bindParam(':playlistid', $m_playlistId);
       $sth->execute();
-      if ($row = $sth->fetch()) {
+      if ($row = $sth->fetch(PDO::FETCH_ASSOC)) {
           return $row;
       } else {
           return null;
