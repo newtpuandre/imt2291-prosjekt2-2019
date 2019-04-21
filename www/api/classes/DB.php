@@ -712,7 +712,7 @@ class DB {
       $sth = $this->dbh->prepare ($sql);
       $sth->bindParam(':playlistid', $m_playlistId);
       $sth->execute();
-      if ($rows = $sth->fetchAll()) {
+      if ($rows = $sth->fetchAll(PDO::FETCH_ASSOC)) {
           return $rows;
       } else {
           return null;

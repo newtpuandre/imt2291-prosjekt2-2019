@@ -70,7 +70,7 @@ class EditPlaylistView extends PolymerElement {
       .then(data=>{
         this.playlist = data;
       });
-  
+
       this.playlistVideos = [];
       fetch (`${window.MyAppGlobals.serverURL}api/getPlaylistVideos.php?id=` + subroute.path)
       .then(res=>res.json())
@@ -246,6 +246,15 @@ class EditPlaylistView extends PolymerElement {
     {
       console.log(pair[0]+ ', '+ pair[1]); 
     }*/
+    fetch (`${window.MyAppGlobals.serverURL}api/deleteVideoFromPlaylist.php?id=` + this.route.path, {
+      method: 'POST',
+      body: data
+    })
+    .then(res=>res.json())
+    .then(data=>{
+      console.log(data)
+    });
+
     let i = 0;
     for (var idx of this.playlistVideos){ //Loop over all userVideos
       if (idx[0] == data.get('vidId[]')) { //Find selected and remove it from userVideos
@@ -254,15 +263,6 @@ class EditPlaylistView extends PolymerElement {
         this.push("userVideos", video); //Add to selected video list
 
         this.splice("playlistVideos", i, 1); //Remove from the other list
-
-        fetch (`${window.MyAppGlobals.serverURL}api/deleteVideoFromPlaylist.php?id=` + this.route.path, {
-          method: 'POST',
-          body: data
-        })
-        .then(res=>res.json())
-        .then(data=>{
-          console.log(data)
-        });
       }
         i++;
     }
