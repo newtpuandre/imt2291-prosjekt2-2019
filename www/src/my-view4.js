@@ -22,6 +22,16 @@ class MyView4 extends PolymerElement {
       user: {
         type: Object,
        value: { student: false, teacher: false, admin: false }
+      },
+      playlistSearch: {
+        type: Boolean,
+        value: false
+      },
+      searchQuerry:{
+        type: String,
+      },
+      searchResult:{
+        type: Array
       }
     }
   }
@@ -43,6 +53,28 @@ class MyView4 extends PolymerElement {
       this.playlists = data;
       console.log(data);
     });
+  }
+
+  search(e){
+    const data = new FormData(e.target.form);
+    if(data.get('search') != "") {
+    this.set('playlistSearch', true);
+    this.set('searchQuerry', data.get('search'));
+
+    this.searchResult = [];
+    fetch (`${window.MyAppGlobals.serverURL}api/searchPlaylist.php?q=` + this.searchQuerry)
+    .then(res=>res.json())
+    .then(data=>{
+      this.searchResult = data;
+      console.log(this.searchResult);
+    });
+
+    }
+  }
+
+  reset(e){
+    this.set('playlistSearch', false);
+    this.set('searchQuerry', "");
   }
 
   static get template() {
@@ -74,8 +106,11 @@ class MyView4 extends PolymerElement {
 
       <div class="card">
       <h1>Søk</h1>
-      <input type="text">
-      <button>Søk</button>
+      <form class="search" onsubmit="javascript: return false;">
+        <input type="text" name="search">
+        <button on-click="search">Søk</button>
+      </form>
+      <template is="dom-if" if="{{!playlistSearch}}">
         <h1>Alle Spillelister</h1>
         <div class="grid-container">
           <template is="dom-repeat" items="[[playlists]]">
@@ -86,7 +121,21 @@ class MyView4 extends PolymerElement {
             <p>Laget av: [[item.lectname]]</p>
             </div>
           </template>
-      </div>
+      </template>
+      <template is="dom-if" if="{{playlistSearch}}">
+      <a href="/view4" on-click="reset"><- Tilbake</a>
+      <h1>Søkeresultater for: {{searchQuerry}}</h1>
+        <h1>Alle Spillelister</h1>
+        <div class="grid-container">
+          <template is="dom-repeat" items="{{searchResult}}">
+            <div class="grid-item">
+            <b><a href="/playlist/[[item.id]]">[[item.name]]</a></b>
+            <p><img src="[[item.thumbnail]]"></p>
+            <p>Beskrivelse: [[item.description]]</p>
+            </div>
+          </template>
+          </div>
+      </template>
       </div>
     `;
   }

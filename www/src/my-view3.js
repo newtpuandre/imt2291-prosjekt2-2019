@@ -134,7 +134,7 @@ class MyView3 extends PolymerElement {
       </template>
       <template is="dom-if" if="{{videoSearch}}">
       <a href="/view3" on-click="reset"><- Tilbake</a>
-      <h1>Søke resultater for: {{searchQuerry}}</h1>
+      <h1>Søkeresultater for: {{searchQuerry}}</h1>
       <div class="grid-container">
           <template is="dom-repeat" items="{{searchResult}}">
             <div class="grid-item">
