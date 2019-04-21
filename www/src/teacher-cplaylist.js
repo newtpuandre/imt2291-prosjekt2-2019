@@ -127,10 +127,10 @@ class TeacherCPlaylist extends PolymerElement {
 
   create(e) {
     const data = new FormData(e.target.form);
-    for (var pair of data.entries())
+    /*for (var pair of data.entries())
     {
       console.log(pair[0]+ ', '+ pair[1]); 
-    }
+    }*/
     fetch (`${window.MyAppGlobals.serverURL}api/createPlaylist.php`, {
         method: 'POST',
         credentials: "include",

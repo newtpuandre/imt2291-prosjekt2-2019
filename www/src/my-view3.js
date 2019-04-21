@@ -25,6 +25,16 @@ class MyView3 extends PolymerElement {
       user: {
         type: Object,
        value: { student: false, teacher: false, admin: false }
+      },
+      videoSearch: {
+        type: Boolean,
+        value: false
+      },
+      searchQuerry:{
+        type: String,
+      },
+      searchResult:{
+        type: Array
       }
     }
   }
@@ -48,6 +58,29 @@ class MyView3 extends PolymerElement {
       this.videos = data;
       //console.log(data);
     });
+  }
+
+  
+  search(e){
+    const data = new FormData(e.target.form);
+    if(data.get('search') != "") {
+    this.set('videoSearch', true);
+    this.set('searchQuerry', data.get('search'));
+
+    this.searchResult = [];
+    fetch (`${window.MyAppGlobals.serverURL}api/searchVideos.php?q=` + this.searchQuerry)
+    .then(res=>res.json())
+    .then(data=>{
+      this.searchResult = data;
+      console.log(this.searchResult);
+    });
+
+    }
+  }
+
+  reset(e){
+    this.set('videoSearch', false);
+    this.set('searchQuerry', "");
   }
 
   static get template() {
@@ -79,9 +112,12 @@ class MyView3 extends PolymerElement {
 
       <div class="card">
       <h1>Søk</h1>
-      <input type="text">
-      <button>Søk</button>
-        <h1>Alle Videoer</h1>
+      <form class="search" onsubmit="javascript: return false;">
+        <input type="text" name="search">
+        <button on-click="search">Søk</button>
+      </form>
+      <template is="dom-if" if="{{!videoSearch}}">
+      <h1>Alle Videoer</h1>
         <div class="grid-container">
           <template is="dom-repeat" items="[[videos]]">
             <div class="grid-item">
@@ -94,7 +130,27 @@ class MyView3 extends PolymerElement {
             <p>Fag: [[item.course]]</p>
             </div>
           </template>
-      </div>
+        </div>
+      </template>
+      <template is="dom-if" if="{{videoSearch}}">
+      <a href="/view3" on-click="reset"><- Tilbake</a>
+      <h1>Søke resultater for: {{searchQuerry}}</h1>
+      <div class="grid-container">
+          <template is="dom-repeat" items="{{searchResult}}">
+            <div class="grid-item">
+            <a href="/video/[[item.id]]"><b>[[item.title]]</b></a>
+            <!-- TODO: The serverURL shouldn't be hardcoded -->
+            <p><img src="[[serverURL]]api/video/getFile.php?id=[[item.id]]&type=thumbnail"
+                  width="100" height="52"></p>
+            <p>Beskrivelse: [[item.description]]</p>
+            <p>Emne: [[item.topic]]</p>
+            <p>Fag: [[item.course]]</p>
+            <p>Lastet opp av: [[item.name]]</p>
+            </div>
+          </template>
+        </div>
+      </template>
+
       </div>
     `;
   }
