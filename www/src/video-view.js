@@ -92,7 +92,6 @@ class VideoView extends PolymerElement {
       .then(res => res.json())
       .then(res => {
         this.videoInfo = res.video;
-        console.log(res);
 
         // Used to retrieve the files associated with a video
         this.fileURL = `${window.MyAppGlobals.serverURL}api/video/getFile.php?id=${res.id}`;
@@ -102,7 +101,9 @@ class VideoView extends PolymerElement {
       fetch (`${window.MyAppGlobals.serverURL}api/video/getComments.php?id=` + subroute.path)
       .then(res => res.json())
       .then(res => {
-        this.comments = res;
+        if(res.comments != null) {
+          this.comments = res;
+        }
       });
     }
   }
