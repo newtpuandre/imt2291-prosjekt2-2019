@@ -53,7 +53,7 @@ if(isset($_GET["id"])) {
     
                     break;
                 case "subtitle":
-                    // Not sure what content type this needs, if any special
+                    header("Content-Type: text/vtt;charset=utf-8");
                     $path .= "subtitles/$id";
     
                     break;

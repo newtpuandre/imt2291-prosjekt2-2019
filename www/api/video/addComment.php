@@ -9,6 +9,10 @@
  * - comment, string: The comment to add
  * 
  * Return:
+ * On success:
+ * - comment, associative array: Contains the information about the comment
+ * 
+ * Always:
  * - status, string: SUCCESS/FAILED
  */
 
@@ -45,8 +49,11 @@ if(isset($_POST["id"])) {
         $res["uid"] = $uid;
         $res["comment"] = $comment;
 
-        if($db->newComment($uid, $vid, $comment)) {
+        $cid = $db->newComment($uid, $vid, $comment);
+
+        if($cid != -1) {
             $res["status"] = "SUCCESS";
+            $res["comment"] = $db->returnComment($cid);
         }
     }
 }
