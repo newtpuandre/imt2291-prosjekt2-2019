@@ -29,6 +29,10 @@ class TeacherCPlaylist extends PolymerElement {
 
   static get properties() {
     return {
+      serverURL: {
+        type: String,
+        value: window.MyAppGlobals.serverURL
+      },
       userVideos:{
         type: Array,
         notify: true
@@ -68,6 +72,7 @@ class TeacherCPlaylist extends PolymerElement {
       </style>
 
       <div class="card">
+
       <template is="dom-if" if="{{user.isTeacher}}">
         <h1>Lag spilleliste</h1>
         <form onsubmit="javascript: return false;" id="createPlaylist" enctype="multipart/form-data">
@@ -82,9 +87,8 @@ class TeacherCPlaylist extends PolymerElement {
         <div class="grid-container">
           <template is="dom-repeat" items="[[selectedVideos]]">
             <div class="grid-item">
-
             <b>[[item.title]]</b>
-            <p><img src="[[item.thumbnail]]"></p>
+            <p><img src="[[serverURL]]api/video/getFile.php?id=[[item.id]]&type=thumbnail" width="100" height="52"></p>
             <p>Beskrivelse: [[item.description]]</p>
             <p>Emne: [[item.topic]]</p>
             <p>Fag: [[item.course]]</p>
@@ -103,7 +107,7 @@ class TeacherCPlaylist extends PolymerElement {
 
           <form class="selectVideo" name="selectVideo" id="selectVideo" onsubmit="javascript: return false;">
             <b>[[item.title]]</b>
-            <p><img src="[[item.thumbnail]]"></p>
+            <p><img src="[[serverURL]]api/video/getFile.php?id=[[item.id]]&type=thumbnail" width="100" height="52"></p>
             <p>Beskrivelse: [[item.description]]</p>
             <p>Emne: [[item.topic]]</p>
             <p>Fag: [[item.course]]</p>

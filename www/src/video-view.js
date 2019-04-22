@@ -264,7 +264,7 @@ class VideoView extends PolymerElement {
       </style>
 
 
-      <div class="card" id="main">
+      <div class="card">
         <h1>[[videoInfo.title]] - [[videoInfo.topic]] ([[videoInfo.course]])</h1>
 
         <div style="display: flex;">
@@ -291,28 +291,29 @@ class VideoView extends PolymerElement {
         <div class="bottomContainer">
           <h3 id="desc">[[videoInfo.description]]</h3>
           <div id="speed">
-            <p>Hastighet:</p>
-            <select id="videoSpeed" name="videoSpeed" on-click="changePlaybackSpeed">
-              <option value="0.5">0.5</option>
-              <option value="0.75">0.75</option>
-              <option value="1" selected="selected">1</option>
-              <option value="1.25">1.25</option>
-              <option value="1.5">1.5</option>
-              <option value="2">2</option>
-            </select>
+            <p>Hastighet:
+              <select id="videoSpeed" name="videoSpeed" on-click="changePlaybackSpeed">
+                <option value="0.5">0.5</option>
+                <option value="0.75">0.75</option>
+                <option value="1" selected="selected">1</option>
+                <option value="1.25">1.25</option>
+                <option value="1.5">1.5</option>
+                <option value="2">2</option>
+              </select>
+            </p>
           </div>
           
-  
           <div id="userRating">
-            <p>Rating:</p>
-            <select id="rating" name="rating" on-click="updateRating" value="[[videoInfo.userRating]]">
-              <option value="0">0</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-            </select>
+            <p>Rating:
+              <select id="rating" name="rating" on-click="updateRating" value="[[videoInfo.userRating]]">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+              </select>
+            </p>
           </div>
           
           <div id="totalRating">

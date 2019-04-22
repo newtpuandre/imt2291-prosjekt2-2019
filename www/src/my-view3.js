@@ -20,7 +20,8 @@ class MyView3 extends PolymerElement {
         type: Array
       },
       serverURL: {
-        type: String
+        type: String,
+        value: window.MyAppGlobals.serverURL
       },
       user: {
         type: Object,
@@ -48,8 +49,6 @@ class MyView3 extends PolymerElement {
     store.subscribe((state)=>{
       this.user = store.getState().user;
     })
-
-    this.serverURL = window.MyAppGlobals.serverURL;
 
     this.videos = [];
     fetch (`${window.MyAppGlobals.serverURL}api/getAllVideos.php`)
