@@ -5,6 +5,9 @@
  * Parameters required: title, desc, topic, course
  * Required files: video
  * Optional files: thumbnail, subtitles
+ * 
+ * Returns:
+ * - id, int: The ID of the uploaded video
  */
 
 require_once '../classes/DB.php';
@@ -38,6 +41,7 @@ if(isset($_SESSION['uid'])) {
     $id = $db->newVideo($_SESSION["uid"], $title, $desc, $topic, $course, "", "");
 
     if($id != -1) {
+        $res["id"] = $id;
 
         // Every user has their own folder, and in that folder there are
         // subfolders for videos, thumbnails and subtitles

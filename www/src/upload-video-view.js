@@ -38,7 +38,7 @@ class UploadVideoView extends PolymerElement {
         }
       </style>
 
-      <div class="card">
+      <div class="card" id="main">
         <template is="dom-if" if="{{user.isTeacher}}">
           <h1>Last opp video</h1>
         
@@ -86,7 +86,11 @@ class UploadVideoView extends PolymerElement {
     ).then(res => res.json())
     .then(res => {
       console.log(res);
+
+      let main = this.shadowRoot.querySelector("#main");
+
       if(res.status == 'SUCCESS') {
+        main.innerHTML = `<h2>Video lastet opp! <a href="/video/${res.id}">Klikk her for å se den</a></h2>`
         console.log("Video uploaded");
       } else {
         console.log("Error uploading video");
