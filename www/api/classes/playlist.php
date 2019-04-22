@@ -209,8 +209,6 @@ class Playlist
      * @return boolean
      */
     public function insertPlaylist($m_ownerId, $m_name, $m_description, $m_thumbnail){
-
-        session_start();
         $target_dir = "../userFiles/" . $m_ownerId . "/thumbnails/playlists/";
 
         if(!file_exists($target_dir)) {
@@ -295,11 +293,10 @@ class Playlist
      * @return boolean
      */
     public function updatePlaylist($m_id, $m_ownerId, $m_name, $m_description, $m_thumbnail){
-        session_start();
-        $target_dir = "../../userFiles/" . $_SESSION["uid"] . "/thumbnails/playlists";
+        $target_dir = "../userFiles/" . $m_ownerId . "/thumbnails/playlists/";
 
         
-        if (!$m_thumbnail) { 
+        if (!$m_thumbnail['thumbnail']['name']) { 
             return $this->db->updatePlaylist($m_id, $m_ownerId, $m_name, $m_description);
         } else {
 
@@ -307,8 +304,8 @@ class Playlist
                 mkdir($target_dir, 0777, true);
             }
 
-            $thumb_file_type = strtolower(pathinfo(Playlist::$target_dir . basename($m_thumbnail["name"]), PATHINFO_EXTENSION));
-            $thumb_path = Playlist::$target_dir . uniqid() . "." . $thumb_file_type;
+            $thumb_file_type = strtolower(pathinfo($target_dir . basename($m_thumbnail['thumbnail']['name']), PATHINFO_EXTENSION));
+            $thumb_path = $target_dir . uniqid() . "." . $thumb_file_type;
     
             /* TODO : Return meaningful error for all of these, for now, debug echos */
             if (file_exists($thumb_path)) {
@@ -320,11 +317,8 @@ class Playlist
             /* Resize Thumbnail to 320x180 */
             $this->thumbnailResize($m_thumbnail, 320, 180, $thumb_path);
 
-            
-            $this->db->updatePlaylist($m_id, $m_ownerId, $m_name, $m_description, $thumb_path);
+            return $this->db->updatePlaylist($m_id, $m_ownerId, $m_name, $m_description, $thumb_path);
         }
-    
-        return true;
         
     }
 

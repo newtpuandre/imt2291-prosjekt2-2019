@@ -173,10 +173,10 @@ class EditPlaylistView extends PolymerElement {
   ).then(res=>res.json())         // When a reply has arrived
   .then(res=>{
     console.log(res);
-    if (res.status=='SUCCESS') {  //Handle error
-      
+    if (res.status != 'ERROR') {  //Handle error
+      this.set('playlist.thumbnail', res.status);
     } else {
-
+      
     }   
   })
   }

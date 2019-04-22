@@ -529,7 +529,11 @@ class DB {
 
       $sth->execute();
       if ($sth->rowCount()==1) {
-          return true;
+          if($m_thumbnail != null) {
+            return $m_thumbnail;
+          } else {
+              return true;
+          }
       } else {
           return false;
       }
