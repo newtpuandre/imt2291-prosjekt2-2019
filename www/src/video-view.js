@@ -10,14 +10,19 @@ class VideoView extends PolymerElement {
       route: {
         type: Object
       },
-      videoURL: {
+      fileURL: {
         type: String,
       },
       videoInfo: {
         type: Object,
       },
       comments: {
-        type: Array
+        type: Array,
+        value: []
+      },
+      cues: {
+        type: Array,
+        value: []
       },
       user: {
         type: Object,
@@ -42,6 +47,41 @@ class VideoView extends PolymerElement {
     ]
   }
 
+  ready() {
+    super.ready();
+
+  // Subtitles aren't displayed on the video itself (TODO: Show in fullscreen)
+   /// this.$.video.track.mode = "hidden"; 
+
+    // When the subtitles have been loaded (fetched from the backend server)
+    this.$.videoSubs.addEventListener('load', e => {
+      const trackCues = e.target.track.cues;
+
+      for(let i = 0; i < trackCues.length; i++) {
+        this.push("cues", trackCues[i]);
+      };
+    });
+    
+    this.$.video.textTracks[0].addEventListener('cuechange', e => { // When a cue change event occurs
+
+      // Loop over all shown cues, remove class 'active'
+      this.shadowRoot.querySelectorAll('#subtitles ul li').forEach(li => {
+        li.classList.remove('active');                      
+      });
+
+      for(let i = 0; i < e.target.activeCues.length; i++) { // Loop over active cues
+        // Get the current row in the subtitles
+        console.log(e.target.activeCues[i].id);
+        var row = this.shadowRoot.querySelector(`#subtitles li[data-id="${e.target.activeCues[i].id}"]`);
+        row.classList.add('active'); // Add the active class to it
+
+        // Scroll so the row is in view (the current row is put at the top)
+        // TODO: Scroll only inside the div, not the entire page
+        row.scrollIntoView({behavior: "smooth" });
+      }
+    });
+  }
+
   loadData(subroute){
     if(subroute.prefix == "/video" && subroute.path != "") {
       this.route = subroute;
@@ -52,8 +92,8 @@ class VideoView extends PolymerElement {
       .then(res => {
         this.videoInfo = res.video;
 
-        // Used to retrieve the video file (when I get it to work)
-        this.videoURL = `${window.MyAppGlobals.serverURL}api/video/getFile.php?id=${res.id}&type=video`;
+        // Used to retrieve the files associated with a video
+        this.fileURL = `${window.MyAppGlobals.serverURL}api/video/getFile.php?id=${res.id}`;
       });
 
       // Retrieve the comments of the video
@@ -83,7 +123,7 @@ class VideoView extends PolymerElement {
       .then(res => {
         if(res.status == 'SUCCESS') {
           console.log("Comment added");
-          this.comments.push(data.get("comment"));
+          this.push("comments", data.get("comment"));
         } else {
           console.log("Error adding comment");
         }   
@@ -117,7 +157,15 @@ class VideoView extends PolymerElement {
     console.log(id, this.user.uid);
     return id == this.user.uid;
   }
-  
+
+  /**
+   * Puts the video at the time the clicked subtitle is
+   * @param {event} id The event holding the ID of the cue to skip to
+   */
+  skipTo(id) {
+    this.$.video.currentTime = this.cues[id.target.dataset.message].startTime;
+  }
+
   static get template() {
     return html`
       <style include="shared-styles">
@@ -127,22 +175,64 @@ class VideoView extends PolymerElement {
           padding: 10px;
         }
 
+        .container {
+          display: flex;
+        }
+
         .video {
           width: 65%; /* Empty space on side for subtitles */
           height: 56.25%; /* 16:9 Aspect Ratio */
         }
+
+        #subtitles {
+          height: 350px;
+          width: 500px;
+          overflow-y: scroll;
+        }
+    
+        #subtitles ul {
+          list-style-type: none;
+        }
+    
+        #subtitles li {
+          padding: 2px 5px;
+        }
+
+        #subtitles li.active {
+          background-color: #bfbfbf;
+        }
       </style>
 
+
+      <!-- TODO: Make this not look like shit -->
+
+      
       <div class="card">
         <h1>[[videoInfo.title]]</h1>
         
-        <video controls class="video" src="[[videoURL]]" type="video/*">
+        <video id="video" crossorigin="true" controls class="video" src="[[fileURL]]&type=video" type="video/*">
+          <track id="videoSubs" label="English" default kind="subtitles" srclang="en" src="[[fileURL]]&type=subtitle">
           Your browser does not support the video tag.
         </video>
 
         <br>
         <h3>[[videoInfo.description]]</h3>
         <br><br>
+
+        <!-- TODO: Put the subtitles on the side -->
+        <div id="subtitles">
+          <ul>
+            <template is="dom-repeat" items="[[cues]]">
+
+              <!-- Both the li and p elements have an on-click, so the user
+                  can click on either the text or the entire box -->
+              <li data-id$="[[item.id]]" class="active" on-click="skipTo" data-message$="{{item.id}}">
+                <p on-click="skipTo" data-message$="{{item.id}}">[[item.text]]</p>
+                <br>
+              </li>
+            </template>
+          </ul>
+        </div>
 
         <!-- If logged in -->
         <template is="dom-if" if="[[user.uid]]">
@@ -152,7 +242,6 @@ class VideoView extends PolymerElement {
           </form>
         </template>
 
-        <!-- TODO: Make this not look like shit -->
         <template is="dom-repeat" items="[[comments]]">
           <div class="card">
             <p>[[item.name]]</p>
@@ -169,8 +258,6 @@ class VideoView extends PolymerElement {
         </template>
 
         <!-- TODO: Allow rating -->
-
-        <!-- TODO: Subtitles on the side -->
       </div>
       `;
   }
