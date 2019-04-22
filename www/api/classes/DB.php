@@ -802,7 +802,7 @@ class DB {
    * @param int $m_user
    * @param int $m_video
    * @param string $m_comment
-   * @return bool
+   * @return int The ID of the added comment, or -1 on failure
    */
   public function newComment($m_user, $m_video, $m_comment) {
       $sql = 'INSERT INTO comment (userid, videoid, comment) values (?, ?, ?)';
@@ -810,11 +810,32 @@ class DB {
       $sth->execute(array($m_user, $m_video, $m_comment));
 
       if ($sth->rowCount()==1) {
-          return true;
+          return $this->dbh->lastInsertId();
       } else {
-          return false;
+          return -1;
       }
   }
+
+  /**
+   * @brief Returns a comment
+   * @param int $m_cid The ID of the comment
+   * @return array|null An associative array or null
+   */
+  public function returnComment($m_cid) {
+    $sql = 'SELECT comment.userid, users.email, users.name, comment.id, comment.comment FROM comment 
+    JOIN users ON comment.userid = users.id WHERE comment.id=?';
+    $sth = $this->dbh->prepare($sql);
+    $sth->execute(array($m_cid));
+
+    $row = $sth->fetch(PDO::FETCH_ASSOC);
+
+    if($sth->rowCount() == 1) {
+      return $row;
+    } else {
+      return null;
+    }
+  }
+
   /**
    * @function returnAllComments
    * @brief return all comments for a video

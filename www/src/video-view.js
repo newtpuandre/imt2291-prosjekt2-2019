@@ -71,7 +71,6 @@ class VideoView extends PolymerElement {
 
       for(let i = 0; i < e.target.activeCues.length; i++) { // Loop over active cues
         // Get the current row in the subtitles
-        console.log(e.target.activeCues[i].id);
         var row = this.shadowRoot.querySelector(`#subtitles li[data-id="${e.target.activeCues[i].id}"]`);
         row.classList.add('active'); // Add the active class to it
 
@@ -122,8 +121,11 @@ class VideoView extends PolymerElement {
       ).then(res => res.json())
       .then(res => {
         if(res.status == 'SUCCESS') {
-          console.log("Comment added");
-          this.push("comments", data.get("comment"));
+          // Clear the input form
+          this.shadowRoot.querySelector("#addComment").reset();
+
+          // unshift puts the element at the start of the array
+          this.unshift("comments", res.comment);
         } else {
           console.log("Error adding comment");
         }   
@@ -152,9 +154,9 @@ class VideoView extends PolymerElement {
   /**
    * Checks that the ID matches the logged in user
    * @param {int} id The ID of the user
+   * @returns {bool} True if the ID matches
    */
   postedByUser(id) {
-    console.log(id, this.user.uid);
     return id == this.user.uid;
   }
 
