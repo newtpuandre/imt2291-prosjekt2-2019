@@ -5,7 +5,7 @@
  * Methods supported: GET
  * 
  * Required parameters:
- * - ID: an int, the ID of the video
+ * - id: an int, the ID of the video
  * 
  * Return values:
  * 
@@ -63,11 +63,17 @@ if(isset($_GET["id"])) {
     $video["course"] = $data[0]["course"];
     $video["uploader"] = $data[0]["userid"];
     $video["time"] = $data[0]["time"];
-    // TODO: Retrieve user info of teacher who uploaded
-    // TODO: Retrieve rating
+    $video["rating"] = $db->returnSumRatings($id);
+    $video["userRating"] = $db->returnRating($_SESSION["uid"], $id)["rating"];
 
     $res["video"] = $video;
     $res["status"] = "SUCCESS";
+}
+
+if(isset($_SESSION["uid"])) {
+    $res["uid"] = $_SESSION["uid"];
+} else {
+    $res["uid"] = "herst";
 }
 
 echo json_encode($res);

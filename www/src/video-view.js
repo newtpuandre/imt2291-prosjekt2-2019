@@ -20,7 +20,7 @@ class VideoView extends PolymerElement {
         type: Array,
         value: []
       },
-      cues: {
+      cues: { // The subtitles
         type: Array,
         value: []
       },
@@ -39,6 +39,7 @@ class VideoView extends PolymerElement {
     store.subscribe((state)=>{
       this.user = store.getState().user;
     });
+
   }
 
   static get observers() {
@@ -85,10 +86,13 @@ class VideoView extends PolymerElement {
       this.route = subroute;
 
       // Retrieve the general info about the video (title, desc etc.)
-      fetch (`${window.MyAppGlobals.serverURL}api/video/getVideoInfo.php?id=` + subroute.path)
+      fetch (`${window.MyAppGlobals.serverURL}api/video/getVideoInfo.php?id=` + subroute.path, {
+        credentials: "include"
+      })
       .then(res => res.json())
       .then(res => {
         this.videoInfo = res.video;
+        console.log(res);
 
         // Used to retrieve the files associated with a video
         this.fileURL = `${window.MyAppGlobals.serverURL}api/video/getFile.php?id=${res.id}`;
@@ -169,10 +173,36 @@ class VideoView extends PolymerElement {
 
   /**
    * Changes the playback speed of the video
-   * @param {event} e 
+   * @param {event} e The event
    */
   changePlaybackSpeed(e) {
     this.$.video.playbackRate = e.target.value;
+  }
+
+  /**
+   * Updates the users rating of the video
+   * @param {event} e The event
+   */
+  updateRating(e) {
+    var rating = e.target.value;
+    var data = new FormData();
+    data.append("rating", e.target.value);
+    data.append("vid", this.route.path);
+
+    data.forEach(e => console.log(e));
+
+    fetch(`${window.MyAppGlobals.serverURL}api/video/updateRating.php`, {
+      method: "POST",
+      credentials: "include",
+      body: data,
+    })
+    .then(res => res.json())
+    .then(res => {
+      console.log(res);
+      if(res.status == "SUCCESS") {
+        console.log("great:)");
+      }
+    });
   }
 
   static get template() {
@@ -216,7 +246,7 @@ class VideoView extends PolymerElement {
       <!-- TODO: Make this not look like shit -->
 
       
-      <div class="card">
+      <div class="card" id="main">
         <h1>[[videoInfo.title]]</h1>
         
         <video id="video" crossorigin="true" controls class="video" src="[[fileURL]]&type=video" type="video/*">
@@ -234,6 +264,18 @@ class VideoView extends PolymerElement {
           <option value="2">2</option>
         </select>
 
+        <p>Rating:</p>
+        <select id="rating" name="rating" on-click="updateRating" value="[[videoInfo.userRating]]">
+          <option value="0">0</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+        
+        <p>Total rating: [[videoInfo.rating]]</p>
+        
         <br>
         <h3>[[videoInfo.description]]</h3>
         <br><br>
@@ -275,8 +317,6 @@ class VideoView extends PolymerElement {
             </template>
           </div>
         </template>
-
-        <!-- TODO: Allow rating -->
       </div>
       `;
   }

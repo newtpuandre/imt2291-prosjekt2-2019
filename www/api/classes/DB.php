@@ -940,7 +940,7 @@ class DB {
    * @return array|null
    */
   public function returnRating($m_uid, $m_videoid){
-      $sql = 'SELECT rating FROM rating WHERE userid=:userid AND videoid=:videoid';
+      $sql = 'SELECT rating FROM rating WHERE userid=:userid AND videoid=:videoid ORDER BY id ASC';
       
       $sth = $this->dbh->prepare($sql);
 
@@ -990,6 +990,39 @@ class DB {
       } else {
           return null;
       }
+  }
+
+  /**
+   * Returns the summed rating for a video
+   * @param m_videoid The ID of the video
+   * @return int The total summed rating for the video
+   */
+  public function returnSumRatings($m_videoid) {
+      $sql = "SELECT SUM(rating) FROM rating WHERE videoid=?";
+      $sth = $this->dbh->prepare($sql);
+
+      $sth->execute(array($m_videoid));
+      if($sth->rowCount() == 1) {
+          return $sth->fetch(PDO::FETCH_ASSOC)["SUM(rating)"];
+      } else {
+          return 0;
+      }
+  }
+
+  public function insertOrUpdateRating($m_uid, $m_videoid, $m_rating) {
+    $sql = "SELECT rating FROM rating WHERE userid=:uid AND videoid=:vid";
+    $sth = $this->dbh->prepare($sql);
+
+    $sth->bindParam(":uid", $m_uid);
+    $sth->bindParam(":vid", $m_videoid);
+    $sth->execute();
+
+    // Already cast a rating, update
+    if($sth->rowCount() >= 1) {
+        return $this->updateRating($m_uid, $m_videoid, $m_rating);
+    } else { // Insert new rating
+        return $this->newRating($m_uid, $m_videoid, $m_rating);
+    }
   }
 
    /**
