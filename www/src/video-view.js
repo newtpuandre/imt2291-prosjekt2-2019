@@ -50,8 +50,8 @@ class VideoView extends PolymerElement {
   ready() {
     super.ready();
 
-  // Subtitles aren't displayed on the video itself (TODO: Show in fullscreen)
-   /// this.$.video.track.mode = "hidden"; 
+    // Subtitles aren't displayed on the video itself (TODO: Show in fullscreen)
+    this.$.videoSubs.track.mode = "hidden";
 
     // When the subtitles have been loaded (fetched from the backend server)
     this.$.videoSubs.addEventListener('load', e => {
@@ -74,9 +74,8 @@ class VideoView extends PolymerElement {
         var row = this.shadowRoot.querySelector(`#subtitles li[data-id="${e.target.activeCues[i].id}"]`);
         row.classList.add('active'); // Add the active class to it
 
-        // Scroll so the row is in view (the current row is put at the top)
-        // TODO: Scroll only inside the div, not the entire page
-        row.scrollIntoView({behavior: "smooth" });
+        // Put the current subtitle at the top of the box
+        this.$.subtitles.scrollTop = row.offsetTop - this.$.subtitles.offsetTop;
       }
     });
   }
@@ -168,6 +167,14 @@ class VideoView extends PolymerElement {
     this.$.video.currentTime = this.cues[id.target.dataset.message].startTime;
   }
 
+  /**
+   * Changes the playback speed of the video
+   * @param {event} e 
+   */
+  changePlaybackSpeed(e) {
+    this.$.video.playbackRate = e.target.value;
+  }
+
   static get template() {
     return html`
       <style include="shared-styles">
@@ -216,6 +223,16 @@ class VideoView extends PolymerElement {
           <track id="videoSubs" label="English" default kind="subtitles" srclang="en" src="[[fileURL]]&type=subtitle">
           Your browser does not support the video tag.
         </video>
+        
+        <p>Hastighet:</p>
+        <select id="videoSpeed" name="videoSpeed" on-click="changePlaybackSpeed">
+          <option value="0.5">0.5</option>
+          <option value="0.75">0.75</option>
+          <option value="1" selected="selected">1</option>
+          <option value="1.25">1.25</option>
+          <option value="1.5">1.5</option>
+          <option value="2">2</option>
+        </select>
 
         <br>
         <h3>[[videoInfo.description]]</h3>
