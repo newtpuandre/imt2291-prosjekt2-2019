@@ -22,8 +22,14 @@ $res = [];
 
 $playlist = new Playlist();
 
-if($playlist->updatePlaylist($_POST['pId'], $_SESSION['uid'], $_POST['pname'], $_POST['pdesc'],"")) {
-    $res['status'] = 'SUCCESS';
+$ret = $playlist->updatePlaylist($_POST['pId'], $_SESSION['uid'], $_POST['pname'], $_POST['pdesc'],$_FILES);
+if($ret) {
+    if(is_string($ret)){
+        $res['status'] = $ret;
+    } else {
+        $res['status'] = 'SUCCESS';
+    }
+    
 } else {
     $res['status'] = 'ERROR';
 }

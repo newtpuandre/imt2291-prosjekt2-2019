@@ -70,13 +70,13 @@ class TeacherCPlaylist extends PolymerElement {
       <div class="card">
       <template is="dom-if" if="{{user.isTeacher}}">
         <h1>Lag spilleliste</h1>
-        <form class="createPlaylist" name="createPlaylist" id="createPlaylist" onsubmit="javascript: return false;">
+        <form onsubmit="javascript: return false;" id="createPlaylist" enctype="multipart/form-data">
         <p>Spilleliste navn</p>
         <input type="text" name="name"/>
         <p>Beskrivelse</p>
         <input type="text" name="description"/>
         <p>Miniatyrbilde</p>
-        <input type="file" name="thumbnail" accept="image/*">
+        <input type="file" name="thumbnail" id="thumbnail" accept="image/*">
         <p><button on-click="create">Lag spilleliste</button></p>
         <h1>Valgte Videoer</h1>
         <div class="grid-container">

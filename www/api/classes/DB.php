@@ -463,16 +463,20 @@ class DB {
    * @param string $m_name
    * @param string $m_description
    * @param string $m_thumbnail
-   * @return bool
+   * @return int of inserted playlist
    */
   public function insertPlaylist($m_ownerId,$m_name,$m_description, $m_thumbnail){
       $sql = 'INSERT INTO playlists (ownerId , name, description, thumbnail) values (?, ?, ?, ?)';
       $sth = $this->dbh->prepare($sql);
+      
       $sth->execute (array ($m_ownerId, $m_name, $m_description, $m_thumbnail));
+
+      $id = $this->dbh->lastInsertId();
+
       if ($sth->rowCount()==1) {
-          return true;
+        return $id;
       } else {
-          return false;
+        return false;
       }
   }
 
@@ -525,7 +529,11 @@ class DB {
 
       $sth->execute();
       if ($sth->rowCount()==1) {
-          return true;
+          if($m_thumbnail != null) {
+            return $m_thumbnail;
+          } else {
+              return true;
+          }
       } else {
           return false;
       }
