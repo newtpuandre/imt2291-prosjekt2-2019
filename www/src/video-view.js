@@ -185,7 +185,6 @@ class VideoView extends PolymerElement {
    * @param {event} e The event
    */
   updateRating(e) {
-    var rating = e.target.value;
     var data = new FormData();
     data.append("rating", e.target.value);
     data.append("vid", this.route.path);
@@ -199,7 +198,6 @@ class VideoView extends PolymerElement {
     })
     .then(res => res.json())
     .then(res => {
-      console.log(res);
       if(res.status == "SUCCESS") {
         console.log("great:)");
       }
@@ -215,18 +213,40 @@ class VideoView extends PolymerElement {
           padding: 10px;
         }
 
-        .container {
-          display: flex;
+        .bottomContainer {
+          display: grid;
+
+          grid-template-columns: repeat(3, auto);
+          grid-template-rows: repeat(2, auto);
+          grid-template-areas: 
+            "speed userRating totalRating"
+            "desc desc desc";
         }
 
-        .video {
-          width: 65%; /* Empty space on side for subtitles */
-          height: 56.25%; /* 16:9 Aspect Ratio */
+        #speed {
+          grid-area: speed;
+        }
+
+        #userRating {
+          grid-area: userRating;
+        }
+
+        #totalRating {
+          grid-area: totalRating;
+        }
+
+        #desc {
+          grid-area: desc;
+        }
+
+        #video {
+          width: 75%;
+          height: 350px;
         }
 
         #subtitles {
+          width: 25%;
           height: 350px;
-          width: 500px;
           overflow-y: scroll;
         }
     
@@ -244,61 +264,68 @@ class VideoView extends PolymerElement {
       </style>
 
 
-      <!-- TODO: Make this not look like shit -->
-
-      
       <div class="card" id="main">
-        <h1>[[videoInfo.title]]</h1>
-        
-        <video id="video" crossorigin="true" controls class="video" src="[[fileURL]]&type=video" type="video/*">
-          <track id="videoSubs" label="English" default kind="subtitles" srclang="en" src="[[fileURL]]&type=subtitle">
-          Your browser does not support the video tag.
-        </video>
-        
-        <p>Hastighet:</p>
-        <select id="videoSpeed" name="videoSpeed" on-click="changePlaybackSpeed">
-          <option value="0.5">0.5</option>
-          <option value="0.75">0.75</option>
-          <option value="1" selected="selected">1</option>
-          <option value="1.25">1.25</option>
-          <option value="1.5">1.5</option>
-          <option value="2">2</option>
-        </select>
+        <h1>[[videoInfo.title]] - [[videoInfo.topic]] ([[videoInfo.course]])</h1>
 
-        <p>Rating:</p>
-        <select id="rating" name="rating" on-click="updateRating" value="[[videoInfo.userRating]]">
-          <option value="0">0</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-        </select>
-        
-        <p>Total rating: [[videoInfo.rating]]</p>
-        
-        <br>
-        <h3>[[videoInfo.description]]</h3>
-        <br><br>
+        <div style="display: flex;">
+          <video id="video" crossorigin="true" controls class="video" src="[[fileURL]]&type=video" type="video/*">
+            <track id="videoSubs" label="English" default kind="subtitles" srclang="en" src="[[fileURL]]&type=subtitle">
+            Your browser does not support the video tag.
+          </video>
 
-        <!-- TODO: Put the subtitles on the side -->
-        <div id="subtitles">
-          <ul>
-            <template is="dom-repeat" items="[[cues]]">
+          <!-- TODO: Put the subtitles on the side -->
+          <div id="subtitles">
+            <ul>
+              <template is="dom-repeat" items="[[cues]]">
+  
+                <!-- Both the li and p elements have an on-click, so the user
+                    can click on either the text or the entire box -->
+                <li data-id$="[[item.id]]" class="active" on-click="skipTo" data-message$="{{item.id}}">
+                  <p on-click="skipTo" data-message$="{{item.id}}">[[item.text]]</p>
+                  <br>
+                </li>
+              </template>
+            </ul>
+          </div>
+        </div>
 
-              <!-- Both the li and p elements have an on-click, so the user
-                  can click on either the text or the entire box -->
-              <li data-id$="[[item.id]]" class="active" on-click="skipTo" data-message$="{{item.id}}">
-                <p on-click="skipTo" data-message$="{{item.id}}">[[item.text]]</p>
-                <br>
-              </li>
-            </template>
-          </ul>
+        <div class="bottomContainer">
+          <h3 id="desc">[[videoInfo.description]]</h3>
+          <div id="speed">
+            <p>Hastighet:</p>
+            <select id="videoSpeed" name="videoSpeed" on-click="changePlaybackSpeed">
+              <option value="0.5">0.5</option>
+              <option value="0.75">0.75</option>
+              <option value="1" selected="selected">1</option>
+              <option value="1.25">1.25</option>
+              <option value="1.5">1.5</option>
+              <option value="2">2</option>
+            </select>
+          </div>
+          
+  
+          <div id="userRating">
+            <p>Rating:</p>
+            <select id="rating" name="rating" on-click="updateRating" value="[[videoInfo.userRating]]">
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </div>
+          
+          
+          <div id="totalRating">
+            <p>Total rating: [[videoInfo.rating]]</p>
+          </div>
         </div>
 
         <!-- If logged in -->
         <template is="dom-if" if="[[user.uid]]">
           <form onsubmit="javascript: return false;" id="addComment">
+            <paper-input>he</paper-input>
             <input type="text" maxlength="500" name="comment" id="comment" required> <br>
             <button on-click="addComment">Kommenter</button>
           </form>
