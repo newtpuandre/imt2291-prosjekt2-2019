@@ -18,14 +18,23 @@ $db = DB::getDBConnection();
 $res = [];
 
 if (isset($_SESSION['uid'])) {
-    $sql = 'INSERT INTO playlists (ownerId, name, description, thumbnail) values (?, ?, ?, ?)';
+    /*$sql = 'INSERT INTO playlists (ownerId, name, description, thumbnail) values (?, ?, ?, ?)';
     $sth = $db->prepare($sql);
     $sth->execute (array ($_SESSION['uid'], $_POST['name'],$_POST['description'],$_POST['thumbnail']));
-    //print_r($_POST);
+    print_r($_FILES);*/
     //Create playlist
     
-    $id = $db->lastInsertId(); 
+    $id = $playlist->insertPlaylist($_SESSION['uid'],$_POST['name'],$_POST['description'],$_FILES);
 
+    if ($id != false) {
+        $res['status'] = 'SUCCESS';
+    } else {
+        $res['status'] = 'ERROR';
+    }
+    
+    
+    /*$id = $db->lastInsertId(); 
+    print_r($id);*/
 
     if($_POST['vidId']){
         foreach ($_POST['vidId'] as &$vid) {
@@ -33,11 +42,11 @@ if (isset($_SESSION['uid'])) {
         }
     }
     
-    if ($sth->rowCount()==1) {
+    /*if ($sth->rowCount()==1) {
         $res['status'] = 'SUCCESS';
     } else {
         $res['status'] = 'ERROR';
-    }
+    }*/
 
     echo json_encode($res);
 
