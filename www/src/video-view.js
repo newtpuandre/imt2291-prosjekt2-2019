@@ -101,7 +101,7 @@ class VideoView extends PolymerElement {
       fetch (`${window.MyAppGlobals.serverURL}api/video/getComments.php?id=` + subroute.path)
       .then(res => res.json())
       .then(res => {
-        if(res.comments != null) {
+        if(res != null) {
           this.comments = res;
         }
       });
@@ -282,7 +282,6 @@ class VideoView extends PolymerElement {
                     can click on either the text or the entire box -->
                 <li data-id$="[[item.id]]" class="active" on-click="skipTo" data-message$="{{item.id}}">
                   <p on-click="skipTo" data-message$="{{item.id}}">[[item.text]]</p>
-                  <br>
                 </li>
               </template>
             </ul>
@@ -316,7 +315,6 @@ class VideoView extends PolymerElement {
             </select>
           </div>
           
-          
           <div id="totalRating">
             <p>Total rating: [[videoInfo.rating]]</p>
           </div>
@@ -325,7 +323,6 @@ class VideoView extends PolymerElement {
         <!-- If logged in -->
         <template is="dom-if" if="[[user.uid]]">
           <form onsubmit="javascript: return false;" id="addComment">
-            <paper-input>he</paper-input>
             <input type="text" maxlength="500" name="comment" id="comment" required> <br>
             <button on-click="addComment">Kommenter</button>
           </form>
@@ -333,7 +330,7 @@ class VideoView extends PolymerElement {
 
         <template is="dom-repeat" items="[[comments]]">
           <div class="card">
-            <p>[[item.name]]</p>
+            <h3>[[item.name]]</h3>
             <p>[[item.comment]]</p>
             
             <!-- The comment is posted by the current user, show delete button -->
