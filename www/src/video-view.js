@@ -54,6 +54,13 @@ class VideoView extends PolymerElement {
     // Subtitles aren't displayed on the video itself (TODO: Show in fullscreen)
     this.$.videoSubs.track.mode = "hidden";
 
+    console.log(this.$.video);
+
+    // Fullscreen change for chrome, safari and opera
+    this.$.video.addEventListener("webkitfullscreenchange", e => {
+      this.$.videoSubs.track.mode = document.webkitIsFullScreen ? "showing" : "hidden";
+    });
+
     // When the subtitles have been loaded (fetched from the backend server)
     this.$.videoSubs.addEventListener('load', e => {
       const trackCues = e.target.track.cues;
