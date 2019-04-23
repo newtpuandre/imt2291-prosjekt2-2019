@@ -145,7 +145,7 @@ class MyApp extends PolymerElement {
 
           <iron-pages selected="[[page]]" attr-for-selected="name" role="main">
             <my-view1 name="view1" subroute="{{subroute}}"></my-view1>
-            <my-view2 name="view2"></my-view2>
+            <my-view2 name="view2" subroute="{{subroute}}"></my-view2>
             <my-view3 name="view3"></my-view3>
             <my-view4 name="view4"></my-view4>
             <video-view name="video" subroute="{{subroute}}"></video-view>

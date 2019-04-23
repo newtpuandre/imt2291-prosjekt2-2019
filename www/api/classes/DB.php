@@ -344,7 +344,7 @@ class DB {
    * @return array|null
    */
   public function searchVideoCourse($m_prompt){
-      $sql = 'SELECT COUNT(*), course, id, topic, time FROM video WHERE course LIKE :prompt';
+      $sql = 'SELECT course, id, topic, time, title, description, thumbnail_path FROM video WHERE course LIKE :prompt';
       $sth = $this->dbh->prepare ($sql);
       $param = "%" . $m_prompt . "%";
       $sth->bindParam(':prompt', $param);
