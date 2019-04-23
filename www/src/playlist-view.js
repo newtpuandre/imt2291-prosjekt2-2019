@@ -51,20 +51,20 @@ class PlaylistView extends PolymerElement {
       this.route = subroute;
 
       this.playlist = [];
-      fetch (`${window.MyAppGlobals.serverURL}api/getPlaylist.php?id=` + subroute.path)
+      fetch (`${window.MyAppGlobals.serverURL}api/playlist/getPlaylist.php?id=` + subroute.path)
       .then(res=>res.json())
       .then(data=>{
         this.playlist = data;
       });
   
       this.playlistVideos = [];
-      fetch (`${window.MyAppGlobals.serverURL}api/getPlaylistVideos.php?id=` + subroute.path)
+      fetch (`${window.MyAppGlobals.serverURL}api/playlist/getPlaylistVideos.php?id=` + subroute.path)
       .then(res=>res.json())
       .then(data=>{
         this.playlistVideos = data;
       });
 
-      fetch (`${window.MyAppGlobals.serverURL}api/getSubscriptionStatus.php?id=` + subroute.path ,{
+      fetch (`${window.MyAppGlobals.serverURL}api/user/getSubscriptionStatus.php?id=` + subroute.path ,{
         credentials: "include"
       })
       .then(res=>res.json())
@@ -129,7 +129,7 @@ class PlaylistView extends PolymerElement {
       sub = 1;
     }
 
-    fetch (`${window.MyAppGlobals.serverURL}api/changeSubStatus.php?id=` + this.route.path + `&sub=` + sub,{
+    fetch (`${window.MyAppGlobals.serverURL}api/user/changeSubStatus.php?id=` + this.route.path + `&sub=` + sub,{
       credentials: "include"
     })
     .then(res=>res.json())

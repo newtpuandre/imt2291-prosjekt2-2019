@@ -1,7 +1,10 @@
 <?php
 
-//GRABS A PLAYLIST WITH A SPECIFIC ID.
+/*
+Deletes a video from a playlist
+*/
 
+session_start();
 
 $http_origin = $_SERVER['HTTP_ORIGIN'];
 
@@ -15,13 +18,13 @@ header("Access-Control-Allow-Credentials: true");
 header("Content-Type: application/json; charset=utf-8");
 
 
-require_once 'classes/playlist.php';
+require_once '../classes/playlist.php';
 
 $id = $_GET['id'];
 
 $playlist = new Playlist();
 
-$playlists = $playlist->returnPlaylist(trim($id, "/"));
+$playlists = $playlist->deleteVideoFromPlaylist(trim($id, "/"),$_POST['vidId'][0]);
 
 echo json_encode($playlists);
 

@@ -1,5 +1,9 @@
 <?php
 
+/*
+Returns all videos from a specific user
+*/
+
 session_start();
 
 $http_origin = $_SERVER['HTTP_ORIGIN'];
@@ -13,14 +17,10 @@ header("Access-Control-Allow-Headers: Origin");
 header("Access-Control-Allow-Credentials: true");
 header("Content-Type: application/json; charset=utf-8");
 
+require_once '../classes/video.php';
 
-require_once 'classes/playlist.php';
+$video = new Video();
 
-$id = $_GET['id'];
+$videos = $video->getAllUserVideos($_SESSION['uid']);
 
-$playlist = new Playlist();
-
-$playlists = $playlist->deleteVideoFromPlaylist(trim($id, "/"),$_POST['vidId'][0]);
-
-echo json_encode($playlists);
-
+echo json_encode($videos);

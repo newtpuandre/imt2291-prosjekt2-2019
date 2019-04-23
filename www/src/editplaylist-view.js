@@ -65,21 +65,21 @@ class EditPlaylistView extends PolymerElement {
       this.route = subroute;
 
       this.playlist = [];
-      fetch (`${window.MyAppGlobals.serverURL}api/getPlaylist.php?id=` + subroute.path)
+      fetch (`${window.MyAppGlobals.serverURL}api/playlist/getPlaylist.php?id=` + subroute.path)
       .then(res=>res.json())
       .then(data=>{
         this.playlist = data;
       });
 
       this.playlistVideos = [];
-      fetch (`${window.MyAppGlobals.serverURL}api/getPlaylistVideos.php?id=` + subroute.path)
+      fetch (`${window.MyAppGlobals.serverURL}api/playlist/getPlaylistVideos.php?id=` + subroute.path)
       .then(res=>res.json())
       .then(data=>{
         this.playlistVideos = data;
       });
 
       this.userVideos = [];
-      fetch (`${window.MyAppGlobals.serverURL}api/getUserVideos.php`,{
+      fetch (`${window.MyAppGlobals.serverURL}api/playlist/getUserVideos.php`,{
         credentials: "include"
       })
       .then(res=>res.json())
@@ -92,7 +92,7 @@ class EditPlaylistView extends PolymerElement {
       this.set('editMode', false);
 
       this.userPlaylists = [];
-      fetch (`${window.MyAppGlobals.serverURL}api/getUserPlaylists.php`,{
+      fetch (`${window.MyAppGlobals.serverURL}api/playlist/getUserPlaylists.php`,{
         credentials: "include"
       })
       .then(res=>res.json())
@@ -106,7 +106,7 @@ class EditPlaylistView extends PolymerElement {
 
   moveUp(e) {
     const data = new FormData(e.target.form);
-    fetch (`${window.MyAppGlobals.serverURL}api/updateVideoPos.php?down=0`, {
+    fetch (`${window.MyAppGlobals.serverURL}api/playlist/updateVideoPos.php?down=0`, {
         method: 'POST',
         body: data
       }
@@ -135,7 +135,7 @@ class EditPlaylistView extends PolymerElement {
 
   moveDown(e) {
     const data = new FormData(e.target.form);
-    fetch (`${window.MyAppGlobals.serverURL}api/updateVideoPos.php?down=1`, {
+    fetch (`${window.MyAppGlobals.serverURL}api/playlist/updateVideoPos.php?down=1`, {
         method: 'POST',
         body: data
       }
@@ -165,7 +165,7 @@ class EditPlaylistView extends PolymerElement {
 
   updatePlaylist(e){
     const data = new FormData(e.target.form);
-    fetch (`${window.MyAppGlobals.serverURL}api/updatePlaylist.php`, {
+    fetch (`${window.MyAppGlobals.serverURL}api/playlist/updatePlaylist.php`, {
       method: 'POST',
       credentials: 'include',
       body: data
@@ -214,7 +214,7 @@ class EditPlaylistView extends PolymerElement {
       console.log(pair[0]+ ', '+ pair[1]); 
     }*/
     
-    fetch (`${window.MyAppGlobals.serverURL}api/addVideoToPlaylist.php?id=` + this.route.path, {
+    fetch (`${window.MyAppGlobals.serverURL}api/playlist/addVideoToPlaylist.php?id=` + this.route.path, {
       method: 'POST',
       body: data
     })
@@ -246,7 +246,7 @@ class EditPlaylistView extends PolymerElement {
     {
       console.log(pair[0]+ ', '+ pair[1]); 
     }*/
-    fetch (`${window.MyAppGlobals.serverURL}api/deleteVideoFromPlaylist.php?id=` + this.route.path, {
+    fetch (`${window.MyAppGlobals.serverURL}api/playlist/deleteVideoFromPlaylist.php?id=` + this.route.path, {
       method: 'POST',
       body: data
     })

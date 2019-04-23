@@ -8,7 +8,7 @@ class TeacherCPlaylist extends PolymerElement {
     super();
 
     this.userVideos = [];
-    fetch (`${window.MyAppGlobals.serverURL}api/getUserVideos.php`,{
+    fetch (`${window.MyAppGlobals.serverURL}api/playlist/getUserVideos.php`,{
       credentials: "include"
     })
     .then(res=>res.json())
@@ -135,7 +135,7 @@ class TeacherCPlaylist extends PolymerElement {
     {
       console.log(pair[0]+ ', '+ pair[1]); 
     }*/
-    fetch (`${window.MyAppGlobals.serverURL}api/createPlaylist.php`, {
+    fetch (`${window.MyAppGlobals.serverURL}api/playlist/createPlaylist.php`, {
         method: 'POST',
         credentials: "include",
         body: data

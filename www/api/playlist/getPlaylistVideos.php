@@ -1,6 +1,9 @@
 <?php
 
-session_start();
+
+/*
+Returns videos from a playlist with a specific id
+*/
 
 $http_origin = $_SERVER['HTTP_ORIGIN'];
 
@@ -14,28 +17,20 @@ header("Access-Control-Allow-Credentials: true");
 header("Content-Type: application/json; charset=utf-8");
 
 
-require_once 'classes/playlist.php';
+require_once '../classes/playlist.php';
 
 $id = $_GET['id'];
-$sub = $_GET['sub']; //1 for subscribe, 0 for unsub.
-
-$res = [];
 
 $playlist = new Playlist();
 
-if($sub) {
-    $status = $playlist->subscribeToPlaylist(trim($id, "/"),$_SESSION['uid']);
+$playlists = $playlist->returnPlaylistVideos(trim($id, "/"));
+$resolvedVideo = $playlist->resolveVideos(trim($id, "/"));
+if(count($resolvedVideo) > 0){
+    echo json_encode(array_intersect( $resolvedVideo, $playlists));
 } else {
-    $status = $playlist->unsubscribeToPlaylist(trim($id, "/"),$_SESSION['uid']);
+    echo json_encode(null);
 }
 
-if($status) {
-    $res['status'] = 'SUCCESSFUL';
-} else {
-    $res['status'] = 'ERROR';
-}
-
-
-
-echo json_encode($res);
+//print_r(array_intersect( $resolvedVideo, $playlists));
+//echo json_encode(array_intersect( $resolvedVideo, $playlists));
 

@@ -1,6 +1,8 @@
 <?php
 
-//Updates playlist information
+/*
+Updates a specific playlists information
+*/
 
 session_start();
 
@@ -16,7 +18,7 @@ header("Access-Control-Allow-Credentials: true");
 header("Content-Type: application/json; charset=utf-8");
 
 
-require_once 'classes/playlist.php';
+require_once '../classes/playlist.php';
 
 $res = [];
 

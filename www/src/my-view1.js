@@ -41,7 +41,7 @@ class MyView1 extends PolymerElement {
     if ((subroute.prefix == "/view1" || subroute.prefix == "/") && subroute.path == ""){ //Only do the following if we are in the playlist page with ID
 
       this.videos = [];
-      fetch (`${window.MyAppGlobals.serverURL}api/getNewVideos.php`)
+      fetch (`${window.MyAppGlobals.serverURL}api/user/getNewVideos.php`)
       .then(res=>res.json())
       .then(data=>{
         this.videos = data;
@@ -49,7 +49,7 @@ class MyView1 extends PolymerElement {
       });
   
       this.playlists = [];
-      fetch (`${window.MyAppGlobals.serverURL}api/getSubscribedPlaylists.php`,{
+      fetch (`${window.MyAppGlobals.serverURL}api/user/getSubscribedPlaylists.php`,{
         credentials: "include"
       })
       .then(res=>res.json())

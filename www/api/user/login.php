@@ -11,7 +11,7 @@ header("Access-Control-Allow-Headers: Origin");
 header("Access-Control-Allow-Credentials: true");
 header("Content-Type: application/json; charset=utf-8");
 
-require_once 'classes/DB.php';
+require_once '../classes/DB.php';
 $db = DB::getDBConnection();
 $res = [];
 $res['status'] = 'FAILED';

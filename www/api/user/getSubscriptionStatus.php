@@ -1,8 +1,10 @@
 <?php
 
-session_start();
+/*
+Returns the users subscription status of a specific playlist
+*/
 
-//GRABS A SPECIFIC USERS PLAYLISTS
+session_start();
 
 $http_origin = $_SERVER['HTTP_ORIGIN'];
 
@@ -16,11 +18,13 @@ header("Access-Control-Allow-Credentials: true");
 header("Content-Type: application/json; charset=utf-8");
 
 
-require_once 'classes/playlist.php';
+require_once '../classes/playlist.php';
+
+$id = $_GET['id'];
 
 $playlist = new Playlist();
 
-$playlists = $playlist->returnPlaylists($_SESSION['uid']);
+$playlists = $playlist->returnSubscriptionStatus(trim($id, "/"),$_SESSION['uid']);
 
 echo json_encode($playlists);
 

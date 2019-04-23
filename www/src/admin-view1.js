@@ -14,7 +14,7 @@ class AdminView1 extends PolymerElement {
     })
 
     this.students = [];
-    fetch (`${window.MyAppGlobals.serverURL}api/getUsers.php`)
+    fetch (`${window.MyAppGlobals.serverURL}api/admin/getUsers.php`)
     .then(res=>res.json())
     .then(data=>{
       this.students = data;
@@ -78,7 +78,7 @@ class AdminView1 extends PolymerElement {
 
   updateUser(e) {
     const data = new FormData(e.target.form); // Wrap the form in a FormData object
-    fetch (`${window.MyAppGlobals.serverURL}api/updatePrivilege.php`, {
+    fetch (`${window.MyAppGlobals.serverURL}api/admin/updatePrivilege.php`, {
         method: 'POST',
         credentials: "include",
         body: data

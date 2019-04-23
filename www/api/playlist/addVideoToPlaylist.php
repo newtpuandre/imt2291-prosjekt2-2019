@@ -1,6 +1,10 @@
 <?php
 
-//Updates the video position in a playlist
+/*
+Adds a video to a playlist
+*/
+
+session_start();
 
 $http_origin = $_SERVER['HTTP_ORIGIN'];
 
@@ -14,22 +18,13 @@ header("Access-Control-Allow-Credentials: true");
 header("Content-Type: application/json; charset=utf-8");
 
 
-require_once 'classes/playlist.php';
+require_once '../classes/playlist.php';
 
-$res = [];
+$id = $_GET['id'];
 
 $playlist = new Playlist();
 
-if($playlist->editPosition(trim($_POST['routeId'], "/"),$_POST['vidId'], $_GET['down'])){
-    $res['status'] = 'SUCCESS';
-} else {
-    $res['status'] = 'ERROR';
-}
+$playlists = $playlist->addVideoToPlaylist(trim($id, "/"),$_POST['vidId']);
 
-echo json_encode($res);
-
-
-//echo json_encode($_GET);
-//print_r($_POST);
-//print_r($_GET);
+echo json_encode($playlists);
 

@@ -47,7 +47,7 @@ class MyView4 extends PolymerElement {
     })
 
     this.playlists = [];
-    fetch (`${window.MyAppGlobals.serverURL}api/getAllPlaylists.php`)
+    fetch (`${window.MyAppGlobals.serverURL}api/playlist/getAllPlaylists.php`)
     .then(res=>res.json())
     .then(data=>{
       this.playlists = data;
@@ -62,7 +62,7 @@ class MyView4 extends PolymerElement {
     this.set('searchQuerry', data.get('search'));
 
     this.searchResult = [];
-    fetch (`${window.MyAppGlobals.serverURL}api/searchPlaylist.php?q=` + this.searchQuerry)
+    fetch (`${window.MyAppGlobals.serverURL}api/playlist/searchPlaylist.php?q=` + this.searchQuerry)
     .then(res=>res.json())
     .then(data=>{
       this.searchResult = data;

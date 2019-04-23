@@ -1,15 +1,19 @@
 <?php
 
+/*
+Returns all playlists
+*/
+
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Access-Control-Allow-Headers: Origin");
 header("Content-Type: application/json; charset=utf-8");
 
 
-require_once 'classes/video.php';
+require_once '../classes/playlist.php';
 
-$video = new Video();
+$playlist = new Playlist();
 
-$videos = $video->getNewVideos();
+$playlists = $playlist->returnAllPlaylists();
 
-echo json_encode($videos);
+echo json_encode($playlists);

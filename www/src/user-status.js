@@ -133,7 +133,7 @@ class UserStatus extends LitElement {
       }
     })
     // Get user logged in status from server
-    fetch (`${window.MyAppGlobals.serverURL}api/loginStatus.php`, {
+    fetch (`${window.MyAppGlobals.serverURL}api/user/loginStatus.php`, {
       credentials: 'include'
     })
     .then(res=>res.json())
@@ -159,7 +159,7 @@ class UserStatus extends LitElement {
     return html`
       <style>
         div.avatar {
-          background-image: url("${window.MyAppGlobals.serverURL}api/avatar.php");
+          background-image: url("${window.MyAppGlobals.serverURL}api/user/avatar.php");
           background-size: contain;
           border-radius: 35px;
           background-repeat: no-repeat;
@@ -230,7 +230,7 @@ class UserStatus extends LitElement {
 
   login(e) {
     const data = new FormData(e.target.form); // Wrap the form in a FormData object
-    fetch (`${window.MyAppGlobals.serverURL}api/login.php`, {
+    fetch (`${window.MyAppGlobals.serverURL}api/user/login.php`, {
         method: 'POST',
         credentials: "include",
         body: data
@@ -252,7 +252,7 @@ class UserStatus extends LitElement {
   register(e){
     const data = new FormData(e.target.form); // Wrap the form in a FormData object
     console.log(data);
-     fetch (`${window.MyAppGlobals.serverURL}api/register.php`, {
+     fetch (`${window.MyAppGlobals.serverURL}api/user/register.php`, {
         method: 'POST',
         credentials: "include",
         body: data
@@ -270,7 +270,7 @@ class UserStatus extends LitElement {
    * Called when the user clicks the log out button
    */
   logout() {
-    fetch (`${window.MyAppGlobals.serverURL}api/logout.php`, {
+    fetch (`${window.MyAppGlobals.serverURL}api/user/logout.php`, {
         credentials: "include"
       }
     ).then(res=>res.json())
@@ -292,7 +292,7 @@ class UserStatus extends LitElement {
    */
   avatar(e) {
     const data = new FormData(e.target.form);
-    fetch (`${window.MyAppGlobals.serverURL}api/uploadAvatar.php`, {
+    fetch (`${window.MyAppGlobals.serverURL}api/user/uploadAvatar.php`, {
         method: 'POST',
         credentials: "include",
         body: data

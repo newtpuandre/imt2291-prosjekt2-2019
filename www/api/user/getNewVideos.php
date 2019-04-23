@@ -6,10 +6,10 @@ header("Access-Control-Allow-Headers: Origin");
 header("Content-Type: application/json; charset=utf-8");
 
 
-require_once 'classes/video.php';
+require_once '../classes/video.php';
 
 $video = new Video();
 
-$videos = $video->getAllVideos();
+$videos = $video->getNewVideos();
 
 echo json_encode($videos);

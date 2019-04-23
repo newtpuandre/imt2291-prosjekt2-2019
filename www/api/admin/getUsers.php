@@ -1,15 +1,16 @@
 <?php
 
+/*
+Returns all users from the database.
+*/
+
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Access-Control-Allow-Headers: Origin");
 header("Content-Type: application/json; charset=utf-8");
 
+require_once '../classes/admin.php';
+$admin = new Admin();
 
-require_once 'classes/video.php';
-
-$video = new Video();
-
-$videos = $video->getAllVideoCourses();
-
-echo json_encode($videos);
+$res = $admin->gatherUsers();
+echo json_encode($res);

@@ -17,7 +17,7 @@ class MyView2 extends PolymerElement {
     super();
 
     this.courses = [];
-    fetch (`${window.MyAppGlobals.serverURL}api/getCourses.php`)
+    fetch (`${window.MyAppGlobals.serverURL}api/course/getCourses.php`)
     .then(res=>res.json())
     .then(data=>{
       this.courses = data;

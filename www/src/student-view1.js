@@ -37,7 +37,7 @@ class StudentView1 extends PolymerElement {
     if (subroute.prefix == "/student" && subroute.path == ""){
 
       this.playlists = [];
-      fetch (`${window.MyAppGlobals.serverURL}api/getSubscribedPlaylists.php`,{
+      fetch (`${window.MyAppGlobals.serverURL}api/user/getSubscribedPlaylists.php`,{
         credentials: "include"
       })
       .then(res=>res.json())

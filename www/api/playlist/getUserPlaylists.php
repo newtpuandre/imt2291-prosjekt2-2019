@@ -1,7 +1,10 @@
 <?php
 
-//Video search
+session_start();
 
+/*
+Grabs all playlists from a specific user
+*/
 
 $http_origin = $_SERVER['HTTP_ORIGIN'];
 
@@ -15,11 +18,11 @@ header("Access-Control-Allow-Credentials: true");
 header("Content-Type: application/json; charset=utf-8");
 
 
-require_once 'classes/playlist.php';
+require_once '../classes/playlist.php';
 
 $playlist = new Playlist();
 
-$playlists = $playlist->searchForPlaylists($_GET['q']);
+$playlists = $playlist->returnPlaylists($_SESSION['uid']);
 
 echo json_encode($playlists);
 

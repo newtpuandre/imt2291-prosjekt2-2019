@@ -14,7 +14,7 @@ header("Content-Type: application/json; charset=utf-8");
 error_reporting( E_ALL );
 ini_set('display_errors', 1);
 
-require_once 'classes/DB.php';
+require_once '../classes/DB.php';
 $db = DB::getDBConnection();
 $res = [];
 $res['loggedIn'] = false;
