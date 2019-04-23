@@ -90,7 +90,7 @@ class MyView2 extends PolymerElement {
         <div class="grid-container">
         <template is="dom-repeat" items="[[videos]]">
             <div class="grid-item">
-            <b><a href="">[[item.title]]</a></b>
+            <b><a href="/video/[[item.id]]">[[item.title]]</a></b>
             <p><img src="[[serverURL]]api/video/getFile.php?id=[[item.id]]&type=thumbnail"  width="100" height="52"></p>
             <p>Beskrivelse: [[item.description]]</p>
             <p>Emne: [[item.topic]]</p>

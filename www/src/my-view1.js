@@ -95,7 +95,7 @@ class MyView1 extends PolymerElement {
       <div class="grid-container">
           <template is="dom-repeat" items="[[videos]]">
             <div class="grid-item">
-            <b>[[item.title]]</b>
+            <b><a href="/video/[[item.id]]">[[item.title]]</a></b>
             <p><img src="[[item.thumbnail]]"></p>
             <p>Beskrivelse: [[item.description]]</p>
             <p>Emne: [[item.topic]]</p>
