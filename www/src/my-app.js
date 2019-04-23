@@ -120,7 +120,7 @@ class MyApp extends PolymerElement {
               <!-- Only teachers will see this. -->
               <a>Lærer</a>
               <a class="tab" name="upload" href="[[rootPath]]upload"><i>Last opp video</i></a>
-              <a class="tab" name="teacher" href="[[rootPath]]teacher"><i>Rediger video</i></a>
+              <a class="tab" name="teacher" href="[[rootPath]]editVideo"><i>Rediger video</i></a>
               <a class="tab" name="teachercplaylist" href="[[rootPath]]teachercplaylist"><i>Lag spilleliste</i></a>
               <a class="tab" name="editplaylist" href="[[rootPath]]editplaylist"><i>Endre spilleliste</i></a>
             </template>
@@ -156,7 +156,8 @@ class MyApp extends PolymerElement {
             <upload-video-view name="upload"></upload-video-view>
             <teacher-cplaylist name="teachercplaylist"></teacher-cplaylist>
             <admin-view1 name="admin"></admin-view1>
-            <my-view404 name="view404"></my-view404>
+            <edit-video-view name="editVideo" subroute="{{subroute}}"></edit-video-view>
+            <my-view404 name="view404"></my-view404>edit-video-view
           </iron-pages>
         </app-header-layout>
       </app-drawer-layout>
@@ -205,7 +206,7 @@ class MyApp extends PolymerElement {
 
     if (!page) {
       this.page = 'view1';
-    } else if (['view1', 'view2', 'view3', 'view4', 'teacher', 'playlist', 'teachercplaylist', 'editplaylist', 'upload', 'student', 'admin', 'video'].indexOf(page) !== -1) {
+    } else if (['view1', 'view2', 'view3', 'view4', 'teacher', 'playlist', 'teachercplaylist', 'editplaylist', 'upload', 'student', 'admin', 'video', 'editVideo'].indexOf(page) !== -1) {
       this.page = page; 
     } else {
       this.page = 'view404';
@@ -258,6 +259,9 @@ class MyApp extends PolymerElement {
         break;
       case 'video':
         import('./video-view.js');
+        break;
+      case 'editVideo':
+        import('./edit-video-view.js');
         break;
       case 'view404':
         import('./my-view404.js');

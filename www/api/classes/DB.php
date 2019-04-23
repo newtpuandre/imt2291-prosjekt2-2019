@@ -1079,4 +1079,23 @@ class DB {
           return null;
       }
   }
+
+  /**
+   * Returns the ID of the user who uploaded a video
+   * @param $videoID The ID of the video
+   * @return int The user ID of the uploader, or -1 on failure
+   */
+  public function returnUploaderID($videoID) {
+    $sql = "SELECT userid FROM video WHERE id=:videoID";
+    $sth = $this->dbh->prepare($sql);
+
+    $sth->bindParam(":videoID", $videoID);
+    $sth->execute();
+
+    if($row = $sth->fetch(PDO::FETCH_ASSOC)) {
+        return $row["userid"];
+    } else {
+        return -1;
+    }
+  }
 }

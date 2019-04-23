@@ -70,10 +70,4 @@ if(isset($_GET["id"])) {
     $res["status"] = "SUCCESS";
 }
 
-if(isset($_SESSION["uid"])) {
-    $res["uid"] = $_SESSION["uid"];
-} else {
-    $res["uid"] = "herst";
-}
-
 echo json_encode($res);
