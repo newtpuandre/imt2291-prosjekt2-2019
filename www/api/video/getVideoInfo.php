@@ -12,6 +12,7 @@
  * On success:
  * - status: SUCCESS
  * - video:
+ *  - id: The ID of the video
  *  - rating: The average rating
  *  - title: The title of the video
  *  - description: The description of the video
@@ -57,6 +58,7 @@ if(isset($_GET["id"])) {
     $uploaderId = $data[0]["userid"];
 
     $video = array();
+    $video["id"] = $id;
     $video["title"] = $data[0]["title"];
     $video["description"] = $data[0]["description"];
     $video["topic"] = $data[0]["topic"];
@@ -64,7 +66,10 @@ if(isset($_GET["id"])) {
     $video["uploader"] = $data[0]["userid"];
     $video["time"] = $data[0]["time"];
     $video["rating"] = $db->returnSumRatings($id);
-    $video["userRating"] = $db->returnRating($_SESSION["uid"], $id)["rating"];
+    
+    if(isset($_SESSION["uid"])) {
+        $video["userRating"] = $db->returnRating($_SESSION["uid"], $id)["rating"];
+    }
 
     $res["video"] = $video;
     $res["status"] = "SUCCESS";
