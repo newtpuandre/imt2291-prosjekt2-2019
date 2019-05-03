@@ -18,6 +18,12 @@ class MyView1 extends PolymerElement {
       searchQuery:{
         type: String,
         value: ""
+      },
+      searchMode:{
+        type: Boolean
+      },
+      searchResultsPlaylist:{
+        type: Array
       }
     }
   }
@@ -43,7 +49,7 @@ class MyView1 extends PolymerElement {
 
   loadData(subroute){
     if ((subroute.prefix == "/view1" || subroute.prefix == "/") && subroute.path == ""){ //Only do the following if we are in the playlist page with ID
-
+      this.set('searchMode', false);
       this.videos = [];
       fetch (`${window.MyAppGlobals.serverURL}api/user/getNewVideos.php`)
       .then(res=>res.json())
@@ -61,6 +67,25 @@ class MyView1 extends PolymerElement {
         this.playlists = data;
         console.log(data);
       });
+
+    } else if ((subroute.prefix == "/view1" || subroute.prefix == "/") && subroute.path != "") {
+      this.set('searchMode', true);
+      this.videos = [];
+      fetch (`${window.MyAppGlobals.serverURL}api/video/searchVideos.php?q=` + this.searchQuery)
+      .then(res=>res.json())
+      .then(data=>{
+        this.videos = data;
+        console.log(data);
+      });
+
+      this.searchResultsPlaylist = [];
+      fetch (`${window.MyAppGlobals.serverURL}api/playlist/searchPlaylist.php?q=` + this.searchQuery)
+      .then(res=>res.json())
+      .then(data=>{
+      this.searchResultsPlaylist = data;
+      console.log(this.searchResultsPlaylist);
+      });
+
 
     }
   }
@@ -93,8 +118,9 @@ class MyView1 extends PolymerElement {
 
       <div class="card">
       <h1>Søk</h1>
-      <input type="text">
-      <button>Søk</button>
+      <input type="text" value="{{searchQuery::input}}">
+      <a href="/view1/[[searchQuery]]"><button>Søk</button></a>
+      <template is="dom-if" if="{{!searchMode}}">
       <h1>Nye Opplastninger</h1>
       <div class="grid-container">
           <template is="dom-repeat" items="[[videos]]">
@@ -122,6 +148,32 @@ class MyView1 extends PolymerElement {
           <p>Du har ikke abonnert på noen spillelister enda..</p>
           </template>
         </div>
+      </template>
+      </template>
+      <template is="dom-if" if="{{searchMode}}">
+      <p><a href="/view1"><- Tilbake</a></p>
+      <h2>Søke resultater for: [[searchQuery]]</h2>
+      <h2>Videoer:</h2>
+      <template is="dom-repeat" items="{{videos}}">
+            <div class="grid-item">
+            <a href="/video/[[item.id]]"><b>[[item.title]]</b></a>
+            <!-- TODO: The serverURL shouldn't be hardcoded -->
+            <p><img src="[[serverURL]]api/video/getFile.php?id=[[item.id]]&type=thumbnail"
+                  width="100" height="52"></p>
+            <p>Beskrivelse: [[item.description]]</p>
+            <p>Emne: [[item.topic]]</p>
+            <p>Fag: [[item.course]]</p>
+            <p>Lastet opp av: [[item.name]]</p>
+            </div>
+          </template>
+      <h2>Spillelister</h2>
+      <template is="dom-repeat" items="{{searchResultsPlaylist}}">
+            <div class="grid-item">
+            <b><a href="/playlist/[[item.id]]">[[item.name]]</a></b>
+            <p><img src="[[item.thumbnail]]"></p>
+            <p>Beskrivelse: [[item.description]]</p>
+            </div>
+          </template>
       </template>
     </div>
 
