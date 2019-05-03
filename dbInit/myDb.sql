@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS `comment` (
   KEY `fk_useridComment` (`userid`),
   KEY `fk_videoidComment` (`videoid`),
   CONSTRAINT `fk_useridComment` FOREIGN KEY (`userid`) REFERENCES `users` (`id`),
-  CONSTRAINT `fk_videoidComment` FOREIGN KEY (`videoid`) REFERENCES `video` (`id`)
+  CONSTRAINT `fk_videoidComment` FOREIGN KEY (`videoid`) REFERENCES `video` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Data exporting was unselected.
