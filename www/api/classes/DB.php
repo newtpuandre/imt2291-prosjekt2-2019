@@ -539,6 +539,13 @@ class DB {
       }
   }
 
+  /**
+   * @function updatePlaylistThumbnail
+   * @brief updates playlist thumbnail
+   * @param $m_playlistId
+   * @param $m_thumb_path
+   * @return bool
+   */
   public function updatePlaylistThumbnail($m_playlistId, $m_thumb_path){
         $sql = 'UPDATE playlists SET thumbnail=:thumbnail WHERE id=:id';
 
