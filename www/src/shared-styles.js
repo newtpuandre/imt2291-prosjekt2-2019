@@ -40,6 +40,11 @@ $_documentContainer.innerHTML = `<dom-module id="shared-styles">
         color: #212121;
         font-size: 22px;
       }
+
+      .videoThumbnail {
+        width: 132px;
+        height: 70px;
+      }
     </style>
   </template>
 </dom-module>`;

@@ -271,7 +271,7 @@ class DB {
    * @function deleteVideo
    * @brief deletes a specific video
    * @param $m_videoid
-   * @return array|null
+   * @return boolean true if the video was deleted
    */
   public function deleteVideo($m_videoid){
       $sql = 'DELETE FROM video WHERE id=:videoid';

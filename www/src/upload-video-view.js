@@ -41,6 +41,7 @@ class UploadVideoView extends PolymerElement {
       <div class="card" id="main">
         <template is="dom-if" if="{{user.isTeacher}}">
           <h1>Last opp video</h1>
+          <hr>
         
           <form onsubmit="javascript: return false;" id="uploadForm" enctype="multipart/form-data">
             <label for="title">Tittel</label>

@@ -1,17 +1,13 @@
 <?php
+
 /**
- * Edits information about a video
+ * Updates a videos thumbnail
  * 
- * Methods supported: POST
+ * Supported methods: POST
  * 
  * Required parameters:
- * - vid, int: The ID of the video
- * - title, string: The new title of the video
- * - desc, string: The description of the video
- * - topic, string: The topic of the video
- * - course, string: The course of the video
- * 
- * Optional files: thumbnail, subtitles
+ * - vid, int: The ID of video
+ * - thumbnail, string: Base64 representation of the image
  * 
  * Returns:
  * - status: SUCCESS/FAILED
@@ -40,20 +36,29 @@ $db = new DB();
 $res["status"] = "FAILED";
 
 if(isset($_SESSION["uid"])) {
-    if(isset($_POST["vid"])) {
+    if(isset($_POST["vid"]) && isset($_POST["thumbnail"])) {
         $vid = trim($_POST["vid"], "/");
 
         $uploaderID = $db->returnUploaderID($vid);
         
         // Verify the current user is the uploader
-        if($_SESSION["uid"] === $uploaderID) {
-            if($db->updateVideo($vid, $_POST["title"], $_POST["desc"], $_POST["topic"], $_POST["course"])) {
-                $res["status"] = "SUCCESS";
-
-                // Check for file uploads, change on disk
+        if($_SESSION["uid"] == $uploaderID) {
+            $thumbDir = "../../userFiles/" . $_SESSION["uid"] . "/thumbnails";
+            if(!file_exists($thumbDir)) {
+                mkdir($thumbDir, 0777, true);
             }
-        } else {
-            $res["msg"] = "Credentials do not match.";
+    
+            $filePath = $thumbDir . "/$vid";
+    
+            // Remove old thumbnail
+            @unlink($filePath);
+
+            // Open (create) a file for writing
+            $file = fopen($filePath, "w");
+
+            if(fwrite($file, base64_decode($_POST["thumbnail"]))) {
+                $res["status"] = "SUCCESS";
+            }
         }
     }
 }

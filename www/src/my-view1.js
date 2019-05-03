@@ -11,6 +11,10 @@ class MyView1 extends PolymerElement {
       playlists: {
         type: Array
       },
+      serverURL: {
+        type: String,
+        value: window.MyAppGlobals.serverURL
+      },
       user: {
         type: Object,
        value: { student: false, teacher: false, admin: false }
@@ -126,7 +130,9 @@ class MyView1 extends PolymerElement {
           <template is="dom-repeat" items="[[videos]]">
             <div class="grid-item">
             <b><a href="/video/[[item.id]]">[[item.title]]</a></b>
-            <p><img src="[[item.thumbnail]]"></p>
+            <p>
+              <img class="videoThumbnail" src="[[serverURL]]api/video/getFile.php?id=[[item.id]]&type=thumbnail">
+            </p>
             <p>Beskrivelse: [[item.description]]</p>
             <p>Emne: [[item.topic]]</p>
             <p>Fag: [[item.course]]</p>
