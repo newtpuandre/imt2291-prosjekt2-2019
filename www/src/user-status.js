@@ -237,15 +237,21 @@ class UserStatus extends LitElement {
       }
     ).then(res=>res.json())         // When a reply has arrived
     .then(res=>{
+      let toast = document.querySelector("#toast");
+      toast.close();
+
       console.log("data");
       console.log(res);
       if (res.status=='SUCCESS') {  // Successfully logged in
+        toast.show("Du er nå logget inn");
         this.updateStatus(res);
         if(res.hasAvatar==1) {
           this.hasAvatar = true;
         }
         store.dispatch(logIn({uid: res.uid, uname: res.uname, isStudent: this.student, isTeacher: this.teacher, isAdmin: this.admin, hasAvatar: this.hasAvatar}));
-      }                             // Needs to alert the user as to the error!!!!
+      } else {
+        toast.show("En feil oppstod");
+      }
     })
   }
 
@@ -259,10 +265,17 @@ class UserStatus extends LitElement {
       }
     ).then(res=>res.json())         // When a reply has arrived
     .then(res=>{
+      let toast = document.querySelector("#toast");
+      toast.close();
+
       if (res.status=='SUCCESS') {  // Successfully logged in
+        toast.show("Registrering vellykket");
+
         this.updateStatus(res);
         store.dispatch(logIn({uid: res.uid, uname: res.uname, isStudent: this.student, isTeacher: this.teacher, isAdmin: this.admin, hasAvatar: this.hasAvatar}));
-      }    
+      } else {
+        toast.show("En feil oppstod");
+      }
     })
   }
 
@@ -275,14 +288,21 @@ class UserStatus extends LitElement {
       }
     ).then(res=>res.json())
     .then(res=>{
+      let toast = document.querySelector("#toast");
+      toast.close();
+
       if (res.status=='SUCCESS') {  // Successfully logget out
         this.updateStatus(res);
         this.hasAvatar = false;
         this.showLogin = true;
         this.showStatus = false;
         store.dispatch(logOut());
-      }                              // Need to alert the user as to the error!!!!!
-    })
+
+        toast.show("Du er nå logget ut");
+      } else {
+        toast.show("En feil oppstod");
+      }
+    });
   }
 
   /**
@@ -299,9 +319,15 @@ class UserStatus extends LitElement {
       }
     ).then(res=>res.json())
     .then(res=>{
+      let toast = document.querySelector("#toast");
+      toast.close();
+
       if (res.status=='SUCCESS') {  // Successfully uploaded new avatar image
         this.hasAvatar = true;
-      }                             // Need to alert the user as to the error!!!!!
+        toast.show("Avatar oppdatert");
+      } else {
+        toast.show("En feil oppstod");        
+      }
     })
   }
 

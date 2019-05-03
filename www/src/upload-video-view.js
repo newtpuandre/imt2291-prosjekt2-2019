@@ -86,9 +86,8 @@ class UploadVideoView extends PolymerElement {
     }
     ).then(res => res.json())
     .then(res => {
-      console.log(res);
-
       let toast = document.querySelector("#toast");
+      toast.close();
 
       if(res.status == 'SUCCESS') {
         toast.show("Video lastet opp");

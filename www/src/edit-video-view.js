@@ -85,6 +85,10 @@ class EditVideoView extends PolymerElement {
       console.log(res);
       let toast = document.querySelector("#toast");
 
+      // Close it if there is a toast already present, doesn't actually
+      // close but makes the new one stay for it's intended period
+      toast.close();
+
       if(res.status == 'SUCCESS') {
         toast.show("Videoen ble redigert");
       } else {

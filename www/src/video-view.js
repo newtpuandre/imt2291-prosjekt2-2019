@@ -209,7 +209,8 @@ class VideoView extends PolymerElement {
     .then(res => res.json())
     .then(res => {
       let toast = document.querySelector("#toast");
-  
+      toast.close();
+
       if(res.status == "SUCCESS") {
         toast.show("Rating oppdatert");      
       } else {
