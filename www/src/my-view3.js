@@ -121,9 +121,7 @@ class MyView3 extends PolymerElement {
           <template is="dom-repeat" items="[[videos]]">
             <div class="grid-item">
             <a href="/video/[[item.id]]"><b>[[item.title]]</b></a>
-            <!-- TODO: The serverURL shouldn't be hardcoded -->
-            <p><img src="[[serverURL]]api/video/getFile.php?id=[[item.id]]&type=thumbnail"
-                  width="100" height="52"></p>
+            <p><img class="videoThumbnail" src="[[serverURL]]api/video/getFile.php?id=[[item.id]]&type=thumbnail"></p>
             <p>Beskrivelse: [[item.description]]</p>
             <p>Emne: [[item.topic]]</p>
             <p>Fag: [[item.course]]</p>

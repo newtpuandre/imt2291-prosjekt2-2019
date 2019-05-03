@@ -98,6 +98,42 @@ class EditVideoView extends PolymerElement {
     return id == this.user.uid;
   }
 
+  saveThumbnail() {
+    // Find the video
+    let video = this.shadowRoot.querySelector("#video");
+
+    // Create a canvas with the same size as the video
+    var canvas = document.createElement("canvas");
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    var canvasContext = canvas.getContext("2d");
+
+    // Create the image
+    canvasContext.drawImage(video, 0, 0);
+
+    // Get the image out
+    let image = canvas.toDataURL('image/png');
+
+    // image = "data:image/png;base64,hgurGR44erRGegR43......."
+    // We only want the actual image data, everything behind the comma
+    image = image.split(",")[1];
+
+    let data = new FormData();
+    data.append("vid", this.videoInfo.id);
+    data.append("thumbnail", image);
+
+    fetch(`${window.MyAppGlobals.serverURL}api/video/updateThumbnail.php`, {
+      method: 'POST',
+      credentials: "include",
+      body: data
+    })
+    .then(res => res.json())
+    .then(res => {
+      console.log(res);
+    });
+  }
+
   static get template() {
     return html`
       <style include="shared-styles">
@@ -114,10 +150,13 @@ class EditVideoView extends PolymerElement {
 
       <div class="card" id="main">
         <template is="dom-if" if="{{user.isTeacher}}">
-          <h1>Rediger videoen</h1>
+          <h1>Redigerer <i>[[videoInfo.title]]</i></h1>
+          <hr>
         
           <!-- TODO: Add subtitle input, add choose thumbnail from video -->
           <form onsubmit="javascript: return false;" id="editForm" enctype="multipart/form-data">
+            <button on-click="editVideo">Lagre endringer</button>
+            
             <label for="title">Tittel</label>
             <input type="text" name="title" id="title" maxlength="64" value="[[videoInfo.title]]" required>
 
@@ -135,9 +174,16 @@ class EditVideoView extends PolymerElement {
 
             <label for="subtitles">Undertekster</label>
             <input type="file" name="subtitles" id="subtitles" accept=".vtt">
+            <br>
 
+            <video id="video" crossorigin="true" controls class="video" type="video/*"
+                src="[[serverURL]]api/video/getFile.php?id=[[videoInfo.id]]&type=video">
+              Your browser does not support the video tag.
+            </video>
+            <br>
+
+            <button id="png" on-click="saveThumbnail">Lagre som thumbnail</button>
             <br><br>
-            <button on-click="editVideo">Rediger video</button>
           </form>
         </template>
 

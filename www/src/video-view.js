@@ -39,7 +39,6 @@ class VideoView extends PolymerElement {
     store.subscribe((state)=>{
       this.user = store.getState().user;
     });
-
   }
 
   static get observers() {
@@ -51,7 +50,7 @@ class VideoView extends PolymerElement {
   ready() {
     super.ready();
 
-    // Subtitles aren't displayed on the video itself (TODO: Show in fullscreen)
+    // Subtitles aren't displayed on the video itself
     this.$.videoSubs.track.mode = "hidden";
 
     console.log(this.$.video);
@@ -273,6 +272,7 @@ class VideoView extends PolymerElement {
 
       <div class="card">
         <h1>[[videoInfo.title]] - [[videoInfo.topic]] ([[videoInfo.course]])</h1>
+        <hr>
 
         <div style="display: flex;">
           <video id="video" crossorigin="true" controls class="video" src="[[fileURL]]&type=video" type="video/*">
@@ -280,7 +280,6 @@ class VideoView extends PolymerElement {
             Your browser does not support the video tag.
           </video>
 
-          <!-- TODO: Put the subtitles on the side -->
           <div id="subtitles">
             <ul>
               <template is="dom-repeat" items="[[cues]]">
@@ -295,6 +294,7 @@ class VideoView extends PolymerElement {
           </div>
         </div>
 
+        <!-- Container under the video, holds speed and rating -->
         <div class="bottomContainer">
           <h3 id="desc">[[videoInfo.description]]</h3>
           <div id="speed">
