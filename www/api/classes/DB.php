@@ -308,7 +308,7 @@ class DB {
       $sth->bindParam(':course', $m_course);
 
       $sth->execute();
-      if ($row = $sth->fetch()) {
+      if ($sth->rowCount() == 1) {
           return true;
       } else {
           return false;
@@ -946,7 +946,7 @@ class DB {
       $sth->bindParam(':rating', $m_rating);
 
       $sth->execute();
-      if ($row = $sth->fetch()) {
+      if ($sth->rowcount() == 1) {
           return true;
       } else {
           return false;

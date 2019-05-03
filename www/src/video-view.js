@@ -130,15 +130,16 @@ class VideoView extends PolymerElement {
       }
       ).then(res => res.json())
       .then(res => {
+        let toast = document.querySelector("#toast");
         if(res.status == 'SUCCESS') {
           // Clear the input form
           this.shadowRoot.querySelector("#addComment").reset();
 
           // unshift puts the element at the start of the array
           this.unshift("comments", res.comment);
+          toast.show("Kommentar lagt til");
         } else {
-          console.log("Error adding comment");
-        }   
+          toast.show("En feil oppstod");}   
       });
     }
   }
@@ -152,11 +153,14 @@ class VideoView extends PolymerElement {
     fetch(`${window.MyAppGlobals.serverURL}api/video/deleteComment.php?cid=${cid}`)
     .then(res => res.json())
     .then(res => {
+      let toast = document.querySelector("#toast");
+
       if(res.status == "SUCCESS") {
         // Remove the comment from the array
         this.comments = this.comments.filter(comment => comment.id != cid);
+        toast.show("Kommentar slettet");
       } else {
-        console.log("Couldn't delete comment");
+        toast.show("En feil oppstod");
       }
     });
   }
@@ -204,8 +208,12 @@ class VideoView extends PolymerElement {
     })
     .then(res => res.json())
     .then(res => {
+      let toast = document.querySelector("#toast");
+  
       if(res.status == "SUCCESS") {
-        console.log("great:)");
+        toast.show("Rating oppdatert");      
+      } else {
+        toast.show("En feil oppstod");
       }
     });
   }

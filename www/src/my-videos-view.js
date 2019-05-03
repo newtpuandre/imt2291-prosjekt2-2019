@@ -50,12 +50,13 @@ class MyVideosView extends PolymerElement {
     })
     .then(res => res.json())
     .then(res => {
-      console.log(res);
+      let toast = document.querySelector("#toast");
+      
       if(res.status == "SUCCESS") {
+        toast.show("Video slettet");
         this.videos = this.videos.filter(v => v.id != id);
-        console.log("Video deleted");
       } else {
-        console.log("Problem deleting video");
+        toast.show("En feil oppstod");
       }
     });
   }
@@ -92,7 +93,9 @@ class MyVideosView extends PolymerElement {
       <div class="grid-container">
         <template is="dom-repeat" items="[[videos]]">
           <div class="grid-item">
-            <h2>[[item.title]]</h2>
+            <a href="/video/[[item.id]]">
+              <h2>[[item.title]]</h2>
+            </a>
 
             <a href="/editVideo/[[item.id]]">Rediger</a>
             <a href="/myVideos" on-click="deleteVideo" data-id$="[[item.id]]">Slett</a>

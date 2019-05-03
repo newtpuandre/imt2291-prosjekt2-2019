@@ -12,7 +12,7 @@ class EditVideoView extends PolymerElement {
 
     store.subscribe((state)=>{
       this.user = store.getState().user;
-    })
+    });
   }
 
   static get properties() {
@@ -32,6 +32,10 @@ class EditVideoView extends PolymerElement {
         value: { student: false, teacher: false, admin: false }
       }
     };
+  }
+
+  ready() {
+    super.ready();
   }
 
   static get observers() {
@@ -79,12 +83,12 @@ class EditVideoView extends PolymerElement {
     ).then(res => res.json())
     .then(res => {
       console.log(res);
-      let main = this.shadowRoot.querySelector("#main");
+      let toast = document.querySelector("#toast");
 
       if(res.status == 'SUCCESS') {
-
+        toast.show("Videoen ble redigert");
       } else {
-
+        toast.show("En feil oppstod");
       }
     });
   }
@@ -131,6 +135,13 @@ class EditVideoView extends PolymerElement {
     .then(res => res.json())
     .then(res => {
       console.log(res);
+      let toast = document.querySelector("#toast");
+      
+      if(res.status == "SUCCESS") {
+        toast.show("Thumbnailen ble oppdatert");
+      } else {
+        toast.show("En feil oppstod");
+      }
     });
   }
 
@@ -152,8 +163,8 @@ class EditVideoView extends PolymerElement {
         <template is="dom-if" if="{{user.isTeacher}}">
           <h1>Redigerer <i>[[videoInfo.title]]</i></h1>
           <hr>
-        
-          <!-- TODO: Add subtitle input, add choose thumbnail from video -->
+
+          <!-- TODO: Add subtitle input -->
           <form onsubmit="javascript: return false;" id="editForm" enctype="multipart/form-data">
             <button on-click="editVideo">Lagre endringer</button>
             

@@ -39,6 +39,8 @@ $db = new DB();
 
 $res["status"] = "FAILED";
 
+$res["p"] = $_POST;
+
 if(isset($_SESSION["uid"])) {
     if(isset($_POST["vid"])) {
         $vid = trim($_POST["vid"], "/");
@@ -51,6 +53,8 @@ if(isset($_SESSION["uid"])) {
                 $res["status"] = "SUCCESS";
 
                 // Check for file uploads, change on disk
+            } else {
+                $res["ke fan"] = "idk2";
             }
         } else {
             $res["msg"] = "Credentials do not match.";

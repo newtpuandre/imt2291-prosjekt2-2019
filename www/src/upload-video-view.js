@@ -88,13 +88,12 @@ class UploadVideoView extends PolymerElement {
     .then(res => {
       console.log(res);
 
-      let main = this.shadowRoot.querySelector("#main");
+      let toast = document.querySelector("#toast");
 
       if(res.status == 'SUCCESS') {
-        main.innerHTML = `<h2>Video lastet opp! <a href="/video/${res.id}">Klikk her for å se den</a></h2>`
-        console.log("Video uploaded");
+        toast.show("Video lastet opp");
       } else {
-        console.log("Error uploading video");
+        toast.show("En feil oppstod");
       }
     });
   }
