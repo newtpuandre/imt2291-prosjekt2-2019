@@ -131,7 +131,7 @@ class MyView1 extends PolymerElement {
             <div class="grid-item">
             <b><a href="/video/[[item.id]]">[[item.title]]</a></b>
             <p>
-              <img class="videoThumbnail" src="[[serverURL]]api/video/getFile.php?id=[[item.id]]&type=thumbnail">
+              <img class="videoThumbnail" src="[[serverURL]]api/video/getFile.php?id=[[item.id]]&type=thumbnail" width="360" height="180">
             </p>
             <p>Beskrivelse: [[item.description]]</p>
             <p>Emne: [[item.topic]]</p>
