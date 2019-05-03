@@ -104,7 +104,7 @@ CREATE TABLE IF NOT EXISTS `rating` (
   KEY `fk_useridRating` (`userid`),
   KEY `fk_videoidRating` (`videoid`),
   CONSTRAINT `fk_useridRating` FOREIGN KEY (`userid`) REFERENCES `users` (`id`),
-  CONSTRAINT `fk_videoidRating` FOREIGN KEY (`videoid`) REFERENCES `video` (`id`)
+  CONSTRAINT `fk_videoidRating` FOREIGN KEY (`videoid`) REFERENCES `video` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Data exporting was unselected.
