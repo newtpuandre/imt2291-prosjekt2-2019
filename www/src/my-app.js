@@ -120,7 +120,7 @@ class MyApp extends PolymerElement {
               <!-- Only teachers will see this. -->
               <a>Lærer</a>
               <a class="tab" name="upload" href="[[rootPath]]upload"><i>Last opp video</i></a>
-              <a class="tab" name="teacher" href="[[rootPath]]editVideo"><i>Rediger video</i></a>
+              <a class="tab" name="editVideo" href="[[rootPath]]editVideo"><i>Rediger video</i></a>
               <a class="tab" name="teachercplaylist" href="[[rootPath]]teachercplaylist"><i>Lag spilleliste</i></a>
               <a class="tab" name="editplaylist" href="[[rootPath]]editplaylist"><i>Endre spilleliste</i></a>
             </template>
@@ -157,7 +157,7 @@ class MyApp extends PolymerElement {
             <teacher-cplaylist name="teachercplaylist"></teacher-cplaylist>
             <admin-view1 name="admin"></admin-view1>
             <edit-video-view name="editVideo" subroute="{{subroute}}"></edit-video-view>
-            <my-view404 name="view404"></my-view404>edit-video-view
+            <my-view404 name="view404"></my-view404>
           </iron-pages>
         </app-header-layout>
       </app-drawer-layout>

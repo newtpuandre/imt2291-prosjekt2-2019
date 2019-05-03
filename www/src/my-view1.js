@@ -14,6 +14,10 @@ class MyView1 extends PolymerElement {
       user: {
         type: Object,
        value: { student: false, teacher: false, admin: false }
+      },
+      searchQuery:{
+        type: String,
+        value: ""
       }
     }
   }
