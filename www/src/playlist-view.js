@@ -20,6 +20,10 @@ class PlaylistView extends PolymerElement {
       route:{
         type: Object
       },
+      serverURL: {
+        type: String,
+        value: window.MyAppGlobals.serverURL
+      },
       user: {
         type: Object,
        value: { student: false, teacher: false, admin: false }
@@ -91,7 +95,7 @@ class PlaylistView extends PolymerElement {
 
       <div class="card">
         <h1>Spilleliste: [[playlist.name]]</h1>
-        <p><img src="[[playlist.thumbnail]]"></p>
+        <p><img src="[[playlist.thumbnail]]" width="360" height="180"></p>
         <p>Beskrivelse: [[playlist.description]]</p>
         <template is="dom-if" if="{{user.isStudent}}">
         <template is="dom-if" if="{{isSubscribed}}">
@@ -106,7 +110,7 @@ class PlaylistView extends PolymerElement {
           <template is="dom-repeat" items="[[playlistVideos]]">
             <li>
             <b>[[item.title]]</b>
-            <p><img src="[[item.thumbnail]]"></p>
+            <p><img src="[[serverURL]]api/video/getFile.php?id=[[item.id]]&type=thumbnail"  width="100" height="52"></p>
             <p>Beskrivelse: [[item.description]]</p>
             <p>Emne: [[item.topic]]</p>
             <p>Fag: [[item.course]]</p>

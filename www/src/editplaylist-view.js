@@ -10,6 +10,10 @@ class EditPlaylistView extends PolymerElement {
       playlist:{
         type: Array
       },
+      serverURL: {
+        type: String,
+        value: window.MyAppGlobals.serverURL
+      },
       playlistVideos:{
         type: Array
       },
@@ -37,7 +41,7 @@ class EditPlaylistView extends PolymerElement {
       user: {
         type: Object,
        value: { student: false, teacher: false, admin: false }
-      }
+      },
     }
   }
 
@@ -268,6 +272,19 @@ class EditPlaylistView extends PolymerElement {
     }
   }
 
+  useThumbnail(e){
+    const data = new FormData(e.target.form);
+    fetch (`${window.MyAppGlobals.serverURL}api/playlist/updatePlaylistThumbnail.php?p=` + this.route.path + `&v=` + data.get('vidId'), {
+      credentials: 'include'
+    })
+    .then(res=>res.json())
+    .then(data=>{
+      console.log(data)
+    });
+
+
+  }
+
   static get template() {
     return html`
       <style include="shared-styles">
@@ -306,7 +323,7 @@ class EditPlaylistView extends PolymerElement {
         <p>Spilleliste navn:</p>
         <input type="text" name="pname" id="pname" value="[[playlist.name]]">
         <p>Miniatyrbilde:</p>
-        <p><img src="[[playlist.thumbnail]]"></p>
+        <p><img src="[[playlist.thumbnail]]" width="320" height="160"></p>
         <p><input type="file" name="thumbnail" id="thumbnail"></p>
         <p>Beskrivelse:</p>
         <input type="text" name="pdesc" id="pdesc" value="[[playlist.description]]">
@@ -323,12 +340,13 @@ class EditPlaylistView extends PolymerElement {
             <input type="hidden" name="vidId" id="vidId" value="[[item.id]]" />
             <input type="hidden" name="routeId" id="routeId" value="[[route.path]]" />
             <b>[[item.title]]</b>
-            <p><img src="[[item.thumbnail]]"></p>
+            <p><img src="[[serverURL]]api/video/getFile.php?id=[[item.id]]&type=thumbnail"  width="100" height="52"></p>
             <p>Beskrivelse: [[item.description]]</p>
             <p>Emne: [[item.topic]]</p>
             <p>Fag: [[item.course]]</p>
             <button on-click="moveUp">Flytt opp</button>
             <button on-click="moveDown">Flytt ned</button>
+            <button on-click="useThumbnail">Bruk som thumbnail</button>
             <!-- <button>Bruk video Miniatyrbilde for denne spillelisten</button> -->
             </form>
             </li>
@@ -344,7 +362,7 @@ class EditPlaylistView extends PolymerElement {
 
             <form class="removeVideo" name="removeVideo" id="removeVideo" onsubmit="javascript: return false;">
             <b>[[item.title]]</b>
-            <p><img src="[[item.thumbnail]]"></p>
+            <p><img src="[[serverURL]]api/video/getFile.php?id=[[item.id]]&type=thumbnail"  width="100" height="52"></p>
             <p>Beskrivelse: [[item.description]]</p>
             <p>Emne: [[item.topic]]</p>
             <p>Fag: [[item.course]]</p>
@@ -363,7 +381,7 @@ class EditPlaylistView extends PolymerElement {
 
           <form class="selectVid" name="selectVid" id="selectVid" onsubmit="javascript: return false;">
             <b>[[item.title]]</b>
-            <p><img src="[[item.thumbnail]]"></p>
+            <p><img src="[[serverURL]]api/video/getFile.php?id=[[item.id]]&type=thumbnail"  width="100" height="52"></p>
             <p>Beskrivelse: [[item.description]]</p>
             <p>Emne: [[item.topic]]</p>
             <p>Fag: [[item.course]]</p>
@@ -384,7 +402,7 @@ class EditPlaylistView extends PolymerElement {
           <template is="dom-repeat" items="[[userPlaylists]]">
             <div class="grid-item">
             <b>[[item.name]]</b>
-            <p><img src="[[item.thumbnail]]"></p>
+            <p><img src="[[item.thumbnail]]" width="320" height="160"></p>
             <p>Beskrivelse: [[item.description]]</p>
             <a href="/editplaylist/{{item.id}}"><button>Endre spilleliste</button></a>
             </div>

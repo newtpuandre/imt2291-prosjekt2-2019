@@ -209,7 +209,7 @@ class Playlist
      * @return boolean
      */
     public function insertPlaylist($m_ownerId, $m_name, $m_description, $m_thumbnail){
-        $target_dir = "../userFiles/" . $m_ownerId . "/thumbnails/playlists/";
+        $target_dir = "../../userFiles/" . $m_ownerId . "/thumbnails/playlists/";
 
         if(!file_exists($target_dir)) {
             mkdir($target_dir, 0777, true);
@@ -293,7 +293,7 @@ class Playlist
      * @return boolean
      */
     public function updatePlaylist($m_id, $m_ownerId, $m_name, $m_description, $m_thumbnail){
-        $target_dir = "../userFiles/" . $m_ownerId . "/thumbnails/playlists/";
+        $target_dir = "../../userFiles/" . $m_ownerId . "/thumbnails/playlists/";
 
         
         if (!$m_thumbnail['thumbnail']['name']) { 
@@ -320,6 +320,27 @@ class Playlist
             return $this->db->updatePlaylist($m_id, $m_ownerId, $m_name, $m_description, $thumb_path);
         }
         
+    }
+
+    /**
+     * @function updatePlaylistThumbnail
+     * @brief updates a playlists thumbnail with a videos thumbnail
+     * @param int $m_videoId
+     * @param int $m_playlistId
+     * @param int $m_ownerId
+     * @return bool
+     */
+    public function updatePlaylistThumbnail($m_videoId, $m_playlistId, $m_ownerId){
+        $target_dir = "../../userFiles/" . $m_ownerId . "/thumbnails/playlists/" .  uniqid();
+
+        $source_dir = "../../userFiles/" . $m_ownerId . "/thumbnails/" . $m_videoId;
+
+        if (!copy($source_dir, $target_dir)) {
+            return false;
+        }
+
+        $ret = $this->db->updatePlaylistThumbnail($m_playlistId, $target_dir);
+        return $ret;
     }
 
      /**

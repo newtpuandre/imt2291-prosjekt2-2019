@@ -539,6 +539,21 @@ class DB {
       }
   }
 
+  public function updatePlaylistThumbnail($m_playlistId, $m_thumb_path){
+        $sql = 'UPDATE playlists SET thumbnail=:thumbnail WHERE id=:id';
+
+        $sth = $this->dbh->prepare ($sql);
+        $sth->bindParam(':thumbnail',$m_thumb_path);
+        $sth->bindParam(':id', $m_playlistId);
+        $sth->execute();
+
+        if ($sth->rowCount()==1) {
+            return true;
+        } else {
+            return false;
+        }
+  }
+
   /**
    * @function deletePlaylist
    * @brief deletes a playlist from the db

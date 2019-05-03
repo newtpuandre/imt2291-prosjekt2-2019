@@ -116,7 +116,7 @@ class MyView4 extends PolymerElement {
           <template is="dom-repeat" items="[[playlists]]">
             <div class="grid-item">
             <b><a href="/playlist/[[item.id]]">[[item.name]]</a></b>
-            <p><img src="[[item.thumbnail]]"></p>
+            <p><img src="[[item.thumbnail]]" width="320" height="180"></p>
             <p>Beskrivelse: [[item.description]]</p>
             <p>Laget av: [[item.lectname]]</p>
             </div>
@@ -130,7 +130,7 @@ class MyView4 extends PolymerElement {
           <template is="dom-repeat" items="{{searchResult}}">
             <div class="grid-item">
             <b><a href="/playlist/[[item.id]]">[[item.name]]</a></b>
-            <p><img src="[[item.thumbnail]]"></p>
+            <p><img src="[[item.thumbnail]]" width="320" height="180"></p>
             <p>Beskrivelse: [[item.description]]</p>
             </div>
           </template>
