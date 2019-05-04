@@ -26,6 +26,7 @@ $playlist = new Playlist();
 
 $ret = $playlist->updatePlaylist($_POST['pId'], $_SESSION['uid'], $_POST['pname'], $_POST['pdesc'],$_FILES);
 if($ret) {
+    //print_r($ret);
     if(is_string($ret)){
         $res['status'] = $ret;
     } else {

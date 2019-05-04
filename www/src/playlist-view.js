@@ -78,6 +78,7 @@ class PlaylistView extends PolymerElement {
     }
   }
 
+
   static get template() {
     return html`
       <style include="shared-styles">
@@ -126,10 +127,8 @@ class PlaylistView extends PolymerElement {
     this.set('isSubscribed', !this.isSubscribed);
     let sub;
     if(!this.isSubscribed) {
-      console.log("Unsub");
       sub = 0;
     } else {
-      console.log("subscribed");
       sub = 1;
     }
 
@@ -138,7 +137,17 @@ class PlaylistView extends PolymerElement {
     })
     .then(res=>res.json())
     .then(data=>{
-      console.log(data);
+      let toast = document.querySelector("#toast");
+      toast.close();
+      if(data.status == 'SUCCESS') {
+        if(sub == 1) {
+          toast.show("Du er nå abonnert");
+        } else {
+          toast.show("Du har nå avsluttet abonnementet");
+        }
+      } else {
+        toast.show("En feil oppstod");
+      }
     });
 
 

@@ -176,12 +176,16 @@ class EditPlaylistView extends PolymerElement {
     }
   ).then(res=>res.json())         // When a reply has arrived
   .then(res=>{
-    console.log(res);
-    if (res.status != 'ERROR') {  //Handle error
+    let toast = document.querySelector("#toast");
+    toast.close();
+    if (res.status != 'ERROR' && res.status != 'SUCCESS') {  //Handle error
       this.set('playlist.thumbnail', res.status);
-    } else {
-      
-    }   
+      toast.show("Spillelisten er nå oppdatert");
+    } else if (res.status != 'ERROR'){
+      toast.show("Spillelisten er nå oppdatert");
+    }  else {
+      toast.show("En feil oppstod");
+    }
   })
   }
   
@@ -279,7 +283,12 @@ class EditPlaylistView extends PolymerElement {
     })
     .then(res=>res.json())
     .then(data=>{
-      console.log(data)
+      if (data.status != 'ERROR') {  //Handle error
+        this.set('playlist.thumbnail', data.status);
+        toast.show("Spillelisten er nå oppdatert");
+      }  else {
+        toast.show("En feil oppstod");
+      }
     });
 
 

@@ -145,7 +145,7 @@ class MyView1 extends PolymerElement {
           <template is="dom-repeat" items="[[playlists]]">
             <div class="grid-item">
             <a data-page="playlist" href="/playlist/{{item.id}}"><b>[[item.name]]</b></a>
-            <p><img src="[[item.thumbnail]]"></p>
+            <p><img src="[[item.thumbnail]]" width="360" height="180"></p>
             <p>Beskrivelse: [[item.description]]</p>
             <p>Laget av: [[item.lectname]]</p>
             </div>
@@ -165,7 +165,7 @@ class MyView1 extends PolymerElement {
             <a href="/video/[[item.id]]"><b>[[item.title]]</b></a>
             <!-- TODO: The serverURL shouldn't be hardcoded -->
             <p><img src="[[serverURL]]api/video/getFile.php?id=[[item.id]]&type=thumbnail"
-                  width="100" height="52"></p>
+                  width="360" height="180"></p>
             <p>Beskrivelse: [[item.description]]</p>
             <p>Emne: [[item.topic]]</p>
             <p>Fag: [[item.course]]</p>
@@ -176,7 +176,7 @@ class MyView1 extends PolymerElement {
       <template is="dom-repeat" items="{{searchResultsPlaylist}}">
             <div class="grid-item">
             <b><a href="/playlist/[[item.id]]">[[item.name]]</a></b>
-            <p><img src="[[item.thumbnail]]"></p>
+            <p><img src="[[item.thumbnail]]" width="360" height="180"></p>
             <p>Beskrivelse: [[item.description]]</p>
             </div>
           </template>

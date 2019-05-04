@@ -142,12 +142,13 @@ class TeacherCPlaylist extends PolymerElement {
       }
     ).then(res=>res.json())         // When a reply has arrived
     .then(res=>{
-      console.log(res);
-      if (res.status=='SUCCESS') {  //Handle error
-
+      let toast = document.querySelector("#toast");
+      toast.close();
+      if(res.status == 'SUCCESS') {
+          toast.show("Spilleliste er nå opprettet");
       } else {
-
-      }   
+        toast.show("En feil oppstod");
+      }  
     })
   }
 

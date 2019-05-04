@@ -34,7 +34,7 @@ if($sub) {
 }
 
 if($status) {
-    $res['status'] = 'SUCCESSFUL';
+    $res['status'] = 'SUCCESS';
 } else {
     $res['status'] = 'ERROR';
 }

@@ -340,7 +340,11 @@ class Playlist
         }
 
         $ret = $this->db->updatePlaylistThumbnail($m_playlistId, $target_dir);
-        return $ret;
+        if($ret) {
+            return $target_dir;
+        } else {
+            return $ret;
+        }
     }
 
      /**

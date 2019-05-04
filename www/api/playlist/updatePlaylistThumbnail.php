@@ -30,10 +30,10 @@ $res = [];
 
 $ret = $playlist->updatePlaylistThumbnail($videoid, $playlistid, $uid);
 
-if ($ret) {
-    $res['status'] = "SUCCESS";
-} else {
+if (!$ret) {
     $res['status'] = "ERROR";
+} else {
+    $res['status'] = $ret;
 }
 
 echo json_encode($res);
