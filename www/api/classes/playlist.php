@@ -252,6 +252,16 @@ class Playlist
         return $this->db->returnPlaylist($m_id);
     }
 
+    /**
+     * @function returnNewestVideos
+     * @brief returns the newest videos from DB
+     * @param int $m_id
+     * @return array|bool
+     */
+    public function returnNewestVideos($m_id){
+        return $this->db->getNewVideosInPlaylist($m_id);
+    }
+
      /**
      * @function returnPlaylists
      * @brief returns all playlist from one user

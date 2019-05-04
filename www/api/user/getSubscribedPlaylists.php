@@ -19,10 +19,27 @@ header("Content-Type: application/json; charset=utf-8");
 
 
 require_once '../classes/playlist.php';
+require_once '../classes/video.php';
 
 $playlist = new Playlist();
+$video = new Video();
 
 $playlists = $playlist->getSubscribedPlaylists($_SESSION['uid']);
+
+$i = 0; //Loop counter
+foreach ($playlists as &$value) {
+    $vidArray = []; //Array containing all new videos
+    $id = $value['id']; //Helper variable
+    $ret = $playlist->returnNewestVideos($id); //Get array of videoids
+
+    foreach ($ret as &$vid) { //Loop over videoid array and resolve videos
+        $resVideo = $video->getVideo($vid['videoid']);
+        $vidArray[] = $resVideo[0]; //Add to array
+    }
+
+    $playlists[$i]['videos'] = $vidArray; //Add to specific playlists video array
+    $i++;
+}
 
 echo json_encode($playlists);
 

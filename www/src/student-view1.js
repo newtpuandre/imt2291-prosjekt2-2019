@@ -8,6 +8,10 @@ class StudentView1 extends PolymerElement {
       playlists: {
         type: Array
       },
+      serverURL: {
+        type: String,
+        value: window.MyAppGlobals.serverURL
+      },
       user: {
         type: Object,
        value: { student: false, teacher: false, admin: false }
@@ -69,6 +73,7 @@ class StudentView1 extends PolymerElement {
           padding: 20px;
           text-align: left;
         }
+
       </style>
       <div class="card">
       <template is="dom-if" if="{{user.isStudent}}">
@@ -80,6 +85,20 @@ class StudentView1 extends PolymerElement {
             <p><img src="[[item.thumbnail]]"></p>
             <p>Beskrivelse: [[item.description]]</p>
             <p>Laget av: [[item.lectname]]</p>
+
+            <p><b>Siste opplastninger i denne spillelisten:</b></p>
+
+            <template is="dom-repeat" items="[[item.videos]]">
+ 
+            <a href="video/[[item.id]]"><b>[[item.title]]</b></a>
+            <p><img src="[[serverURL]]api/video/getFile.php?id=[[item.id]]&type=thumbnail"  width="100" height="52"></p>
+            <p>Beskrivelse: [[item.description]]</p>
+            <p>Emne: [[item.topic]]</p>
+            <p>Fag: [[item.course]]</p>
+
+            </template>
+
+            
             </div>
           </template>
           <template is="dom-if" if="[[!playlists]]">

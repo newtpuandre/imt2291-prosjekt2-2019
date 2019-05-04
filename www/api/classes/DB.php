@@ -540,6 +540,26 @@ class DB {
   }
 
   /**
+   * @function getNewVideosInPlaylist
+   * @brief get the newest videos in the playlist
+   * @param int $m_playlistid
+   * @return array|bool
+   */
+  public function getNewVideosInPlaylist($m_playlistid) {
+    $sql = 'SELECT videoid FROM playlistvideos WHERE playlistid=:playlistid ORDER BY id ASC LIMIT 3';
+    $sth = $this->dbh->prepare($sql);
+
+    $sth->bindParam(':playlistid', $m_playlistid);
+    $sth->execute();
+
+    if ($row = $sth->fetchAll(PDO::FETCH_ASSOC)) {
+        return $row;
+    } else {
+        return false;
+    }
+  }
+
+  /**
    * @function updatePlaylistThumbnail
    * @brief updates playlist thumbnail
    * @param $m_playlistId
