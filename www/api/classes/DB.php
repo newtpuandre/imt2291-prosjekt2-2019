@@ -487,7 +487,7 @@ class DB {
    * @return array|null
    */
   public function returnPlaylist($m_id){
-      $sql = 'SELECT id, ownerId, name, description, date, thumbnail FROM playlists WHERE id=:id';
+      $sql = 'SELECT users.name AS lectname, playlists.id, ownerId, playlists.name, description, date, thumbnail FROM playlists JOIN users ON users.id = ownerid WHERE playlists.id=:id';
       $sth = $this->dbh->prepare ($sql);
       $sth->bindParam(':id', $m_id);
       $sth->execute();

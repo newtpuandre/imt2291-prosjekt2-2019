@@ -98,6 +98,7 @@ class PlaylistView extends PolymerElement {
         <h1>Spilleliste: [[playlist.name]]</h1>
         <p><img src="[[playlist.thumbnail]]" width="360" height="180"></p>
         <p>Beskrivelse: [[playlist.description]]</p>
+        <p>Laget av: [[playlist.lectname]]</p>
         <template is="dom-if" if="{{user.isStudent}}">
         <template is="dom-if" if="{{isSubscribed}}">
         <button on-click="subButton">Avslutt abonnementet</button>
