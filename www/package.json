@@ -21,14 +21,19 @@
     "@polymer/iron-media-query": "^3.0.0-pre.15",
     "@polymer/iron-pages": "^3.0.0-pre.15",
     "@polymer/iron-selector": "^3.0.0-pre.15",
+    "@polymer/neon-animation": "^3.0.1",
     "@polymer/paper-button": "^3.0.1",
+    "@polymer/paper-dropdown-menu": "^3.0.1",
     "@polymer/paper-icon-button": "^3.0.0-pre.15",
     "@polymer/paper-input": "^3.0.2",
+    "@polymer/paper-item": "github:PolymerElements/paper-item",
+    "@polymer/paper-listbox": "github:PolymerElements/paper-listbox",
     "@polymer/paper-toast": "^3.0.1",
     "@polymer/polymer": "^3.0.0",
     "@webcomponents/webcomponentsjs": "^2.0.0",
     "lit-element": "^2.0.1",
-    "redux": "^4.0.1"
+    "redux": "^4.0.1",
+    "web-animations-js": "^2.3.1"
   },
   "devDependencies": {
     "polymer-cli": "^1.9.7",
