@@ -11,7 +11,9 @@
  * - topic, string: The topic of the video
  * - course, string: The course of the video
  * 
- * Optional files: thumbnail, subtitles
+ * Optional files:
+ * - thumbnail
+ * - subtitles
  * 
  * Returns:
  * - status: SUCCESS/FAILED
@@ -50,14 +52,43 @@ if(isset($_SESSION["uid"])) {
         // Verify the current user is the uploader
         if($_SESSION["uid"] === $uploaderID) {
             if($db->updateVideo($vid, $_POST["title"], $_POST["desc"], $_POST["topic"], $_POST["course"])) {
-                $res["status"] = "SUCCESS";
+                $ok = true;
 
                 // Check for file uploads, change on disk
-            } else {
-                $res["ke fan"] = "idk2";
+                $thumbDir = "../../userFiles/" . $_SESSION["uid"] . "/thumbnails";
+                $subtitlesDir = "../../userFiles/" . $_SESSION["uid"] . "/subtitles";
+
+                if(!file_exists($thumbDir)) {
+                    mkdir($thumbDir, 0777, true);
+                }
+
+                if(!file_exists($subtitlesDir)) {
+                    mkdir($subtitlesDir, 0777, true);
+                }
+
+                $thumbPath = $thumbDir . "/" . $vid;
+                $subsPath = $subtitlesDir . "/" . $vid;
+
+                // Remove old files (ignores warning if file doesn't exist)
+                @unlink($thumbPath);
+                @unlink($subsPath);
+
+                if(@$_FILES["thumbnail"]["error"] === UPLOAD_ERR_OK) {
+                    if(!move_uploaded_file($_FILES["thumbnail"]["tmp_name"], $thumbPath)) {
+                        $ok = false; 
+                    }
+                }
+                
+                if(@$_FILES["subtitles"]["error"] === UPLOAD_ERR_OK) {
+                    if(!move_uploaded_file($_FILES["subtitles"]["tmp_name"], $subsPath)) {
+                        $ok = false;
+                    }
+                }
+
+                if($ok) { // Nothing failed
+                    $res["status"] = "SUCCESS";
+                }
             }
-        } else {
-            $res["msg"] = "Credentials do not match.";
         }
     }
 }
