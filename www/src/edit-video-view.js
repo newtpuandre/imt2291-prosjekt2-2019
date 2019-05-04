@@ -165,10 +165,9 @@ class EditVideoView extends PolymerElement {
 
       <div class="card" id="main">
         <template is="dom-if" if="{{user.isTeacher}}">
-          <h1>Redigerer <i>[[videoInfo.title]]</i></h1>
+          <h1>Redigerer <a href="/video/[[videoInfo.id]]"><i>[[videoInfo.title]]</i></a></h1>
           <hr>
 
-          <!-- TODO: Add subtitle input -->
           <form onsubmit="javascript: return false;" id="editForm" enctype="multipart/form-data">
             <button on-click="editVideo">Lagre endringer</button>
             

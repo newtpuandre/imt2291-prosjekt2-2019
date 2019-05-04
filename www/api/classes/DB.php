@@ -295,7 +295,7 @@ class DB {
    * @param string $m_description
    * @param string $m_topic
    * @param string $m_course
-   * @return bool
+   * @return bool Returns true if the statement caused no errors. Possibliy no rows affected even with true returned
    */
   public function updateVideo($m_videoid, $m_title, $m_description, $m_topic, $m_course){
 
@@ -308,7 +308,10 @@ class DB {
       $sth->bindParam(':course', $m_course);
 
       $sth->execute();
-      if ($sth->rowCount() == 1) {
+
+      $error = $sth->errorCode();
+
+      if ($error == "00000") {
           return true;
       } else {
           return false;
