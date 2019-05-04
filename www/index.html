@@ -94,6 +94,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           });
         });
       }
+
+      // Fixes problem with multiple defines of elements (like paper-button)
+      // See: https://github.com/Polymer/polymer-starter-kit/issues/1123#issuecomment-434724376
+      const _customElementsDefine = window.customElements.define;
+      window.customElements.define = (name, cl, conf) => {
+        if (!customElements.get(name)) {
+          _customElementsDefine.call(window.customElements, name, cl, conf);
+        }
+      };
     </script>
 
     <!-- Load webcomponents-loader.js to check and load any polyfills your browser needs -->
