@@ -1,11 +1,17 @@
+
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import store from './js/store/index';
+import './shared-styles.js';
 import '@polymer/app-route/app-location.js';
 import '@polymer/app-route/app-route.js';
-import './shared-styles.js';
-import store from './js/store/index';
+import '@polymer/paper-button/paper-button.js';
+import '@polymer/paper-input/paper-input.js';
+import '@polymer/paper-dropdown-menu/paper-dropdown-menu.js';
+import '@polymer/paper-item/paper-item.js';
+import '@polymer/paper-listbox/paper-listbox.js';
 
 class VideoView extends PolymerElement {
-  static get properties () {
+  static get properties() {
     return {
       route: {
         type: Object
@@ -15,6 +21,27 @@ class VideoView extends PolymerElement {
       },
       videoInfo: {
         type: Object,
+      },
+      rating: { // The users rating
+        type: Number
+      },
+      speed: { // Speed of the video
+        type: Number,
+        value: 2 // The position in the array under (1)
+      },
+      speedValues: { // The possible speed values of the video
+        type: Array,
+        value: [
+          0.5,
+          0.75,
+          1,
+          1.25,
+          1.5,
+          2
+        ]
+      },
+      comment: { // What's typed as a new comment to add
+        type: String
       },
       comments: {
         type: Array,
@@ -43,7 +70,9 @@ class VideoView extends PolymerElement {
 
   static get observers() {
     return [
-        'loadData(subroute)'
+        'loadData(subroute)',
+        'changePlaybackSpeed(speed)',
+        'updateRating(rating)'
     ]
   }
 
@@ -52,8 +81,6 @@ class VideoView extends PolymerElement {
 
     // Subtitles aren't displayed on the video itself
     this.$.videoSubs.track.mode = "hidden";
-
-    console.log(this.$.video);
 
     // Fullscreen change for chrome, safari and opera
     this.$.video.addEventListener("webkitfullscreenchange", e => {
@@ -87,7 +114,7 @@ class VideoView extends PolymerElement {
     });
   }
 
-  loadData(subroute){
+  loadData(subroute) {
     if(subroute.prefix == "/video" && subroute.path != "") {
       this.route = subroute;
 
@@ -98,6 +125,8 @@ class VideoView extends PolymerElement {
       .then(res => res.json())
       .then(res => {
         this.videoInfo = res.video;
+
+        this.rating = res.video.userRating;
 
         // Used to retrieve the files associated with a video
         this.fileURL = `${window.MyAppGlobals.serverURL}api/video/getFile.php?id=${res.id}`;
@@ -116,13 +145,14 @@ class VideoView extends PolymerElement {
 
   /**
    * Adds a comment to the video
-   * @param {*} e The event holding the form data
+   * @param {*} e 
    */
   addComment(e) {
-    let data = new FormData(e.target.form);
-    data.append("id", this.route.path);
-
-    if(data.get("comment") != "") { // Not a blank comment entered
+    if(this.comment != "") {
+      let data = new FormData();
+      data.append("id", this.route.path);
+      data.append("comment", this.comment);
+  
       fetch(`${window.MyAppGlobals.serverURL}api/video/addComment.php`, {
         method: "POST",
         credentials: "include",
@@ -131,9 +161,11 @@ class VideoView extends PolymerElement {
       ).then(res => res.json())
       .then(res => {
         let toast = document.querySelector("#toast");
+        toast.close();
+
         if(res.status == 'SUCCESS') {
           // Clear the input form
-          this.shadowRoot.querySelector("#addComment").reset();
+          this.comment = "";
 
           // unshift puts the element at the start of the array
           this.unshift("comments", res.comment);
@@ -149,11 +181,13 @@ class VideoView extends PolymerElement {
    * @param {event} e The event holding the form data
    */
   deleteComment(e) {
-    const cid = e.target.form.id.value; // The ID of the comment
+    let cid = e.target.dataset.id; // The ID of the comment
+
     fetch(`${window.MyAppGlobals.serverURL}api/video/deleteComment.php?cid=${cid}`)
     .then(res => res.json())
     .then(res => {
       let toast = document.querySelector("#toast");
+      toast.close();
 
       if(res.status == "SUCCESS") {
         // Remove the comment from the array
@@ -184,22 +218,20 @@ class VideoView extends PolymerElement {
 
   /**
    * Changes the playback speed of the video
-   * @param {event} e The event
+   * @param {number} speed The index of the selected speed in this.speedValues
    */
-  changePlaybackSpeed(e) {
-    this.$.video.playbackRate = e.target.value;
+  changePlaybackSpeed(speed) {
+    this.$.video.playbackRate = this.speedValues[speed];
   }
 
   /**
    * Updates the users rating of the video
-   * @param {event} e The event
+   * @param {event} rating The rating
    */
-  updateRating(e) {
+  updateRating(rating) {
     var data = new FormData();
-    data.append("rating", e.target.value);
+    data.append("rating", rating);
     data.append("vid", this.route.path);
-
-    data.forEach(e => console.log(e));
 
     fetch(`${window.MyAppGlobals.serverURL}api/video/updateRating.php`, {
       method: "POST",
@@ -213,8 +245,6 @@ class VideoView extends PolymerElement {
 
       if(res.status == "SUCCESS") {
         toast.show("Rating oppdatert");      
-      } else {
-        toast.show("En feil oppstod");
       }
     });
   }
@@ -229,6 +259,7 @@ class VideoView extends PolymerElement {
         }
 
         .bottomContainer {
+          width: 75%;
           display: grid;
 
           grid-template-columns: repeat(3, auto);
@@ -242,12 +273,14 @@ class VideoView extends PolymerElement {
           grid-area: speed;
         }
 
-        #userRating {
-          grid-area: userRating;
-        }
-
         #totalRating {
           grid-area: totalRating;
+          text-align: right;
+        }
+        
+        #userRating {
+          grid-area: userRating;
+          text-align: center;
         }
 
         #desc {
@@ -275,6 +308,10 @@ class VideoView extends PolymerElement {
 
         #subtitles li.active {
           background-color: #bfbfbf;
+        }
+
+        paper-input { /* Same size as video */
+          width: 75%;
         }
       </style>
 
@@ -307,29 +344,27 @@ class VideoView extends PolymerElement {
         <div class="bottomContainer">
           <h3 id="desc">[[videoInfo.description]]</h3>
           <div id="speed">
-            <p>Hastighet:
-              <select id="videoSpeed" name="videoSpeed" on-click="changePlaybackSpeed">
-                <option value="0.5">0.5</option>
-                <option value="0.75">0.75</option>
-                <option value="1" selected="selected">1</option>
-                <option value="1.25">1.25</option>
-                <option value="1.5">1.5</option>
-                <option value="2">2</option>
-              </select>
-            </p>
+            <paper-dropdown-menu label="Hastighet" style="width: 80px;">
+              <paper-listbox slot="dropdown-content" selected="{{speed}}">
+                <template is="dom-repeat" items="[[speedValues]]">
+                  <paper-item>[[item]]</paper-item>
+                </template>
+              </paper-listbox>
+            </paper-dropdown-menu>
           </div>
           
+          <!-- TODO: Disable if not logged in -->
           <div id="userRating">
-            <p>Rating:
-              <select id="rating" name="rating" on-click="updateRating" value="[[videoInfo.userRating]]">
-                <option value="0">0</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-              </select>
-            </p>
+            <paper-dropdown-menu label="Rating" style="width: 80px;">
+              <paper-listbox slot="dropdown-content" selected="{{rating}}">
+                <paper-item>0</paper-item>
+                <paper-item>1</paper-item>
+                <paper-item>2</paper-item>
+                <paper-item>3</paper-item>
+                <paper-item>4</paper-item>
+                <paper-item>5</paper-item>
+              </paper-listbox>
+            </paper-dropdown-menu>
           </div>
           
           <div id="totalRating">
@@ -337,12 +372,12 @@ class VideoView extends PolymerElement {
           </div>
         </div>
 
-        <!-- If logged in -->
+        <hr>
+
+        <!-- If logged in add ability to comment -->
         <template is="dom-if" if="[[user.uid]]">
-          <form onsubmit="javascript: return false;" id="addComment">
-            <input type="text" maxlength="500" name="comment" id="comment" required> <br>
-            <button on-click="addComment">Kommenter</button>
-          </form>
+          <paper-input label="Legg til en kommentar" value="{{comment}}"></paper-input>
+          <paper-button raised on-click="addComment">Kommenter</paper-button>
         </template>
 
         <template is="dom-repeat" items="[[comments]]">
@@ -352,10 +387,9 @@ class VideoView extends PolymerElement {
             
             <!-- The comment is posted by the current user, show delete button -->
             <template is="dom-if" if="{{postedByUser(item.userid)}}">
-              <form onsubmit="javascript: return false;" id="deleteComment">
-                <input type="hidden" name="id" value="[[item.id]]">
-                <button on-click="deleteComment">Slett kommentar</button>
-              </form>
+              <paper-button raised on-click="deleteComment" data-id$="[[item.id]]" style="font-size: 10px;">
+                Slett kommentar
+              </paper-button>
             </template>
           </div>
         </template>

@@ -1,6 +1,7 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import './shared-styles.js';
 import store from './js/store/index';
+import './shared-styles.js';
+import '@polymer/paper-button/paper-button.js';
 
 class MyVideosView extends PolymerElement {
   static get properties () {
@@ -98,8 +99,12 @@ class MyVideosView extends PolymerElement {
               <h2>[[item.title]]</h2>
             </a>
 
-            <a href="/editVideo/[[item.id]]">Rediger</a>
-            <a href="/myVideos" on-click="deleteVideo" data-id$="[[item.id]]">Slett</a>
+            <a href="/editVideo/[[item.id]]">
+              <paper-button raised>Rediger</paper-button>
+            </a>
+            <a href="/myVideos" on-click="deleteVideo" data-id$="[[item.id]]">
+              <paper-button raised>Slett</paper-button>
+            </a>
 
             <p> <!-- Video thumbnail -->
               <img class="videoThumbnail" src="[[serverURL]]api/video/getFile.php?id=[[item.id]]&type=thumbnail">

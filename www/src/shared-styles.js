@@ -11,7 +11,8 @@
 import '@polymer/polymer/polymer-element.js';
 
 const $_documentContainer = document.createElement('template');
-$_documentContainer.innerHTML = `<dom-module id="shared-styles">
+$_documentContainer.innerHTML = `
+<dom-module id="shared-styles">
   <template>
     <style>
       .card {
@@ -44,6 +45,12 @@ $_documentContainer.innerHTML = `<dom-module id="shared-styles">
       .videoThumbnail {
         width: 132px;
         height: 70px;
+      }
+
+      paper-button {
+        background: rgb(224, 224, 224); /* Background color of the button */
+        color: rgb(0, 0, 0); /* Text and ripple color */
+        font-size: 0.8em;
       }
     </style>
   </template>

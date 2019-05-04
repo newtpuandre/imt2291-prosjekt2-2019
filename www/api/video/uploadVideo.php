@@ -71,8 +71,8 @@ if(isset($_SESSION['uid'])) {
         
         if(@$_FILES["subtitles"]["error"] === UPLOAD_ERR_OK) {
             if(move_uploaded_file($_FILES["subtitles"]["tmp_name"], $subtitlesDir . "/" . $id)) {
-            $res["subs"] = "uploaded";
-            $res["status"] = "SUCCESS";
+                $res["subs"] = "uploaded";
+                $res["status"] = "SUCCESS";
             }
         } else {
             $res["subs"] = "not found";
@@ -96,8 +96,6 @@ if(isset($_SESSION['uid'])) {
                 unlink($subtitlesDir . "/" . $id);
             }
         }
-    } else {
-        $res["status"] = "FAILED";
     }
 }
 

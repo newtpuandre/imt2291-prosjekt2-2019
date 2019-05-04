@@ -1,5 +1,7 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import './shared-styles.js';
+import '@polymer/paper-button/paper-button.js';
+import '@polymer/paper-input/paper-input.js';
 import store from './js/store/index';
 
 class EditVideoView extends PolymerElement {
@@ -34,10 +36,6 @@ class EditVideoView extends PolymerElement {
     };
   }
 
-  ready() {
-    super.ready();
-  }
-
   static get observers() {
     return [
         'loadData(subroute)'
@@ -60,6 +58,7 @@ class EditVideoView extends PolymerElement {
 
         if(res.status == "SUCCESS") {
           this.videoInfo = res.video;
+
         } else {
           main.innerHTML = "<h2>Det oppstod en feil ved henting av video informasjonen.</h2>"
         }
@@ -72,6 +71,38 @@ class EditVideoView extends PolymerElement {
    * @param {event} e The event containing the form data 
    */
   editVideo(e) {
+    let toast = document.querySelector("#toast");
+    toast.close();
+
+    if(this.videoInfo.title == "" || this.videoInfo.description == "" || this.videoInfo.topic == "" || this.videoInfo.course == "") {
+      toast.show("Fyll inn alle feltene");
+    } else {
+      // Create the data from the form that holds the subtitles/thumbnails files
+      const files = this.shadowRoot.querySelector("#editForm");
+      const data = new FormData(files);
+
+      data.append("vid", this.route.path);
+      data.append("title", this.videoInfo.title);
+      data.append("desc", this.videoInfo.description);
+      data.append("topic", this.videoInfo.topic);
+      data.append("course", this.videoInfo.course);
+
+      fetch(`${window.MyAppGlobals.serverURL}api/video/editVideo.php`, {
+        method: 'POST',
+        credentials: "include",
+        body: data
+      }).then(res => res.json())
+      .then(res => {
+        console.log(res);
+        if(res.status == 'SUCCESS') {
+          toast.show("Videoen ble redigert");
+        } else {
+          toast.show("En feil oppstod");
+        }
+      });
+    }
+
+    /*
     const data = new FormData(e.target.form);
     data.append("vid", this.route.path);
 
@@ -90,11 +121,11 @@ class EditVideoView extends PolymerElement {
       toast.close();
 
       if(res.status == 'SUCCESS') {
-        toast.show("Videoen ble redigert");
       } else {
         toast.show("En feil oppstod");
       }
     });
+    */
   }
 
   /**
@@ -106,6 +137,9 @@ class EditVideoView extends PolymerElement {
     return id == this.user.uid;
   }
 
+  /**
+   * Sets the thumbnail of the video to the current frame of the video
+   */
   saveThumbnail() {
     // Find the video
     let video = this.shadowRoot.querySelector("#video");
@@ -161,6 +195,10 @@ class EditVideoView extends PolymerElement {
         label {
           display: block;
         }
+
+        paper-input {
+          width: 35%;
+        }
       </style>
 
       <div class="card" id="main">
@@ -168,42 +206,36 @@ class EditVideoView extends PolymerElement {
           <h1>Redigerer <a href="/video/[[videoInfo.id]]"><i>[[videoInfo.title]]</i></a></h1>
           <hr>
 
+          <paper-input label="Tittel" value="{{videoInfo.title}}" maxlength="64"></paper-input>
+          <paper-input label="Beskrivelse" value="{{videoInfo.description}}" maxlength="512"></paper-input>
+          <paper-input label="Emne" value="{{videoInfo.topic}}" maxlength="64"></paper-input>
+          <paper-input label="Fag" value="{{videoInfo.course}}" maxlength="64"></paper-input>
+
           <form onsubmit="javascript: return false;" id="editForm" enctype="multipart/form-data">
-            <button on-click="editVideo">Lagre endringer</button>
-            
-            <label for="title">Tittel</label>
-            <input type="text" name="title" id="title" maxlength="64" value="[[videoInfo.title]]" required>
-
-            <label for="desc">Beskrivelse</label>
-            <input type="text" name="desc" id="desc" maxlength="512" value="[[videoInfo.description]]" required>
-
-            <label for="topic">Emne</label>
-            <input type="text" name="topic" id="topic" maxlength="64" value="[[videoInfo.topic]]" required>
-
-            <label for="course">Fag</label>
-            <input type="text" name="course" id="course" maxlength="64" value="[[videoInfo.course]]" required>
-
             <label for="thumbnail">Thumbnail</label>
             <input type="file" name="thumbnail" id="thumbnail" accept="image/*">
 
             <label for="subtitles">Undertekster</label>
             <input type="file" name="subtitles" id="subtitles" accept=".vtt">
-            <br>
-
-            <video id="video" crossorigin="true" controls class="video" type="video/*"
-                src="[[serverURL]]api/video/getFile.php?id=[[videoInfo.id]]&type=video">
-              Your browser does not support the video tag.
-            </video>
-            <br>
-
-            <button id="png" on-click="saveThumbnail">Lagre som thumbnail</button>
             <br><br>
           </form>
+
+          <paper-button raised on-click="editVideo">Lagre endringer</paper-button>
+          <br><br><br>
+
+          <!-- Get the video so a new thumbnail from the video can be set -->
+          <video id="video" crossorigin="true" controls class="video" type="video/*"
+              src="[[serverURL]]api/video/getFile.php?id=[[videoInfo.id]]&type=video">
+            Your browser does not support the video tag.
+          </video>
+          <br>
+
+          <paper-button raised id="png" on-click="saveThumbnail">Lagre som thumbnail</paper-button>
+          <br><br>
         </template>
 
-        <!-- TODO: fix this -->
         <template is="dom-if" if="{{!postedByUser(videoInfo.uploader)}}">
-          <h1>You don't have permission to access this page.</h1>
+          <h1>Du har ikke adgang til denne siden</h1>
         </template>
       </div>
     `;
