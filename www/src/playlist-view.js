@@ -110,7 +110,7 @@ class PlaylistView extends PolymerElement {
         <ul>
           <template is="dom-repeat" items="[[playlistVideos]]">
             <li>
-            <b>[[item.title]]</b>
+            <a href="video/[[item.id]]"><b>[[item.title]]</b></a>
             <p><img src="[[serverURL]]api/video/getFile.php?id=[[item.id]]&type=thumbnail"  width="100" height="52"></p>
             <p>Beskrivelse: [[item.description]]</p>
             <p>Emne: [[item.topic]]</p>
