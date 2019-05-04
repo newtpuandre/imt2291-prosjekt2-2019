@@ -203,9 +203,26 @@ class MyApp extends PolymerElement {
      // If no page was found in the route data, page will be an empty string.
      // Show 'view1' in that case. And if the page doesn't exist, show 'view404'.
 
+    let supportedPages = [
+      'view1', 
+      'view2', 
+      'view3', 
+      'view4', 
+      'teacher', 
+      'playlist', 
+      'teachercplaylist', 
+      'editplaylist', 
+      'upload', 
+      'student', 
+      'admin', 
+      'video', 
+      'myVideos', 
+      'editVideo'
+    ];
+
     if (!page) {
       this.page = 'view1';
-    } else if (['view1', 'view2', 'view3', 'view4', 'teacher', 'playlist', 'teachercplaylist', 'editplaylist', 'upload', 'student', 'admin', 'video', 'myVideos', 'editVideo'].indexOf(page) !== -1) {
+    } else if (supportedPages.indexOf(page) !== -1) {
       this.page = page; 
     } else {
       this.page = 'view404';
