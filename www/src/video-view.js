@@ -70,7 +70,7 @@ class VideoView extends PolymerElement {
     return [
         'loadData(subroute)',
         'changePlaybackSpeed(speed)',
-        'updateRating(videoInfo.rating)'
+        'updateRating(videoInfo.userRating)'
     ]
   }
 
@@ -113,7 +113,7 @@ class VideoView extends PolymerElement {
 
     // Not logged in, disable rating dropdown
     if(!this.user.uid) {
-      this.shadowRoot.querySelector("#speedDropdown").disabled = true;
+      this.shadowRoot.querySelector("#ratingDropdown").disabled = true;
     }
   }
 
@@ -244,6 +244,7 @@ class VideoView extends PolymerElement {
     .then(res => {
       let toast = document.querySelector("#toast");
       toast.close();
+      console.log(res);
 
       if(res.status == "SUCCESS") {
         toast.show("Rating oppdatert");      
@@ -367,8 +368,8 @@ class VideoView extends PolymerElement {
           </div>  <!-- speed -->
           
           <div id="userRating">
-            <paper-dropdown-menu label="Rating" id="speedDropdown" style="width: 80px;">
-              <paper-listbox slot="dropdown-content" selected="{{videoInfo.rating}}">
+            <paper-dropdown-menu label="Rating" id="ratingDropdown" style="width: 80px;">
+              <paper-listbox slot="dropdown-content" selected="{{videoInfo.userRating}}">
                 <paper-item>0</paper-item>
                 <paper-item>1</paper-item>
                 <paper-item>2</paper-item>
