@@ -1,5 +1,11 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import './shared-styles.js';
+import '@polymer/paper-button/paper-button.js';
+import '@polymer/paper-input/paper-input.js';
+import '@polymer/paper-input/paper-textarea.js';
+import '@polymer/paper-dropdown-menu/paper-dropdown-menu.js';
+import '@polymer/paper-listbox/paper-listbox.js';
+import '@polymer/paper-item/paper-item.js';
 import store from './js/store/index';
 
 class AdminView1 extends PolymerElement {
@@ -43,6 +49,24 @@ class AdminView1 extends PolymerElement {
           padding: 20px;
           text-align: left;
         }
+
+        paper-button {
+          padding:0;
+        }
+
+        paper-button::shadow .button-content {
+          padding:0;
+        }
+
+        paper-button button {
+          padding:1em;
+          background-color: transparent;
+          border-color: transparent;
+        }
+
+        paper-button button::-moz-focus-inner {
+          border: 0;
+        }
       </style>
 
       <div class="card">
@@ -53,16 +77,20 @@ class AdminView1 extends PolymerElement {
             <div class="grid-item">
             <form class="updatePriv" name="updatePriv" id="updatePriv" onsubmit="javascript: return false;">
             <input type="hidden" name="id" id="id" value="[[item.id]]" />
-            <p><label for="name">Navn: [[item.name]]</label></p>
+            <p>Navn: [[item.name]]</p>
             <p>E-post: [[item.email]]</p>
-            <p>Privilegier: <select id="privilege" name="privilege" value=[[item.privileges]]>
-            <option value="0">Student</option>
-            <option value="1">Lærer</option>
-            <option value="2">Admin</option>
-          </select>
-          </p>
+            <p>
+            <paper-dropdown-menu label="Privilegier:" id="privilege" style="width: 120px;">
+              <paper-listbox slot="dropdown-content" selected="{{item.privileges}}">
+                <paper-item value="0" >Student</paper-item>
+                <paper-item value="1">Lærer</paper-item>
+                <paper-item value="2">Admin</paper-item>
+              </paper-listbox>
+            </paper-dropdown-menu>
+            </p>
+            <input is="iron-input" name="privilege" type="hidden" value$="[[item.privileges]]">
             <p>Er lærer?: <input type="checkbox" name="isTeacher" value="1" checked=[[item.isTeacher]] disabled></p>
-            <p><button on-click="updateUser">Oppdater bruker</button></p>
+            <paper-button raised><button on-click="updateUser">Oppdater bruker</button></paper-button>
             </form>
             </div>
           </template>

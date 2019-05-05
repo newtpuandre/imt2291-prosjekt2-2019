@@ -70,7 +70,10 @@ class StudentView1 extends PolymerElement {
     
         .grid-item {
           background-color: rgba(255, 255, 255, 0.8);
-          padding: 20px;
+          border: 1px solid rgba(0, 0, 0, 0.8);
+          border-radius: 5px;
+          margin: 2px;
+          padding: 10px;
           text-align: left;
         }
 
