@@ -1,6 +1,7 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@polymer/app-route/app-location.js';
 import '@polymer/app-route/app-route.js';
+import '@polymer/paper-button/paper-button.js';
 import './shared-styles.js';
 import store from './js/store/index';
 
@@ -92,6 +93,24 @@ class PlaylistView extends PolymerElement {
           list-style-type: none;
         }
 
+        paper-button {
+          padding:0;
+        }
+
+        paper-button::shadow .button-content {
+          padding:0;
+        }
+
+        paper-button button {
+          padding:1em;
+          background-color: transparent;
+          border-color: transparent;
+        }
+
+        paper-button button::-moz-focus-inner {
+          border: 0;
+        }
+
       </style>
 
       <div class="card">
@@ -101,10 +120,10 @@ class PlaylistView extends PolymerElement {
         <p>Laget av: [[playlist.lectname]]</p>
         <template is="dom-if" if="{{user.isStudent}}">
         <template is="dom-if" if="{{isSubscribed}}">
-        <button on-click="subButton">Avslutt abonnementet</button>
+        <paper-button raised><button on-click="subButton">Avslutt abonnementet</button></paper-button>
         </template>
         <template is="dom-if" if="{{!isSubscribed}}">
-        <button on-click="subButton">Abonner</button>
+        <paper-button raised><button on-click="subButton">Abonner</button></paper-button>
         </template>
         </template>
         <h1>Videoer i denne spillelisten</h1>

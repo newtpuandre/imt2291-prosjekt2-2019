@@ -1,6 +1,9 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@polymer/app-route/app-location.js';
 import '@polymer/app-route/app-route.js';
+import '@polymer/paper-button/paper-button.js';
+import '@polymer/paper-input/paper-input.js';
+import '@polymer/paper-input/paper-textarea.js';
 import './shared-styles.js';
 import store from './js/store/index';
 
@@ -38,6 +41,12 @@ class EditPlaylistView extends PolymerElement {
         type:Boolean,
         value: true
       },
+      playName:{
+        type: String
+      },
+      playDesc:{
+        type: String
+      },
       user: {
         type: Object,
        value: { student: false, teacher: false, admin: false }
@@ -73,7 +82,10 @@ class EditPlaylistView extends PolymerElement {
       .then(res=>res.json())
       .then(data=>{
         this.playlist = data;
+        this.playName = this.playlist.name;
+        this.playDesc = this.playlist.description;
       });
+
 
       this.playlistVideos = [];
       fetch (`${window.MyAppGlobals.serverURL}api/playlist/getPlaylistVideos.php?id=` + subroute.path)
@@ -116,7 +128,8 @@ class EditPlaylistView extends PolymerElement {
       }
     ).then(res=>res.json())         // When a reply has arrived
     .then(res=>{
-      console.log(res);
+      let i = 0;//Loop variable
+      let found = 0;//Index of selected item
       if (res.status=='SUCCESS') {  //Handle error
         let i = 0; //Loop variable
         let found = 0; //Index of selected item
@@ -132,7 +145,7 @@ class EditPlaylistView extends PolymerElement {
         this.set(['playlistVideos.'+ found], video); //Set selected video "slot" to the item below
 
       } else {
-
+        toast.show("Kunne ikke flytte videoen opp..");
       }   
     })
   }
@@ -145,7 +158,8 @@ class EditPlaylistView extends PolymerElement {
       }
     ).then(res=>res.json())         // When a reply has arrived
     .then(res=>{
-      console.log(res);
+      let toast = document.querySelector("#toast");
+      toast.close();
       if (res.status=='SUCCESS') {  //Handle error
         let i = 0;//Loop variable
         let found = 0;//Index of selected item
@@ -160,7 +174,7 @@ class EditPlaylistView extends PolymerElement {
         this.set(['playlistVideos.'+ (found + 1)], this.get(["playlistVideos", found])); //Move selected item up 1
         this.set(['playlistVideos.'+ found], video); //Set selected video "slot" to the item above
       } else {
-
+        toast.show("Kunne ikke flytte videoen ned..");
       }   
     })
 
@@ -169,6 +183,8 @@ class EditPlaylistView extends PolymerElement {
 
   updatePlaylist(e){
     const data = new FormData(e.target.form);
+    data.append("pname", this.playName);
+    data.append("pdesc", this.playDesc);
     fetch (`${window.MyAppGlobals.serverURL}api/playlist/updatePlaylist.php`, {
       method: 'POST',
       credentials: 'include',
@@ -318,6 +334,24 @@ class EditPlaylistView extends PolymerElement {
           padding: 20px;
           text-align: left;
         }
+
+        paper-button {
+          padding:0;
+        }
+
+        paper-button::shadow .button-content {
+          padding:0;
+        }
+
+        paper-button button {
+          padding:1em;
+          background-color: transparent;
+          border-color: transparent;
+        }
+
+        paper-button button::-moz-focus-inner {
+          border: 0;
+        }
       </style>
 
       <div class="card">
@@ -329,17 +363,15 @@ class EditPlaylistView extends PolymerElement {
         <h1>Endre Spilleliste: [[playlist.name]]</h1>
         <form class="editPlaylist" onsubmit="javascript: return false;">
         <input type="hidden" name="pId" id="pId" value="[[playlist.id]]" />
-        <p>Spilleliste navn:</p>
-        <input type="text" name="pname" id="pname" value="[[playlist.name]]">
+        <paper-input label="Spilleliste navn" value="{{playName}}" maxlength="64" style="width:240px;"></paper-input>
         <p>Miniatyrbilde:</p>
         <p><img src="[[playlist.thumbnail]]" width="320" height="160"></p>
         <p><input type="file" name="thumbnail" id="thumbnail"></p>
-        <p>Beskrivelse:</p>
-        <input type="text" name="pdesc" id="pdesc" value="[[playlist.description]]">
-        <p><button on-click="updatePlaylist">Oppdater</button></p>
+        <paper-textarea label="Beskrivelse" value="{{playDesc}}" maxlength="256" style="width:240px;"></paper-textarea>
+        <p><paper-button raised><button on-click="updatePlaylist">Oppdater</button></paper-button></p>
         </form>
-        <button on-click="posedit" >Endre Video rekkefølge</button>
-        <button on-click="addremvideo">Legg til / fjern Videoer</button>
+        <paper-button raised><button on-click="posedit" >Endre Video rekkefølge</button></paper-button>
+        <paper-button raised><button on-click="addremvideo">Legg til / fjern Videoer</button></paper-button>
         <template is="dom-if" if="{{posEdit}}">
         <h1>Videoer i denne spillelisten</h1>
         <ul>
@@ -353,9 +385,9 @@ class EditPlaylistView extends PolymerElement {
             <p>Beskrivelse: [[item.description]]</p>
             <p>Emne: [[item.topic]]</p>
             <p>Fag: [[item.course]]</p>
-            <button on-click="moveUp">Flytt opp</button>
-            <button on-click="moveDown">Flytt ned</button>
-            <button on-click="useThumbnail">Bruk som thumbnail</button>
+            <paper-button raised><button on-click="moveUp">Flytt opp</button></paper-button>
+            <paper-button raised><button on-click="moveDown">Flytt ned</button></paper-button>
+            <paper-button raised><button on-click="useThumbnail">Bruk som thumbnail</button></paper-button>
             <!-- <button>Bruk video Miniatyrbilde for denne spillelisten</button> -->
             </form>
             </li>
@@ -376,7 +408,7 @@ class EditPlaylistView extends PolymerElement {
             <p>Emne: [[item.topic]]</p>
             <p>Fag: [[item.course]]</p>
             <input type="hidden" name="vidId[]" id="vidId" value="[[item.id]]" />
-            <p><button on-click="removeVid">Fjern fra spillelisten</button></p>
+            <p><paper-button raised><button on-click="removeVid">Fjern fra spillelisten</button></paper-button ></p>
             </form>
 
             </div>
@@ -395,7 +427,7 @@ class EditPlaylistView extends PolymerElement {
             <p>Emne: [[item.topic]]</p>
             <p>Fag: [[item.course]]</p>
             <input type="hidden" name="vidId" id="vidId" value="[[item.id]]" />
-            <p><button on-click="selectVid">Velg Video</button></p>
+            <p><paper-button raised><button on-click="selectVid">Velg Video</button></paper-button></p>
           </form>
 
           </div>
@@ -413,7 +445,7 @@ class EditPlaylistView extends PolymerElement {
             <b>[[item.name]]</b>
             <p><img src="[[item.thumbnail]]" width="320" height="160"></p>
             <p>Beskrivelse: [[item.description]]</p>
-            <a href="/editplaylist/{{item.id}}"><button>Endre spilleliste</button></a>
+            <a href="/editplaylist/{{item.id}}"><paper-button raised><button>Endre spilleliste</button></paper-button></a>
             </div>
           </template>
         </div>

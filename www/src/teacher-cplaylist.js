@@ -104,7 +104,7 @@ class TeacherCPlaylist extends PolymerElement {
         <h1>Lag spilleliste</h1>
         <form onsubmit="javascript: return false;" id="createPlaylist" enctype="multipart/form-data">
         <paper-input label="Spilleliste navn" value="{{playName}}" maxlength="64"></paper-input>
-        <paper-input label="Beskrivelse" value="{{playDesc}}" maxlength="256"></paper-input>
+        <paper-textarea label="Beskrivelse" value="{{playDesc}}" maxlength="256"></paper-textarea>
         <p>Miniatyrbilde</p>
         <input type="file" name="thumbnail" id="thumbnail" accept="image/*">
         <p><paper-button raised><button on-click="create">Lag spilleliste</button></paper-button></p>
