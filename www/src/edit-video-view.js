@@ -2,6 +2,7 @@ import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import './shared-styles.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-input/paper-input.js';
+import '@polymer/paper-input/paper-textarea.js';
 import store from './js/store/index';
 
 class EditVideoView extends PolymerElement {
@@ -73,6 +74,8 @@ class EditVideoView extends PolymerElement {
   editVideo(e) {
     let toast = document.querySelector("#toast");
     toast.close();
+
+    console.log(this.videoInfo.description);
 
     if(this.videoInfo.title == "" || this.videoInfo.description == "" || this.videoInfo.topic == "" || this.videoInfo.course == "") {
       toast.show("Fyll inn alle feltene");
@@ -173,6 +176,10 @@ class EditVideoView extends PolymerElement {
         paper-input {
           width: 35%;
         }
+
+        paper-textarea {
+          width: 35%;
+        }
       </style>
 
       <div class="card" id="main">
@@ -181,7 +188,7 @@ class EditVideoView extends PolymerElement {
           <hr>
 
           <paper-input label="Tittel" value="{{videoInfo.title}}" maxlength="64"></paper-input>
-          <paper-input label="Beskrivelse" value="{{videoInfo.description}}" maxlength="512"></paper-input>
+          <paper-textarea label="Beskrivelse" value="{{videoInfo.description}}" maxlength="512"></paper-textarea>
           <paper-input label="Emne" value="{{videoInfo.topic}}" maxlength="64"></paper-input>
           <paper-input label="Fag" value="{{videoInfo.course}}" maxlength="64"></paper-input>
 

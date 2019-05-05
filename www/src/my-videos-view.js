@@ -45,6 +45,7 @@ class MyVideosView extends PolymerElement {
    */
   deleteVideo(e) {
     let id = e.target.dataset.id;
+    console.log(id);
 
     fetch(`${window.MyAppGlobals.serverURL}api/video/deleteVideo.php?id=${id}`,{
       credentials: "include"
@@ -102,9 +103,8 @@ class MyVideosView extends PolymerElement {
             <a href="/editVideo/[[item.id]]">
               <paper-button raised>Rediger</paper-button>
             </a>
-            <a href="/myVideos" on-click="deleteVideo" data-id$="[[item.id]]">
-              <paper-button raised>Slett</paper-button>
-            </a>
+            
+            <paper-button raised on-click="deleteVideo" data-id$="[[item.id]]">Slett</paper-button>
 
             <p> <!-- Video thumbnail -->
               <img class="videoThumbnail" src="[[serverURL]]api/video/getFile.php?id=[[item.id]]&type=thumbnail">

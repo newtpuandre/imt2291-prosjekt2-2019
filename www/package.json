@@ -28,6 +28,7 @@
     "@polymer/paper-input": "^3.0.2",
     "@polymer/paper-item": "github:PolymerElements/paper-item",
     "@polymer/paper-listbox": "github:PolymerElements/paper-listbox",
+    "@polymer/paper-ripple": "^3.0.1",
     "@polymer/paper-toast": "^3.0.1",
     "@polymer/polymer": "^3.0.0",
     "@webcomponents/webcomponentsjs": "^2.0.0",

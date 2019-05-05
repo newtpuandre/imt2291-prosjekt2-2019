@@ -6,6 +6,7 @@ import '@polymer/app-route/app-location.js';
 import '@polymer/app-route/app-route.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-input/paper-input.js';
+import '@polymer/paper-input/paper-textarea.js';
 import '@polymer/paper-dropdown-menu/paper-dropdown-menu.js';
 import '@polymer/paper-item/paper-item.js';
 import '@polymer/paper-listbox/paper-listbox.js';
@@ -112,6 +113,11 @@ class VideoView extends PolymerElement {
         this.$.subtitles.scrollTop = row.offsetTop - this.$.subtitles.offsetTop;
       }
     });
+
+    // Not logged in, disable rating dropdown
+    if(!this.user.uid) {
+      this.shadowRoot.querySelector("#speedDropdown").disabled = true;
+    }
   }
 
   loadData(subroute) {
@@ -148,7 +154,8 @@ class VideoView extends PolymerElement {
    * @param {*} e 
    */
   addComment(e) {
-    if(this.comment != "") {
+    // Only whitespace comments not allowed
+    if(this.comment !== undefined && this.comment.trim().length != 0) {
       let data = new FormData();
       data.append("id", this.route.path);
       data.append("comment", this.comment);
@@ -263,9 +270,10 @@ class VideoView extends PolymerElement {
           display: grid;
 
           grid-template-columns: repeat(3, auto);
-          grid-template-rows: repeat(2, auto);
+          grid-template-rows: repeat(3, auto);
           grid-template-areas: 
             "speed userRating totalRating"
+            "time . ."
             "desc desc desc";
         }
 
@@ -281,6 +289,10 @@ class VideoView extends PolymerElement {
         #userRating {
           grid-area: userRating;
           text-align: center;
+        }
+
+        #time {
+          grid-area: time;
         }
 
         #desc {
@@ -310,14 +322,19 @@ class VideoView extends PolymerElement {
           background-color: #bfbfbf;
         }
 
-        paper-input { /* Same size as video */
+        paper-textarea { /* Same size as video */
           width: 75%;
+        }
+
+        p { /* So newlines creates new lines */
+          white-space: pre-wrap;
         }
       </style>
 
 
       <div class="card">
-        <h1>[[videoInfo.title]] - [[videoInfo.topic]] ([[videoInfo.course]])</h1>
+        <h1>[[videoInfo.course]] - [[videoInfo.title]]</h1>
+        <h3>[[videoInfo.topic]]</h3>
         <hr>
 
         <div style="display: flex;">
@@ -342,7 +359,8 @@ class VideoView extends PolymerElement {
 
         <!-- Container under the video, holds speed and rating -->
         <div class="bottomContainer">
-          <h3 id="desc">[[videoInfo.description]]</h3>
+          <i id="time">[[videoInfo.time]]</i>
+          <p id="desc">[[videoInfo.description]]</p>
           <div id="speed">
             <paper-dropdown-menu label="Hastighet" style="width: 80px;">
               <paper-listbox slot="dropdown-content" selected="{{speed}}">
@@ -353,9 +371,8 @@ class VideoView extends PolymerElement {
             </paper-dropdown-menu>
           </div>
           
-          <!-- TODO: Disable if not logged in -->
           <div id="userRating">
-            <paper-dropdown-menu label="Rating" style="width: 80px;">
+            <paper-dropdown-menu label="Rating" id="speedDropdown" style="width: 80px;">
               <paper-listbox slot="dropdown-content" selected="{{rating}}">
                 <paper-item>0</paper-item>
                 <paper-item>1</paper-item>
@@ -373,10 +390,11 @@ class VideoView extends PolymerElement {
         </div>
 
         <hr>
+        <br><br><br><br>
 
         <!-- If logged in add ability to comment -->
         <template is="dom-if" if="[[user.uid]]">
-          <paper-input label="Legg til en kommentar" value="{{comment}}"></paper-input>
+          <paper-textarea label="Legg til en kommentar" value="{{comment}}"></paper-textarea>
           <paper-button raised on-click="addComment">Kommenter</paper-button>
         </template>
 

@@ -2,6 +2,7 @@ import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import './shared-styles.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-input/paper-input.js';
+import '@polymer/paper-input/paper-textarea.js';
 import store from './js/store/index';
 
 class UploadVideoView extends PolymerElement {
@@ -98,6 +99,10 @@ class UploadVideoView extends PolymerElement {
         paper-input {
           width: 35%;
         }
+
+        paper-textarea {
+          width: 35%;
+        }
       </style>
 
       <div class="card" id="main">
@@ -106,7 +111,7 @@ class UploadVideoView extends PolymerElement {
           <hr>
         
           <paper-input label="Tittel" value="{{title}}" maxlength="64"></paper-input>
-          <paper-input label="Beskrivelse" value="{{description}}" maxlength="512"></paper-input>
+          <paper-textarea label="Beskrivelse" value="{{description}}" maxlength="512"></paper-textarea>
           <paper-input label="Emne" value="{{topic}}" maxlength="64"></paper-input>
           <paper-input label="Fag" value="{{course}}" maxlength="64"></paper-input>
 
