@@ -50,7 +50,6 @@ $db = new DB();
 $res["status"] = "FAILED";
 
 if(isset($_GET["id"])) {
-    // TODO: Check if numeric id
     $id = trim($_GET["id"], "/");
     $res["id"] = $id;
 

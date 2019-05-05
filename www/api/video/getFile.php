@@ -61,6 +61,7 @@ if(isset($_GET["id"])) {
                     break;
             }
     
+            // Return the file if it is found, and is not a directory
             if(file_exists($path) && !is_dir($path)) {
                 readfile($path);
             }

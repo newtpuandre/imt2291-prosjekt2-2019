@@ -18,13 +18,10 @@ class VideoView extends PolymerElement {
         type: Object
       },
       fileURL: {
-        type: String,
+        type: String
       },
       videoInfo: {
-        type: Object,
-      },
-      rating: { // The users rating
-        type: Number
+        type: Object
       },
       speed: { // Speed of the video
         type: Number,
@@ -73,17 +70,17 @@ class VideoView extends PolymerElement {
     return [
         'loadData(subroute)',
         'changePlaybackSpeed(speed)',
-        'updateRating(rating)'
+        'updateRating(videoInfo.rating)'
     ]
   }
 
   ready() {
     super.ready();
 
-    // Subtitles aren't displayed on the video itself
+    // Subtitles aren't displayed on the video itself (unless fullscreen)
     this.$.videoSubs.track.mode = "hidden";
 
-    // Fullscreen change for chrome, safari and opera
+    // Fullscreen change for chrome, safari and opera, change if subtitles are shown
     this.$.video.addEventListener("webkitfullscreenchange", e => {
       this.$.videoSubs.track.mode = document.webkitIsFullScreen ? "showing" : "hidden";
     });
@@ -109,8 +106,8 @@ class VideoView extends PolymerElement {
         var row = this.shadowRoot.querySelector(`#subtitles li[data-id="${e.target.activeCues[i].id}"]`);
         row.classList.add('active'); // Add the active class to it
 
-        // Put the current subtitle at the top of the box
-        this.$.subtitles.scrollTop = row.offsetTop - this.$.subtitles.offsetTop;
+        // Put the current subtitle at (ish) the middle of the box
+        this.$.subtitles.scrollTop = row.offsetTop - this.$.subtitles.offsetTop - (this.$.subtitles.clientHeight / 2);
       }
     });
 
@@ -131,8 +128,6 @@ class VideoView extends PolymerElement {
       .then(res => res.json())
       .then(res => {
         this.videoInfo = res.video;
-
-        this.rating = res.video.userRating;
 
         // Used to retrieve the files associated with a video
         this.fileURL = `${window.MyAppGlobals.serverURL}api/video/getFile.php?id=${res.id}`;
@@ -337,7 +332,7 @@ class VideoView extends PolymerElement {
         <h3>[[videoInfo.topic]]</h3>
         <hr>
 
-        <div style="display: flex;">
+        <div style="display: flex;">  <!-- container for video/subtitles -->
           <video id="video" crossorigin="true" controls class="video" src="[[fileURL]]&type=video" type="video/*">
             <track id="videoSubs" label="English" default kind="subtitles" srclang="en" src="[[fileURL]]&type=subtitle">
             Your browser does not support the video tag.
@@ -354,8 +349,8 @@ class VideoView extends PolymerElement {
                 </li>
               </template>
             </ul>
-          </div>
-        </div>
+          </div>  <!-- subtitles -->
+        </div>  <!-- video/subtitles container -->
 
         <!-- Container under the video, holds speed and rating -->
         <div class="bottomContainer">
@@ -369,11 +364,11 @@ class VideoView extends PolymerElement {
                 </template>
               </paper-listbox>
             </paper-dropdown-menu>
-          </div>
+          </div>  <!-- speed -->
           
           <div id="userRating">
             <paper-dropdown-menu label="Rating" id="speedDropdown" style="width: 80px;">
-              <paper-listbox slot="dropdown-content" selected="{{rating}}">
+              <paper-listbox slot="dropdown-content" selected="{{videoInfo.rating}}">
                 <paper-item>0</paper-item>
                 <paper-item>1</paper-item>
                 <paper-item>2</paper-item>
@@ -382,15 +377,15 @@ class VideoView extends PolymerElement {
                 <paper-item>5</paper-item>
               </paper-listbox>
             </paper-dropdown-menu>
-          </div>
+          </div>  <!-- userRating -->
           
           <div id="totalRating">
             <p>Total rating: [[videoInfo.rating]]</p>
           </div>
-        </div>
+        </div>  <!-- bottomContainer -->
 
         <hr>
-        <br><br><br><br>
+        <br><br><br>
 
         <!-- If logged in add ability to comment -->
         <template is="dom-if" if="[[user.uid]]">
@@ -409,9 +404,9 @@ class VideoView extends PolymerElement {
                 Slett kommentar
               </paper-button>
             </template>
-          </div>
-        </template>
-      </div>
+          </div>  <!-- card -->
+        </template> <!-- repeat comments -->
+      </div> <!-- card -->
       `;
   }
 }

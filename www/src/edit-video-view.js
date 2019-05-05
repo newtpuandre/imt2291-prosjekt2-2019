@@ -54,12 +54,10 @@ class EditVideoView extends PolymerElement {
       })
       .then(res => res.json())
       .then(res => {
-        console.log(res);
         let main = this.shadowRoot.querySelector("#main");
 
         if(res.status == "SUCCESS") {
           this.videoInfo = res.video;
-
         } else {
           main.innerHTML = "<h2>Det oppstod en feil ved henting av video informasjonen.</h2>"
         }
@@ -75,8 +73,6 @@ class EditVideoView extends PolymerElement {
     let toast = document.querySelector("#toast");
     toast.close();
 
-    console.log(this.videoInfo.description);
-
     if(this.videoInfo.title == "" || this.videoInfo.description == "" || this.videoInfo.topic == "" || this.videoInfo.course == "") {
       toast.show("Fyll inn alle feltene");
     } else {
@@ -91,13 +87,12 @@ class EditVideoView extends PolymerElement {
       data.append("course", this.videoInfo.course);
 
       fetch(`${window.MyAppGlobals.serverURL}api/video/editVideo.php`, {
-        method: 'POST',
+        method: "POST",
         credentials: "include",
         body: data
       }).then(res => res.json())
       .then(res => {
-        console.log(res);
-        if(res.status == 'SUCCESS') {
+        if(res.status == "SUCCESS") {
           toast.show("Videoen ble redigert");
         } else {
           toast.show("En feil oppstod");
@@ -144,14 +139,15 @@ class EditVideoView extends PolymerElement {
     data.append("thumbnail", image);
 
     fetch(`${window.MyAppGlobals.serverURL}api/video/updateThumbnail.php`, {
-      method: 'POST',
+      method: "POST",
       credentials: "include",
       body: data
     })
     .then(res => res.json())
     .then(res => {
       let toast = document.querySelector("#toast");
-      
+      toast.close();
+
       if(res.status == "SUCCESS") {
         toast.show("Thumbnailen ble oppdatert");
       } else {

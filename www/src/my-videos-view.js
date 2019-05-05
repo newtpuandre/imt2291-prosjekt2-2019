@@ -34,7 +34,6 @@ class MyVideosView extends PolymerElement {
     .then(res => res.json())
     .then(res => {
       this.videos = res.videos;
-      console.log(this.videos);
     });
   }
 
@@ -45,7 +44,6 @@ class MyVideosView extends PolymerElement {
    */
   deleteVideo(e) {
     let id = e.target.dataset.id;
-    console.log(id);
 
     fetch(`${window.MyAppGlobals.serverURL}api/video/deleteVideo.php?id=${id}`,{
       credentials: "include"
@@ -57,6 +55,8 @@ class MyVideosView extends PolymerElement {
       
       if(res.status == "SUCCESS") {
         toast.show("Video slettet");
+
+        // Remove the video from the in-memory storage as well (so the list in the browser updates)
         this.videos = this.videos.filter(v => v.id != id);
       } else {
         toast.show("En feil oppstod");

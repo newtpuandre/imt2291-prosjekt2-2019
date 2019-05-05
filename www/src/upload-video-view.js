@@ -47,13 +47,14 @@ class UploadVideoView extends PolymerElement {
     let toast = document.querySelector("#toast");
     toast.close();
 
+    // All fields must be entered
     if(this.title == "" || this.description == "" || this.topic == "" || this.course == "") {
       toast.show("Fyll inn alle feltene");
     } else {
       const files = this.shadowRoot.querySelector("#uploadForm");
       const data = new FormData(files);
 
-      const video = data.get("video");
+      const video = data.get("video"); // Get the video file to check it's selected for upload
 
       // All files are in the form, if the name isn't empty it's selected to upload
       // To be sure, check that the size isn't 0 as well
@@ -69,7 +70,6 @@ class UploadVideoView extends PolymerElement {
           body: data
         }).then(res => res.json())
         .then(res => {
-          console.log(res);
           if(res.status == 'SUCCESS') {
             toast.show("Video lastet opp");
           } else {
@@ -77,7 +77,6 @@ class UploadVideoView extends PolymerElement {
           }
         });
       } else {
-        toast.close();
         toast.show("Velg en videofil å laste opp");
       }
     }
@@ -107,7 +106,7 @@ class UploadVideoView extends PolymerElement {
 
       <div class="card" id="main">
         <template is="dom-if" if="{{user.isTeacher}}">
-          <h1>Last opp video</h1>
+          <h1>Last opp en ny video</h1>
           <hr>
         
           <paper-input label="Tittel" value="{{title}}" maxlength="64"></paper-input>
@@ -128,12 +127,12 @@ class UploadVideoView extends PolymerElement {
             <br><br>
           </form>
           <paper-button raised on-click="uploadVideo">Last opp video</paper-button>
-        </template>
+        </template>  <!-- isTeacher -->
 
         <template is="dom-if" if="{{!user.isTeacher}}">
           <h1>Du må være lærer for å se denne siden.</h1>
         </template>
-      </div>
+      </div>  <!-- card -->
     `;
   }
 }

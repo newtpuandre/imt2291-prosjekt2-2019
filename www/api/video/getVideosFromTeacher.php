@@ -36,8 +36,7 @@ $db = new DB();
 $res["status"] = "FAILED";
 
 if(isset($_GET["id"])) {
-    $id = $_GET["id"];
-
+    $res["status"] = "SUCCESS";
     $res["videos"] = $db->returnVideos($_GET["id"]);
 }
 
