@@ -131,6 +131,7 @@ class MyView4 extends PolymerElement {
       </form>
       <template is="dom-if" if="{{!playlistSearch}}">
         <h1>Alle Spillelister</h1>
+        <hr>
         <div class="grid-container">
           <template is="dom-repeat" items="[[playlists]]">
             <div class="grid-item">
@@ -145,6 +146,7 @@ class MyView4 extends PolymerElement {
       <a href="/view4" on-click="reset"><- Tilbake</a>
       <h1>Søkeresultater for: {{searchQuerry}}</h1>
         <h1>Alle Spillelister</h1>
+        <hr>
         <div class="grid-container">
           <template is="dom-repeat" items="{{searchResult}}">
             <div class="grid-item">

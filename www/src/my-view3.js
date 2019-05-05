@@ -138,6 +138,7 @@ class MyView3 extends PolymerElement {
       </form>
       <template is="dom-if" if="{{!videoSearch}}">
       <h1>Alle Videoer</h1>
+      <hr>
         <div class="grid-container">
           <template is="dom-repeat" items="[[videos]]">
             <div class="grid-item">

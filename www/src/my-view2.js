@@ -99,6 +99,7 @@ class MyView2 extends PolymerElement {
       <a href="/view2/[[searchQuery]]"><paper-button raised><button>Søk</button></paper-button></a>
         <template is="dom-if" if="{{!searchMode}}">
         <h1>Emner</h1>
+        <hr>
           <template is="dom-repeat" items="[[courses]]">
             <b><a href="/view2/[[item.course]]">[[item.course]]</a></b> 
             <p>Videoer i dette emnet: [[item.count]]</p>

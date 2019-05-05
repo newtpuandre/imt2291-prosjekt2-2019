@@ -81,6 +81,7 @@ class StudentView1 extends PolymerElement {
       <div class="card">
       <template is="dom-if" if="{{user.isStudent}}">
         <h1>Abonnerte Spillelister</h1>
+        <hr>
         <div class="grid-container">
           <template is="dom-repeat" items="[[playlists]]">
             <div class="grid-item">
