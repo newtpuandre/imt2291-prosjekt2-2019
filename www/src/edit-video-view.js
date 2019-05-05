@@ -101,31 +101,6 @@ class EditVideoView extends PolymerElement {
         }
       });
     }
-
-    /*
-    const data = new FormData(e.target.form);
-    data.append("vid", this.route.path);
-
-    fetch (`${window.MyAppGlobals.serverURL}api/video/editVideo.php`, {
-      method: 'POST',
-      credentials: "include",
-      body: data
-    }
-    ).then(res => res.json())
-    .then(res => {
-      console.log(res);
-      let toast = document.querySelector("#toast");
-
-      // Close it if there is a toast already present, doesn't actually
-      // close but makes the new one stay for it's intended period
-      toast.close();
-
-      if(res.status == 'SUCCESS') {
-      } else {
-        toast.show("En feil oppstod");
-      }
-    });
-    */
   }
 
   /**
@@ -172,7 +147,6 @@ class EditVideoView extends PolymerElement {
     })
     .then(res => res.json())
     .then(res => {
-      console.log(res);
       let toast = document.querySelector("#toast");
       
       if(res.status == "SUCCESS") {
