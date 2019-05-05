@@ -72,6 +72,7 @@ class AdminView1 extends PolymerElement {
       <div class="card">
       <template is="dom-if" if="{{user.isAdmin}}">
         <h1>Endre bruker privilegier</h1>
+        <hr>
         <div class="grid-container">
           <template is="dom-repeat" items="[[students]]">
             <div class="grid-item">

@@ -102,6 +102,7 @@ class TeacherCPlaylist extends PolymerElement {
 
       <template is="dom-if" if="{{user.isTeacher}}">
         <h1>Lag spilleliste</h1>
+        <hr>
         <form onsubmit="javascript: return false;" id="createPlaylist" enctype="multipart/form-data">
         <paper-input label="Spilleliste navn" value="{{playName}}" maxlength="64"></paper-input>
         <paper-textarea label="Beskrivelse" value="{{playDesc}}" maxlength="256"></paper-textarea>

@@ -9,6 +9,8 @@
  */
 
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import '@polymer/paper-button/paper-button.js';
+import '@polymer/paper-input/paper-input.js';
 import './shared-styles.js';
 
 class MyView2 extends PolymerElement {
@@ -71,12 +73,30 @@ class MyView2 extends PolymerElement {
           padding: 10px;
           text-align: left;
         }
+
+        paper-button {
+          padding:0;
+        }
+
+        paper-button::shadow .button-content {
+          padding:0;
+        }
+
+        paper-button button {
+          padding:1em;
+          background-color: transparent;
+          border-color: transparent;
+        }
+
+        paper-button button::-moz-focus-inner {
+          border: 0;
+        }
       </style>
 
       <div class="card">
       <h1>Søk</h1>
-      <input type="text" value="{{searchQuery::input}}">
-      <a href="/view2/[[searchQuery]]"><button>Søk</button></a>
+      <paper-input label="Søk" value="{{searchQuery}}" maxlength="64" style="width:240px;"></paper-input>
+      <a href="/view2/[[searchQuery]]"><paper-button raised><button>Søk</button></paper-button></a>
         <template is="dom-if" if="{{!searchMode}}">
         <h1>Emner</h1>
           <template is="dom-repeat" items="[[courses]]">

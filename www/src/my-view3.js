@@ -10,6 +10,8 @@
 
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import './shared-styles.js';
+import '@polymer/paper-button/paper-button.js';
+import '@polymer/paper-input/paper-input.js';
 import store from './js/store/index';
 
 class MyView3 extends PolymerElement {
@@ -62,6 +64,7 @@ class MyView3 extends PolymerElement {
   
   search(e){
     const data = new FormData(e.target.form);
+    data.append('search', this.searchQuerry);
     if(data.get('search') != "") {
     this.set('videoSearch', true);
     this.set('searchQuerry', data.get('search'));
@@ -107,13 +110,31 @@ class MyView3 extends PolymerElement {
           text-align: left;
         }
 
+        paper-button {
+          padding:0;
+        }
+
+        paper-button::shadow .button-content {
+          padding:0;
+        }
+
+        paper-button button {
+          padding:1em;
+          background-color: transparent;
+          border-color: transparent;
+        }
+
+        paper-button button::-moz-focus-inner {
+          border: 0;
+        }
+
       </style>
 
       <div class="card">
       <h1>Søk</h1>
       <form class="search" onsubmit="javascript: return false;">
-        <input type="text" name="search">
-        <button on-click="search">Søk</button>
+      <paper-input label="Søk" value="{{searchQuerry}}" maxlength="64" style="width:240px;"></paper-input>
+      <paper-button raised><button on-click="search">Søk</button></paper-button>
       </form>
       <template is="dom-if" if="{{!videoSearch}}">
       <h1>Alle Videoer</h1>

@@ -1,5 +1,7 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import './shared-styles.js';
+import '@polymer/paper-button/paper-button.js';
+import '@polymer/paper-input/paper-input.js';
 import store from './js/store/index';
 
 class MyView1 extends PolymerElement {
@@ -118,14 +120,33 @@ class MyView1 extends PolymerElement {
           padding: 10px;
           text-align: left;
         }
+
+        paper-button {
+          padding:0;
+        }
+
+        paper-button::shadow .button-content {
+          padding:0;
+        }
+
+        paper-button button {
+          padding:1em;
+          background-color: transparent;
+          border-color: transparent;
+        }
+
+        paper-button button::-moz-focus-inner {
+          border: 0;
+        }
       </style>
 
       <div class="card">
       <h1>Søk</h1>
-      <input type="text" value="{{searchQuery::input}}">
-      <a href="/view1/[[searchQuery]]"><button>Søk</button></a>
+      <paper-input label="Søk" value="{{searchQuery}}" maxlength="64" style="width:240px;"></paper-input>
+      <a href="/view1/[[searchQuery]]"><paper-button raised><button>Søk</button></paper-button></a>
       <template is="dom-if" if="{{!searchMode}}">
       <h1>Nye Opplastninger</h1>
+      <hr>
       <div class="grid-container">
           <template is="dom-repeat" items="[[videos]]">
             <div class="grid-item">
@@ -141,6 +162,7 @@ class MyView1 extends PolymerElement {
       </div>
       <template is="dom-if" if="{{user.isStudent}}">
       <h1>Abonnerte spillelister</h1>
+      <hr>
       <div class="grid-container">
           <template is="dom-repeat" items="[[playlists]]">
             <div class="grid-item">
@@ -160,6 +182,7 @@ class MyView1 extends PolymerElement {
       <p><a href="/view1"><- Tilbake</a></p>
       <h2>Søke resultater for: [[searchQuery]]</h2>
       <h2>Videoer:</h2>
+      <hr>
       <template is="dom-repeat" items="{{videos}}">
             <div class="grid-item">
             <a href="/video/[[item.id]]"><b>[[item.title]]</b></a>
@@ -173,6 +196,7 @@ class MyView1 extends PolymerElement {
             </div>
           </template>
       <h2>Spillelister</h2>
+      <hr>
       <template is="dom-repeat" items="{{searchResultsPlaylist}}">
             <div class="grid-item">
             <b><a href="/playlist/[[item.id]]">[[item.name]]</a></b>

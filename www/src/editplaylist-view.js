@@ -361,6 +361,7 @@ class EditPlaylistView extends PolymerElement {
 
         <template is="dom-if" if="{{editMode}}">
         <h1>Endre Spilleliste: [[playlist.name]]</h1>
+        <hr>
         <form class="editPlaylist" onsubmit="javascript: return false;">
         <input type="hidden" name="pId" id="pId" value="[[playlist.id]]" />
         <paper-input label="Spilleliste navn" value="{{playName}}" maxlength="64" style="width:240px;"></paper-input>
@@ -374,6 +375,7 @@ class EditPlaylistView extends PolymerElement {
         <paper-button raised><button on-click="addremvideo">Legg til / fjern Videoer</button></paper-button>
         <template is="dom-if" if="{{posEdit}}">
         <h1>Videoer i denne spillelisten</h1>
+        <hr>
         <ul>
           <template is="dom-repeat" items="{{playlistVideos}}">
             <li>
@@ -397,6 +399,7 @@ class EditPlaylistView extends PolymerElement {
         <template is="dom-if" if="{{addVideo}}">
 
         <h1>Videoer i spillelisten</h1>
+        <hr>
         <div class="grid-container">
           <template is="dom-repeat" items="{{playlistVideos}}">
             <div class="grid-item">
@@ -416,6 +419,7 @@ class EditPlaylistView extends PolymerElement {
         </div>
 
         <h1>Tilgjengelige Videoer</h1>
+        <hr>
         <div class="grid-container">
           <template is="dom-repeat" id="list" items="{{userVideos}}" >
           <div class="grid-item">
@@ -439,6 +443,7 @@ class EditPlaylistView extends PolymerElement {
 
         <template is="dom-if" if="{{!editMode}}">
         <h1>Endre spilleliste</h1>
+        <hr>
         <div class="grid-container">
           <template is="dom-repeat" items="[[userPlaylists]]">
             <div class="grid-item">
