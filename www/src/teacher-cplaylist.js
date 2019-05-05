@@ -1,5 +1,8 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import './shared-styles.js';
+import '@polymer/paper-button/paper-button.js';
+import '@polymer/paper-input/paper-input.js';
+import '@polymer/paper-input/paper-textarea.js';
 import store from './js/store/index';
 
 class TeacherCPlaylist extends PolymerElement {
@@ -41,6 +44,12 @@ class TeacherCPlaylist extends PolymerElement {
         type: Array,
         notify: true
       },
+      playName:{
+        type: String
+      },
+      playDesc:{
+        type: String
+      },
       user: {
         type: Object,
        value: { student: false, teacher: false, admin: false }
@@ -69,6 +78,24 @@ class TeacherCPlaylist extends PolymerElement {
           padding: 20px;
           text-align: left;
         }
+
+        paper-button {
+          padding:0;
+        }
+
+        paper-button::shadow .button-content {
+          padding:0;
+        }
+
+        paper-button button {
+          padding:1em;
+          background-color: transparent;
+          border-color: transparent;
+        }
+
+        paper-button button::-moz-focus-inner {
+          border: 0;
+        }
       </style>
 
       <div class="card">
@@ -76,13 +103,11 @@ class TeacherCPlaylist extends PolymerElement {
       <template is="dom-if" if="{{user.isTeacher}}">
         <h1>Lag spilleliste</h1>
         <form onsubmit="javascript: return false;" id="createPlaylist" enctype="multipart/form-data">
-        <p>Spilleliste navn</p>
-        <input type="text" name="name"/>
-        <p>Beskrivelse</p>
-        <input type="text" name="description"/>
+        <paper-input label="Spilleliste navn" value="{{playName}}" maxlength="64"></paper-input>
+        <paper-input label="Beskrivelse" value="{{playDesc}}" maxlength="256"></paper-input>
         <p>Miniatyrbilde</p>
         <input type="file" name="thumbnail" id="thumbnail" accept="image/*">
-        <p><button on-click="create">Lag spilleliste</button></p>
+        <p><paper-button raised><button on-click="create">Lag spilleliste</button></paper-button></p>
         <h1>Valgte Videoer</h1>
         <div class="grid-container">
           <template is="dom-repeat" items="[[selectedVideos]]">
@@ -93,7 +118,7 @@ class TeacherCPlaylist extends PolymerElement {
             <p>Emne: [[item.topic]]</p>
             <p>Fag: [[item.course]]</p>
             <input type="hidden" name="vidId[]" id="vidId" value="[[item.id]]" />
-            <p><button on-click="removeVid">Fjern fra valgt video</button></p>
+            <p><paper-button raised><button on-click="removeVid">Fjern fra valgt video</button></paper-button></p>
 
             </div>
           </template>
@@ -112,7 +137,7 @@ class TeacherCPlaylist extends PolymerElement {
             <p>Emne: [[item.topic]]</p>
             <p>Fag: [[item.course]]</p>
             <input type="hidden" name="vidId" id="vidId" value="[[item.id]]" />
-            <p><button on-click="selectVid">Velg Video</button></p>
+            <p><paper-button raised><button on-click="selectVid">Velg Video</button></paper-button></p>
           </form>
 
           </div>
@@ -131,10 +156,8 @@ class TeacherCPlaylist extends PolymerElement {
 
   create(e) {
     const data = new FormData(e.target.form);
-    /*for (var pair of data.entries())
-    {
-      console.log(pair[0]+ ', '+ pair[1]); 
-    }*/
+    data.append("name", this.playName);
+    data.append("description", this.playDesc);
     fetch (`${window.MyAppGlobals.serverURL}api/playlist/createPlaylist.php`, {
         method: 'POST',
         credentials: "include",

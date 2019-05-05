@@ -22,6 +22,12 @@ $res = [];
 
 if (isset($_SESSION['uid'])) {
 
+    if (($_POST['name'] == "" && $_POST['description'] == "") || $_POST['name'] == "") {
+        $res['status'] = 'ERROR';
+        echo json_encode($res);
+        return;
+    }
+
     $id = $playlist->insertPlaylist($_SESSION['uid'],$_POST['name'],$_POST['description'],$_FILES);
 
     if ($id != false) {
