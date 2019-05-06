@@ -52,6 +52,7 @@ class MyView3 extends PolymerElement {
       this.user = store.getState().user;
     })
 
+    //Load all videos
     this.videos = [];
     fetch (`${window.MyAppGlobals.serverURL}api/video/getAllVideos.php`)
     .then(res=>res.json())
@@ -61,14 +62,17 @@ class MyView3 extends PolymerElement {
     });
   }
 
-  
+  /**
+   * Search for videos
+   */
   search(e){
     const data = new FormData(e.target.form);
     data.append('search', this.searchQuerry);
-    if(data.get('search') != "") {
+    if(data.get('search') != "") { //if the query is empty do nothing
     this.set('videoSearch', true);
     this.set('searchQuerry', data.get('search'));
 
+    //Search for videos
     this.searchResult = [];
     fetch (`${window.MyAppGlobals.serverURL}api/video/searchVideos.php?q=` + this.searchQuerry)
     .then(res=>res.json())
@@ -80,6 +84,7 @@ class MyView3 extends PolymerElement {
     }
   }
 
+  //Reset search and go back to previous page
   reset(e){
     this.set('videoSearch', false);
     this.set('searchQuerry', "");

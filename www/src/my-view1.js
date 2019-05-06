@@ -53,10 +53,14 @@ class MyView1 extends PolymerElement {
     ]
   }
 
+  /**
+   * Load required data for the website to work.
+   */
   loadData(subroute){
     if ((subroute.prefix == "/view1" || subroute.prefix == "/") && subroute.path == ""){ //Only do the following if we are in the playlist page with ID
       this.set('searchMode', false);
       this.videos = [];
+      //Load newest videos
       fetch (`${window.MyAppGlobals.serverURL}api/user/getNewVideos.php`)
       .then(res=>res.json())
       .then(data=>{
@@ -65,6 +69,7 @@ class MyView1 extends PolymerElement {
       });
   
       this.playlists = [];
+      //Load all subscribed playlists
       fetch (`${window.MyAppGlobals.serverURL}api/user/getSubscribedPlaylists.php`,{
         credentials: "include"
       })
@@ -74,8 +79,10 @@ class MyView1 extends PolymerElement {
         console.log(data);
       });
 
-    } else if ((subroute.prefix == "/view1" || subroute.prefix == "/") && subroute.path != "") {
+    } else if ((subroute.prefix == "/view1" || subroute.prefix == "/") && subroute.path != "") { //Search mode
       this.set('searchMode', true);
+
+      //Search for videos
       this.videos = [];
       fetch (`${window.MyAppGlobals.serverURL}api/video/searchVideos.php?q=` + this.searchQuery)
       .then(res=>res.json())
@@ -83,7 +90,8 @@ class MyView1 extends PolymerElement {
         this.videos = data;
         console.log(data);
       });
-
+      
+      //Search for playlists
       this.searchResultsPlaylist = [];
       fetch (`${window.MyAppGlobals.serverURL}api/playlist/searchPlaylist.php?q=` + this.searchQuery)
       .then(res=>res.json())

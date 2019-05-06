@@ -19,6 +19,9 @@ class AdminView1 extends PolymerElement {
       this.user = store.getState().user;
     })
 
+    /**
+     * Load users
+     */
     this.students = [];
     fetch (`${window.MyAppGlobals.serverURL}api/admin/getUsers.php`)
     .then(res=>res.json())
@@ -104,7 +107,11 @@ class AdminView1 extends PolymerElement {
 
     `;
   }
-
+/**
+ * updateUser
+ * Updates users privilege supplied by form.
+ * @param {event} e 
+ */
   updateUser(e) {
     const data = new FormData(e.target.form); // Wrap the form in a FormData object
     fetch (`${window.MyAppGlobals.serverURL}api/admin/updatePrivilege.php`, {

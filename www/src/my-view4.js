@@ -48,6 +48,7 @@ class MyView4 extends PolymerElement {
       this.user = store.getState().user;
     })
 
+    //Get all playlists
     this.playlists = [];
     fetch (`${window.MyAppGlobals.serverURL}api/playlist/getAllPlaylists.php`)
     .then(res=>res.json())
@@ -57,6 +58,9 @@ class MyView4 extends PolymerElement {
     });
   }
 
+  /**
+   * Search for a playlist
+   */
   search(e){
     const data = new FormData(e.target.form);
     data.append('search', this.searchQuerry);
@@ -64,6 +68,7 @@ class MyView4 extends PolymerElement {
     this.set('playlistSearch', true);
     this.set('searchQuerry', data.get('search'));
 
+    //Get playlists
     this.searchResult = [];
     fetch (`${window.MyAppGlobals.serverURL}api/playlist/searchPlaylist.php?q=` + this.searchQuerry)
     .then(res=>res.json())
@@ -75,6 +80,7 @@ class MyView4 extends PolymerElement {
     }
   }
 
+  //Reset search and go to previous page
   reset(e){
     this.set('playlistSearch', false);
     this.set('searchQuerry', "");

@@ -50,11 +50,15 @@ class PlaylistView extends PolymerElement {
     ]
   }
 
+  /**
+   * Load required data for the website to work.
+   */
   loadData(subroute){
     if (subroute.prefix == "/playlist" && subroute.path != ""){ //Only do the following if we are in the playlist page with ID
 
       this.route = subroute;
 
+      //Get playlist information
       this.playlist = [];
       fetch (`${window.MyAppGlobals.serverURL}api/playlist/getPlaylist.php?id=` + subroute.path)
       .then(res=>res.json())
@@ -62,6 +66,7 @@ class PlaylistView extends PolymerElement {
         this.playlist = data;
       });
   
+      //Get playlist videos
       this.playlistVideos = [];
       fetch (`${window.MyAppGlobals.serverURL}api/playlist/getPlaylistVideos.php?id=` + subroute.path)
       .then(res=>res.json())
@@ -69,6 +74,7 @@ class PlaylistView extends PolymerElement {
         this.playlistVideos = data;
       });
 
+      //Get subscription status for current playlist
       fetch (`${window.MyAppGlobals.serverURL}api/user/getSubscriptionStatus.php?id=` + subroute.path ,{
         credentials: "include"
       })
@@ -143,15 +149,19 @@ class PlaylistView extends PolymerElement {
     `;
   }
  
+  /**
+   * Subscribe or unsubscribe
+   */
   subButton(e){
-    this.set('isSubscribed', !this.isSubscribed);
+    this.set('isSubscribed', !this.isSubscribed); //Set value to the opposite
     let sub;
-    if(!this.isSubscribed) {
+    if(!this.isSubscribed) { //Update button to show correct info
       sub = 0;
     } else {
       sub = 1;
     }
 
+    //Change sub status to the opposite
     fetch (`${window.MyAppGlobals.serverURL}api/user/changeSubStatus.php?id=` + this.route.path + `&sub=` + sub,{
       credentials: "include"
     })

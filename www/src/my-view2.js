@@ -26,10 +26,14 @@ class MyView2 extends PolymerElement {
     ]
   }
 
+  /**
+   * Load required data for the website to work.
+   */
   loadData(subroute){
-    if (subroute.prefix == "/view2"  && subroute.path == ""){
+    if (subroute.prefix == "/view2"  && subroute.path == ""){ //Show all courses
       this.set('searchMode', false);
       this.courses = [];
+      //Load all courses
       fetch (`${window.MyAppGlobals.serverURL}api/course/getCourses.php`)
       .then(res=>res.json())
       .then(data=>{
@@ -37,9 +41,10 @@ class MyView2 extends PolymerElement {
         console.log(data);
       });
 
-    } else if (subroute.prefix == "/view2"  && subroute.path != "") {
+    } else if (subroute.prefix == "/view2"  && subroute.path != "") { //Search mode
       this.set('searchMode', true);
       this.videos = [];
+      //Search for course
       fetch (`${window.MyAppGlobals.serverURL}api/course/searchCourse.php?q=`+subroute.path)
       .then(res=>res.json())
       .then(data=>{

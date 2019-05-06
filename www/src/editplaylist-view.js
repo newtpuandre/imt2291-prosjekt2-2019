@@ -70,6 +70,9 @@ class EditPlaylistView extends PolymerElement {
     ]
   }
 
+  /**
+   * Load data required for the page to work.
+   */
   loadData(subroute){
     if (subroute.prefix == "/editplaylist" && subroute.path != ""){ //Only load a specific playlist
 
@@ -77,6 +80,7 @@ class EditPlaylistView extends PolymerElement {
 
       this.route = subroute;
 
+      //Get info about current playlist
       this.playlist = [];
       fetch (`${window.MyAppGlobals.serverURL}api/playlist/getPlaylist.php?id=` + subroute.path)
       .then(res=>res.json())
@@ -86,7 +90,7 @@ class EditPlaylistView extends PolymerElement {
         this.playDesc = this.playlist.description;
       });
 
-
+      //Get videos in the current playlist 
       this.playlistVideos = [];
       fetch (`${window.MyAppGlobals.serverURL}api/playlist/getPlaylistVideos.php?id=` + subroute.path)
       .then(res=>res.json())
@@ -94,6 +98,7 @@ class EditPlaylistView extends PolymerElement {
         this.playlistVideos = data;
       });
 
+      //Get all the users videos
       this.userVideos = [];
       fetch (`${window.MyAppGlobals.serverURL}api/playlist/getUserVideos.php`,{
         credentials: "include"
@@ -107,6 +112,7 @@ class EditPlaylistView extends PolymerElement {
 
       this.set('editMode', false);
 
+      //Get all the users playlists
       this.userPlaylists = [];
       fetch (`${window.MyAppGlobals.serverURL}api/playlist/getUserPlaylists.php`,{
         credentials: "include"
@@ -120,6 +126,9 @@ class EditPlaylistView extends PolymerElement {
     
   }
 
+  /**
+   * Function that moves a videos position up
+   */
   moveUp(e) {
     const data = new FormData(e.target.form);
     fetch (`${window.MyAppGlobals.serverURL}api/playlist/updateVideoPos.php?down=0`, {
@@ -130,7 +139,7 @@ class EditPlaylistView extends PolymerElement {
     .then(res=>{
       let i = 0;//Loop variable
       let found = 0;//Index of selected item
-      if (res.status=='SUCCESS') {  //Handle error
+      if (res.status=='SUCCESS') {  //If it was applied to the database
         let i = 0; //Loop variable
         let found = 0; //Index of selected item
         for (var idx of this.playlistVideos){ //Loop over all videos
@@ -150,6 +159,9 @@ class EditPlaylistView extends PolymerElement {
     })
   }
 
+  /**
+   * Function that moves a videos position down
+   */
   moveDown(e) {
     const data = new FormData(e.target.form);
     fetch (`${window.MyAppGlobals.serverURL}api/playlist/updateVideoPos.php?down=1`, {
@@ -181,6 +193,9 @@ class EditPlaylistView extends PolymerElement {
 
   }
 
+  /**
+   * Updates a playlists title, description or thumbnail
+   */
   updatePlaylist(e){
     const data = new FormData(e.target.form);
     data.append("pname", this.playName);
@@ -194,10 +209,10 @@ class EditPlaylistView extends PolymerElement {
   .then(res=>{
     let toast = document.querySelector("#toast");
     toast.close();
-    if (res.status != 'ERROR' && res.status != 'SUCCESS') {  //Handle error
-      this.set('playlist.thumbnail', res.status);
+    if (res.status != 'ERROR' && res.status != 'SUCCESS') {  //If the return was a thumbnail url
+      this.set('playlist.thumbnail', res.status);            //Set it.
       toast.show("Spillelisten er nå oppdatert");
-    } else if (res.status != 'ERROR'){
+    } else if (res.status != 'ERROR'){ //If the return was SUCCESS just give a headsup to the user
       toast.show("Spillelisten er nå oppdatert");
     }  else {
       toast.show("En feil oppstod");
@@ -205,18 +220,21 @@ class EditPlaylistView extends PolymerElement {
   })
   }
   
+  /**
+   * Set mode to add/remove video
+   */
   addremvideo(e) {
     if(this.addVideo == false)
     this.set('addVideo', true);
     this.set('posEdit', false);
 
     //Dont show duplicate videos.
-    if(this.playlistVideos != null){
-      for(var myVideo of this.playlistVideos){
-        let i = 0;
-        for(var userVideo of this.userVideos){
-          if (myVideo[0] == userVideo[0]){
-            this.splice("userVideos", i , 1 );
+    if(this.playlistVideos != null){ //Handle if video list is empty
+      for(var myVideo of this.playlistVideos){ //Loop over all videos in the playlist
+        let i = 0; //Loop variable
+        for(var userVideo of this.userVideos){ //Loop over all videos a user has uploaded
+          if (myVideo[0] == userVideo[0]){ //If the video exists in the playlist
+            this.splice("userVideos", i , 1 ); //Remove it from available videos to add to playlist
           }
           i++;
         }
@@ -224,20 +242,22 @@ class EditPlaylistView extends PolymerElement {
     }
   }
 
+  /**
+   * Set mode to position editing
+   */
   posedit(e) {
-    console.log(this.playlistVideos);
     if(this.posEdit == false)
     this.set('posEdit', true);
     this.set('addVideo', false);
   }
 
+  /**
+   * Add video to playlist
+   */
   selectVid(e){
     const data = new FormData(e.target.form);
-    /*for (var pair of data.entries())
-    {
-      console.log(pair[0]+ ', '+ pair[1]); 
-    }*/
-    
+
+    //Add the video to the database
     fetch (`${window.MyAppGlobals.serverURL}api/playlist/addVideoToPlaylist.php?id=` + this.route.path, {
       method: 'POST',
       body: data
@@ -264,12 +284,12 @@ class EditPlaylistView extends PolymerElement {
 
   }
 
+  /**
+   * Remove video from playlist
+   */
   removeVid(e){
     const data = new FormData(e.target.form);
-    /*for (var pair of data.entries())
-    {
-      console.log(pair[0]+ ', '+ pair[1]); 
-    }*/
+    //Remove video from the playlist
     fetch (`${window.MyAppGlobals.serverURL}api/playlist/deleteVideoFromPlaylist.php?id=` + this.route.path, {
       method: 'POST',
       body: data
@@ -292,8 +312,12 @@ class EditPlaylistView extends PolymerElement {
     }
   }
 
+  /**
+   * Use the video as thumbnail
+   */
   useThumbnail(e){
     const data = new FormData(e.target.form);
+    //Update DB with new thumbnail
     fetch (`${window.MyAppGlobals.serverURL}api/playlist/updatePlaylistThumbnail.php?p=` + this.route.path + `&v=` + data.get('vidId'), {
       credentials: 'include'
     })

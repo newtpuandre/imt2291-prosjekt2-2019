@@ -10,6 +10,7 @@ class TeacherCPlaylist extends PolymerElement {
   constructor () {
     super();
 
+    //Get users videos
     this.userVideos = [];
     fetch (`${window.MyAppGlobals.serverURL}api/playlist/getUserVideos.php`,{
       credentials: "include"
@@ -155,10 +156,13 @@ class TeacherCPlaylist extends PolymerElement {
     `;
   }
 
+  //Create playlist
   create(e) {
     const data = new FormData(e.target.form);
     data.append("name", this.playName);
     data.append("description", this.playDesc);
+
+    //Create playlist and insert into DB
     fetch (`${window.MyAppGlobals.serverURL}api/playlist/createPlaylist.php`, {
         method: 'POST',
         credentials: "include",
@@ -176,12 +180,11 @@ class TeacherCPlaylist extends PolymerElement {
     })
   }
 
+  /**
+   * Select video and add it to the playlist
+   */
   selectVid(e){
     const data = new FormData(e.target.form);
-    /*for (var pair of data.entries())
-    {
-      console.log(pair[0]+ ', '+ pair[1]); 
-    }*/
     let i = 0;
     for (var idx of this.userVideos){ //Loop over all userVideos
       if (idx[0] == data.get('vidId')) { //Find selected and remove it from userVideos
@@ -195,6 +198,9 @@ class TeacherCPlaylist extends PolymerElement {
     }
   }
 
+  /**
+   * Remove videos from the playlist
+   */
   removeVid(e){
     const data = new FormData(e.target.form);
     /*for (var pair of data.entries())
