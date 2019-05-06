@@ -24,16 +24,16 @@ $res = [];
 
 $playlist = new Playlist();
 
-$ret = $playlist->updatePlaylist($_POST['pId'], $_SESSION['uid'], $_POST['pname'], $_POST['pdesc'],$_FILES);
+$ret = $playlist->updatePlaylist($_POST['pId'], $_SESSION['uid'], $_POST['pname'], $_POST['pdesc'],$_FILES); //Updates playlist
 if($ret) {
     //print_r($ret);
-    if(is_string($ret)){
+    if(is_string($ret)){ //If it was sucessful return new thumbnail path
         $res['status'] = $ret;
-    } else {
+    } else { //If no thumbnail was uploaded return SUCCESS
         $res['status'] = 'SUCCESS';
     }
     
-} else {
+} else { //Something went wrong
     $res['status'] = 'ERROR';
 }
 

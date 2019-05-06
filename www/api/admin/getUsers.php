@@ -12,5 +12,5 @@ header("Content-Type: application/json; charset=utf-8");
 require_once '../classes/admin.php';
 $admin = new Admin();
 
-$res = $admin->gatherUsers();
+$res = $admin->gatherUsers(); //Returns all users from DB
 echo json_encode($res);

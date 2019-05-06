@@ -19,11 +19,11 @@ header("Content-Type: application/json; charset=utf-8");
 
 require_once '../classes/playlist.php';
 
-$id = $_GET['id'];
+$id = $_GET['id']; //playlist id
 
 $playlist = new Playlist();
 
-$playlists = $playlist->returnPlaylist(trim($id, "/"));
+$playlists = $playlist->returnPlaylist(trim($id, "/")); //Returns a playlist with a playlist id
 
 echo json_encode($playlists);
 

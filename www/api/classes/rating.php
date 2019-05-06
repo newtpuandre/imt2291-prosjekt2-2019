@@ -2,7 +2,7 @@
 require_once 'db.php';
 
 /**
-  *  Class Video. Represents a rating per video.
+  *  Class Rating. Represents a rating per video.
   */
 
 class Rating

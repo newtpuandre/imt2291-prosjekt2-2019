@@ -1,7 +1,7 @@
 <?php
 
 /*
-Returns all videos matching the search criteria
+Returns all playlists matching the search criteria
 */
 
 
@@ -21,7 +21,7 @@ require_once '../classes/playlist.php';
 
 $playlist = new Playlist();
 
-$playlists = $playlist->searchForPlaylists($_GET['q']);
+$playlists = $playlist->searchForPlaylists($_GET['q']); //Search for playlists matching search query
 
 echo json_encode($playlists);
 

@@ -20,11 +20,11 @@ header("Content-Type: application/json; charset=utf-8");
 
 require_once '../classes/playlist.php';
 
-$id = $_GET['id'];
+$id = $_GET['id']; //Playlist id
 
 $playlist = new Playlist();
 
-$playlists = $playlist->addVideoToPlaylist(trim($id, "/"),$_POST['vidId']);
+$playlists = $playlist->addVideoToPlaylist(trim($id, "/"),$_POST['vidId']); //Add video to playlist
 
 echo json_encode($playlists);
 

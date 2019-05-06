@@ -19,7 +19,7 @@ require_once '../classes/admin.php';
 $admin = new Admin();
 
 $res = [];
-if($admin->updatePrivileges($_POST['id'], $_POST['privilege'])){
+if($admin->updatePrivileges($_POST['id'], $_POST['privilege'])){ //Updates a user with new privilege
     $res['status'] = 'SUCCESS';
 } else {
     $res['status'] = 'ERROR';

@@ -21,6 +21,6 @@ require_once '../classes/video.php';
 
 $video = new Video();
 
-$videos = $video->getAllUserVideos($_SESSION['uid']);
+$videos = $video->getAllUserVideos($_SESSION['uid']); //Return all videos from a specific user
 
 echo json_encode($videos);

@@ -25,10 +25,10 @@ require_once '../classes/video.php';
 $playlist = new Playlist();
 $video = new Video();
 
-$playlists = $playlist->getSubscribedPlaylists($_SESSION['uid']);
+$playlists = $playlist->getSubscribedPlaylists($_SESSION['uid']); //Get all playlists a user is subbed to.
 
 $i = 0; //Loop counter
-foreach ($playlists as &$value) {
+foreach ($playlists as &$value) { //loop over playlists
     $vidArray = []; //Array containing all new videos
     $id = $value['id']; //Helper variable
     $ret = $playlist->returnNewestVideos($id); //Get array of videoids

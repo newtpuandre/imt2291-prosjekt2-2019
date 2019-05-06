@@ -22,7 +22,7 @@ require_once '../classes/playlist.php';
 
 $playlist = new Playlist();
 
-$playlists = $playlist->returnPlaylists($_SESSION['uid']);
+$playlists = $playlist->returnPlaylists($_SESSION['uid']); //Return all playlists from a specific user
 
 echo json_encode($playlists);
 

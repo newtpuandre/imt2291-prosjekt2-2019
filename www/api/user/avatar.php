@@ -14,8 +14,8 @@ header("Content-Type: image/png");
 require_once '../classes/DB.php';
 $db = DB::getDBConnection();
 
-if ($_SESSION['uid']) {
-  $stmt = $db->prepare('SELECT avatar FROM users WHERE id=?');
+if ($_SESSION['uid']) { //user must be logged in
+  $stmt = $db->prepare('SELECT avatar FROM users WHERE id=?'); //Get avatar from db.
   $stmt->execute(array($_SESSION['uid']));
   $res = $stmt->fetch(PDO::FETCH_ASSOC);
   if ($res) {

@@ -15,25 +15,25 @@ header("Content-Type: application/json; charset=utf-8");
 
 require_once '../classes/playlist.php';
 
-if($_SESSION['uid'] == "") {
+if($_SESSION['uid'] == "") { //User must be logged in.
     return;
 }
 
-$uid = $_SESSION['uid'];
-$playlistidUnTrim = $_GET['p'];
-$playlistid = trim($_GET['p'], "/");
-$videoid = $_GET['v'];
+$uid = $_SESSION['uid']; //User id
+$playlistidUnTrim = $_GET['p']; //Playlist ID
+$playlistid = trim($_GET['p'], "/"); //playlist ID without /
+$videoid = $_GET['v']; //Video id
 
 $playlist = new Playlist();
 
 $res = [];
 
-$ret = $playlist->updatePlaylistThumbnail($videoid, $playlistid, $uid);
+$ret = $playlist->updatePlaylistThumbnail($videoid, $playlistid, $uid); //Update playlist thumbnail
 
 if (!$ret) {
     $res['status'] = "ERROR";
-} else {
-    $res['status'] = $ret;
+} else {//If all went well, return the playlist thumbnail
+    $res['status'] = $ret; 
 }
 
 echo json_encode($res);

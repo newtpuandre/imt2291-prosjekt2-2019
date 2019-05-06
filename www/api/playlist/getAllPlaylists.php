@@ -14,6 +14,6 @@ require_once '../classes/playlist.php';
 
 $playlist = new Playlist();
 
-$playlists = $playlist->returnAllPlaylists();
+$playlists = $playlist->returnAllPlaylists(); //Returns all playlists
 
 echo json_encode($playlists);

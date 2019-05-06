@@ -22,7 +22,7 @@ $res = [];
 
 $playlist = new Playlist();
 
-if($playlist->editPosition(trim($_POST['routeId'], "/"),$_POST['vidId'], $_GET['down'])){
+if($playlist->editPosition(trim($_POST['routeId'], "/"),$_POST['vidId'], $_GET['down'])){ //Either move video up / down
     $res['status'] = 'SUCCESS';
 } else {
     $res['status'] = 'ERROR';

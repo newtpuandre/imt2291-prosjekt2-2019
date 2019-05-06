@@ -20,14 +20,14 @@ header("Content-Type: application/json; charset=utf-8");
 
 require_once '../classes/playlist.php';
 
-$id = $_GET['id'];
+$id = $_GET['id']; //Playlist id
 $sub = $_GET['sub']; //1 for subscribe, 0 for unsub.
 
 $res = [];
 
 $playlist = new Playlist();
 
-if($sub) {
+if($sub) { //If 1(true) subscribe. If 0(false) unsub
     $status = $playlist->subscribeToPlaylist(trim($id, "/"),$_SESSION['uid']);
 } else {
     $status = $playlist->unsubscribeToPlaylist(trim($id, "/"),$_SESSION['uid']);

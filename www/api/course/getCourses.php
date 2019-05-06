@@ -14,6 +14,6 @@ require_once '../classes/video.php';
 
 $video = new Video();
 
-$videos = $video->getAllVideoCourses();
+$videos = $video->getAllVideoCourses(); //Returns all courses
 
 echo json_encode($videos);

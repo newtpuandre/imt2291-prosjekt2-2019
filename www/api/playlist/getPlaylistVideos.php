@@ -19,18 +19,15 @@ header("Content-Type: application/json; charset=utf-8");
 
 require_once '../classes/playlist.php';
 
-$id = $_GET['id'];
+$id = $_GET['id']; //playlist id
 
 $playlist = new Playlist();
 
-$playlists = $playlist->returnPlaylistVideos(trim($id, "/"));
-$resolvedVideo = $playlist->resolveVideos(trim($id, "/"));
-if(count($resolvedVideo) > 0){
-    echo json_encode(array_intersect( $resolvedVideo, $playlists));
-} else {
+$playlists = $playlist->returnPlaylistVideos(trim($id, "/")); //Returns all video ids in a playlist
+$resolvedVideo = $playlist->resolveVideos(trim($id, "/")); //Convert from video id to actual video objects
+if(count($resolvedVideo) > 0){ //There were videos resolved
+    echo json_encode(array_intersect( $resolvedVideo, $playlists)); //Add them to the return json
+} else { //No videos to return
     echo json_encode(null);
 }
-
-//print_r(array_intersect( $resolvedVideo, $playlists));
-//echo json_encode(array_intersect( $resolvedVideo, $playlists));
 

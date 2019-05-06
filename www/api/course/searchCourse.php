@@ -1,7 +1,7 @@
 <?php
 
 /*
-Returns all the videos courses
+Returns all the videos courses based on search query
 */
 
 header("Access-Control-Allow-Origin: *");
@@ -14,8 +14,8 @@ require_once '../classes/video.php';
 
 $video = new Video();
 
-$querry = $_GET['q'];
+$querry = $_GET['q']; //query
 
-$videos = $video->searchVideoCourse(trim($querry, "/"));
+$videos = $video->searchVideoCourse(trim($querry, "/")); //Returns courses based on query
 
 echo json_encode($videos);

@@ -3,7 +3,7 @@
 require_once 'DB.php';
 
 /**
-  *  Class Video. Represents the admin role of the system.
+  *  Class Admin. Represents the admin role of the system.
   */
 
 class Admin

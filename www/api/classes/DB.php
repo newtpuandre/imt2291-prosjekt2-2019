@@ -1,4 +1,9 @@
 <?php
+
+/**
+ * Class DB. Handles connections to the database.
+ */
+
 class DB {
   private static $db=null;
   private $dsn = 'mysql:dbname=myDb;host=db';

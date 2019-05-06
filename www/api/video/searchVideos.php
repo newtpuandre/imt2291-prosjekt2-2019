@@ -19,6 +19,6 @@ require_once '../classes/video.php';
 
 $video = new Video();
 
-$videos = $video->search($_GET['q']);
+$videos = $video->search($_GET['q']); //Returns videos based on search query
 
 echo json_encode($videos);

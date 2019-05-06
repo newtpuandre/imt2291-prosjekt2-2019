@@ -2,7 +2,7 @@
 require_once 'db.php';
 
 /**
-  *  Class Video. Represents a single user.
+  *  Class User. Represents a single user.
   */
 
 class User

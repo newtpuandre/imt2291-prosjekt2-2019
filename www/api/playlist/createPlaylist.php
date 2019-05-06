@@ -20,25 +20,26 @@ require_once '../classes/playlist.php';
 $playlist = new Playlist();
 $res = [];
 
-if (isset($_SESSION['uid'])) {
+if (isset($_SESSION['uid'])) { //User must be logged in.
 
+    //A playlist always needs a name.
     if (($_POST['name'] == "" && $_POST['description'] == "") || $_POST['name'] == "") {
         $res['status'] = 'ERROR';
         echo json_encode($res);
         return;
     }
 
-    $id = $playlist->insertPlaylist($_SESSION['uid'],$_POST['name'],$_POST['description'],$_FILES);
+    $id = $playlist->insertPlaylist($_SESSION['uid'],$_POST['name'],$_POST['description'],$_FILES); //Create playlist
 
-    if ($id != false) {
+    if ($id != false) { //Was it added successfully?
         $res['status'] = 'SUCCESS';
     } else {
         $res['status'] = 'ERROR';
     }
     
-    if($_POST['vidId']){
-        foreach ($_POST['vidId'] as &$vid) {
-            $playlist->addVideoToPlaylist($id, $vid);
+    if($_POST['vidId']){ //Add videos to the playlist
+        foreach ($_POST['vidId'] as &$vid) { //Loop throud vidId array
+            $playlist->addVideoToPlaylist($id, $vid); //Add single video to playlist
         }
     }
     
