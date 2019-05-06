@@ -31,7 +31,3 @@ if($playlist->editPosition(trim($_POST['routeId'], "/"),$_POST['vidId'], $_GET['
 echo json_encode($res);
 
 
-//echo json_encode($_GET);
-//print_r($_POST);
-//print_r($_GET);
-
