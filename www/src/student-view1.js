@@ -47,7 +47,7 @@ class StudentView1 extends PolymerElement {
       .then(res=>res.json())
       .then(data=>{
         this.playlists = data;
-        console.log(data);
+        //console.log(data);
       });
 
     }

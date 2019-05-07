@@ -264,7 +264,7 @@ class EditPlaylistView extends PolymerElement {
     })
     .then(res=>res.json())
     .then(data=>{
-      console.log(data)
+      //console.log(data)
     });
 
     let i = 0;
@@ -296,7 +296,7 @@ class EditPlaylistView extends PolymerElement {
     })
     .then(res=>res.json())
     .then(data=>{
-      console.log(data)
+      //console.log(data)
     });
 
     let i = 0;

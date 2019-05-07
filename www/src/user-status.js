@@ -138,7 +138,7 @@ class UserStatus extends LitElement {
     })
     .then(res=>res.json())
     .then(res=>{
-      console.log(res);
+      //console.log(res);
       if (res.loggedIn) {         // User is logged in
         this.updateStatus(res);   // Sets user name, user id and such
         this.showStatus = false;  // We do not want to open the status pane
@@ -240,8 +240,8 @@ class UserStatus extends LitElement {
       let toast = document.querySelector("#toast");
       toast.close();
 
-      console.log("data");
-      console.log(res);
+      //console.log("data");
+      //console.log(res);
       if (res.status=='SUCCESS') {  // Successfully logged in
         toast.show("Du er nå logget inn");
         this.updateStatus(res);
@@ -257,7 +257,7 @@ class UserStatus extends LitElement {
 
   register(e){
     const data = new FormData(e.target.form); // Wrap the form in a FormData object
-    console.log(data);
+    //console.log(data);
      fetch (`${window.MyAppGlobals.serverURL}api/user/register.php`, {
         method: 'POST',
         credentials: "include",

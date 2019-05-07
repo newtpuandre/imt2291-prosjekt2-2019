@@ -54,7 +54,7 @@ class MyView4 extends PolymerElement {
     .then(res=>res.json())
     .then(data=>{
       this.playlists = data;
-      console.log(data);
+      //console.log(data);
     });
   }
 
@@ -74,7 +74,7 @@ class MyView4 extends PolymerElement {
     .then(res=>res.json())
     .then(data=>{
       this.searchResult = data;
-      console.log(this.searchResult);
+      //console.log(this.searchResult);
     });
 
     }

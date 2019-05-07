@@ -18,7 +18,7 @@ class TeacherCPlaylist extends PolymerElement {
     .then(res=>res.json())
     .then(data=>{
       this.userVideos = data;
-      console.log(data);
+      //console.log(data);
     });
 
     this.selectedVideos = [];

@@ -65,7 +65,7 @@ class MyView1 extends PolymerElement {
       .then(res=>res.json())
       .then(data=>{
         this.videos = data;
-        console.log(data);
+        //console.log(data);
       });
   
       this.playlists = [];
@@ -76,7 +76,7 @@ class MyView1 extends PolymerElement {
       .then(res=>res.json())
       .then(data=>{
         this.playlists = data;
-        console.log(data);
+        //console.log(data);
       });
 
     } else if ((subroute.prefix == "/view1" || subroute.prefix == "/") && subroute.path != "") { //Search mode
@@ -88,7 +88,7 @@ class MyView1 extends PolymerElement {
       .then(res=>res.json())
       .then(data=>{
         this.videos = data;
-        console.log(data);
+        //console.log(data);
       });
       
       //Search for playlists
@@ -97,7 +97,7 @@ class MyView1 extends PolymerElement {
       .then(res=>res.json())
       .then(data=>{
       this.searchResultsPlaylist = data;
-      console.log(this.searchResultsPlaylist);
+      //console.log(this.searchResultsPlaylist);
       });
 
 

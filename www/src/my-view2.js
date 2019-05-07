@@ -38,7 +38,7 @@ class MyView2 extends PolymerElement {
       .then(res=>res.json())
       .then(data=>{
         this.courses = data;
-        console.log(data);
+        //console.log(data);
       });
 
     } else if (subroute.prefix == "/view2"  && subroute.path != "") { //Search mode
@@ -49,7 +49,7 @@ class MyView2 extends PolymerElement {
       .then(res=>res.json())
       .then(data=>{
         this.videos = data;
-        console.log(data);
+        //console.log(data);
       });
     }
   }
